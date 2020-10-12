@@ -19,7 +19,7 @@ namespace Tests
         public void Setup()
         {
             string filePath = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory);
-            System.Console.WriteLine(filePath);
+
             RunSettings = new RunSettingManager();
             driver = DriverProvider.GetDriver(RunSettings.Browser);
         }
@@ -30,10 +30,10 @@ namespace Tests
             driver.Navigate().GoToUrl(RunSettings.InstanceUrl);
         }
 
-        [Test]
-        public void TestSuccessLogin()
+        [TearDown]
+        public void FinishTest()
         {
-
+            driver.Close();
         }
     }
 }
