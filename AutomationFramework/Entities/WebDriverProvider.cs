@@ -1,59 +1,89 @@
 ﻿using OpenQA.Selenium;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Configuration;
 using System.IO;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using AutomationFramework.Enums;
+using NUnit.Framework;
 
 namespace AutomationFramework.Entities
 {
     public class WebDriverProvider
     {
-        public enum Browsers { Chrome, Firefox, IE}
         private static Dictionary<Browsers, List<string>> BrowsersProcessesNames = new Dictionary<Browsers, List<string>>
         {
-            { Browsers.Chrome, new List<string>() { "Google Chrome", "chrome" } },
-            { Browsers.Firefox, new List<string>() { "Firefox", "geckodriver" } }
+            { Browsers.chrome, new List<string>() { "chrome", "Google Chrome" } },
+            { Browsers.firefox, new List<string>() { "geckodriver", "Firefox" } }
         };
         public static IWebDriver GetWebDriverInstance(string browser)
         {
             return SetUpDriver(browser);
         }
+
+        ///<summary>
+        ///Kill all processes for selected browser on local machine. Create new copy of selected IWebDriver with default settings and return it.
+        ///</summary>
         internal static IWebDriver SetUpDriver(string browser)
         {
+            browser = browser.ToLower();
+
             IWebDriver driver = null;
-            string filePath = Path.GetDirectoryName($"{System.AppDomain.CurrentDomain.BaseDirectory}");
 
-            if (browser.ToLower().Equals(Browsers.Chrome.ToString().ToLower()))
-            {
-                CloseWebDriverInstances(Browsers.Chrome);
-                driver = new ChromeDriver($"{filePath}/drivers");
-            } else if (browser.ToLower().Equals(Browsers.Firefox.ToString().ToLower()))
-            {
-                CloseWebDriverInstances(Browsers.Firefox);
-                driver = new FirefoxDriver($"{filePath}/drivers", SetFirefox());
-
-
-            } else if (browser.ToLower().Equals(Browsers.IE.ToString().ToLower()))
-            {
-
-            }
-
-            //todo: Finish Here
-            CreateReportDirectory();
+            CloseWebDriverPrecesses(browser);
+            driver = InitNewCopyOfWebDriver(browser);
 
             return driver;
         }
-        public static void CloseWebDriverInstances(Browsers browser)
+
+        private static IWebDriver InitNewCopyOfWebDriver(string browser)
         {
-            foreach (var processName in BrowsersProcessesNames[browser])
+            IWebDriver driver = null;
+
+            string debugPath = Path.GetDirectoryName($"{System.AppDomain.CurrentDomain.BaseDirectory}");
+            string browsersDriversFolder = "/drivers";
+
+            if (browser.Equals(Browsers.chrome.ToString()))
             {
-                var processes = Process.GetProcessesByName(processName);
-                foreach (var process in processes)
+                driver = new ChromeDriver($"{debugPath}{browsersDriversFolder}");
+            }
+            else if (browser.Equals(Browsers.firefox.ToString()))
+            {
+                driver = new FirefoxDriver($"{debugPath}{browsersDriversFolder}", SetFirefox());
+            }
+            else if (browser.Equals(Browsers.ie.ToString()))
+            {
+
+            }
+            else
+            {
+                Assert.IsNull($"Unknown browser is tried to be initialized: {browser}");
+            }
+
+            return driver;
+        }
+
+        ///<summary>
+        ///Close browser through killing all processess on machine 
+        ///</summary>
+        public static void CloseWebDriverPrecesses(string browser)
+        {
+            foreach (var BrowserProcessNames in BrowsersProcessesNames)
+            {
+                if (BrowserProcessNames.Key.ToString().Equals(browser.ToLower()))
                 {
-                    process.Kill();
+                    foreach (var processName in BrowserProcessNames.Value)
+                    {
+                        var processes = Process.GetProcessesByName(processName.ToLower());
+
+                        foreach (var process in processes) process.Kill();
+
+                        break;
+                    }
+
+                    break;
                 }
             }
         }
@@ -72,10 +102,6 @@ namespace AutomationFramework.Entities
             fireFoxOptions.SetPreference("browser.download.dir", "provide folder");
 
             return fireFoxOptions;
-        }
-        private static void CreateReportDirectory()
-        {
-            
         }
         #endregion
     }
