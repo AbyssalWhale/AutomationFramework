@@ -1,8 +1,6 @@
 using AutomationFramework;
-using AutomationFramework.Entities;
 using NUnit.Framework;
-using OpenQA.Selenium;
-using System.IO;
+using NUnit.Framework.Internal;
 
 namespace Tests
 {
@@ -15,19 +13,36 @@ namespace Tests
             base.OneTimeSetUp();
         }
 
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
+        }
+
         [TearDown]
         public override void TearDown()
         {
             base.TearDown();
+        }
+
+        [OneTimeTearDown]
+        public override void OneTimeTearDown()
+        {
+            base.OneTimeTearDown();
         }
     }
 
     public class RegressionTest : UITestBase
     {
         [Test]
-        public void Test()
+        public void InitTest()
         {
             driver.Navigate().GoToUrl(runSettings.InstanceUrl);
+        }
+        [Test]
+        public void InitTest2()
+        {
+            driver.Navigate().GoToUrl("https://www.google.com/");
         }
     }
 }

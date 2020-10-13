@@ -15,8 +15,8 @@ namespace AutomationFramework.Entities
     {
         private static Dictionary<Browsers, List<string>> BrowsersProcessesNames = new Dictionary<Browsers, List<string>>
         {
-            { Browsers.chrome, new List<string>() { "chrome", "Google Chrome" } },
-            { Browsers.firefox, new List<string>() { "geckodriver", "Firefox" } }
+            { Browsers.chrome, new List<string>() { "chrome", "chromedriver", "Google Chrome" } },
+            { Browsers.firefox, new List<string>() { "Firefox", "geckodriver" } }
         };
         public static IWebDriver GetWebDriverInstance(string browser)
         {
@@ -76,7 +76,7 @@ namespace AutomationFramework.Entities
                 {
                     foreach (var processName in BrowserProcessNames.Value)
                     {
-                        var processes = Process.GetProcessesByName(processName.ToLower());
+                        var processes = Process.GetProcessesByName(processName);
 
                         foreach (var process in processes) process.Kill();
 

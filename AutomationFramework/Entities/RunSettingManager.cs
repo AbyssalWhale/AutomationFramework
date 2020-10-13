@@ -10,7 +10,8 @@ namespace AutomationFramework.Entities
         public string StepRecordingEnabled { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string ReportRootDirectory { get; set; }
+        public string TestReportDirectory { get; set; }
+        public string TestAssetDirectory { get; set; }
         public string ApiKey { get; set; }
         public string DBServer { get; set; }
         public string DBName { get; set; }
@@ -24,6 +25,8 @@ namespace AutomationFramework.Entities
             StepRecordingEnabled = TryToParseTestContext(nameof(StepRecordingEnabled));
             Username = TryToParseTestContext(nameof(Username));
             Password = TryToParseTestContext(nameof(Password));
+            TestReportDirectory = TryToParseTestContext(nameof(TestReportDirectory));
+            TestAssetDirectory = TryToParseTestContext(nameof(TestAssetDirectory));
             ApiKey = TryToParseTestContext(nameof(ApiKey));
             DBServer = TryToParseTestContext(nameof(DBServer));
             DBName = TryToParseTestContext(nameof(DBName));
@@ -38,6 +41,15 @@ namespace AutomationFramework.Entities
             if (value is null) Assert.IsNull($"'{settingName}' setting is not found");
 
             return value;
+        }
+
+        ///<summary>
+        ///Reset TestReportDirectory and TestAssetDirectory into of the current test to default into RunSettingManager. Use it in [TearDown] 
+        ///</summary>
+        internal void ResetTestReportAndAssetDirectoriesPathes()
+        {
+            TestReportDirectory = TestReportDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
+            TestAssetDirectory = TestAssetDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
         }
     }
 }
