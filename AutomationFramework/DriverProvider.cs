@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using AutomationFramework.Enums;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace AutomationFramework.Entities
         {
             this.browser = browser;
         }
-        public static IWebDriver GetDriver(string browser)
+        public static IWebDriver Driver(string browser)
         {
             if (_driver == null)
             {
