@@ -37,12 +37,12 @@ namespace Tests
         [Test]
         public void InitTest()
         {
-            driver.Navigate().GoToUrl(runSettings.InstanceUrl);
+            _driver.Navigate().GoToUrl(_runSettingsSettings.InstanceUrl);
         }
         [Test]
         public void InitTest2()
         {
-            driver.Navigate().GoToUrl("https://www.google.com/");
+            _driver.Navigate().GoToUrl("https://www.google.com/");
         }
     }
 }

@@ -1,8 +1,11 @@
-﻿using NUnit.Framework;
+﻿using AutomationFramework.Enums;
+using NUnit.Framework;
 using System.Configuration;
 
 namespace AutomationFramework.Entities
 {
+    /// <summary>Class <c>RunSettingManager</c> read all properties from current .runsettings file and provide access to them.
+    /// </summary>
     public class RunSettingManager
     {
         public string InstanceUrl { get; set; }
@@ -10,7 +13,9 @@ namespace AutomationFramework.Entities
         public string StepRecordingEnabled { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string TestsReportDirectory { get; set; }
         public string TestReportDirectory { get; set; }
+        public string TestsAssetDirectory { get; set; }
         public string TestAssetDirectory { get; set; }
         public string ApiKey { get; set; }
         public string DBServer { get; set; }
@@ -25,8 +30,10 @@ namespace AutomationFramework.Entities
             StepRecordingEnabled = TryToParseTestContext(nameof(StepRecordingEnabled));
             Username = TryToParseTestContext(nameof(Username));
             Password = TryToParseTestContext(nameof(Password));
-            TestReportDirectory = TryToParseTestContext(nameof(TestReportDirectory));
-            TestAssetDirectory = TryToParseTestContext(nameof(TestAssetDirectory));
+            TestsReportDirectory = TryToParseTestContext(nameof(TestsReportDirectory));
+            TestReportDirectory = string.Empty;
+            TestsAssetDirectory = TryToParseTestContext(nameof(TestsAssetDirectory));
+            TestAssetDirectory = string.Empty;
             ApiKey = TryToParseTestContext(nameof(ApiKey));
             DBServer = TryToParseTestContext(nameof(DBServer));
             DBName = TryToParseTestContext(nameof(DBName));
@@ -46,10 +53,13 @@ namespace AutomationFramework.Entities
         ///<summary>
         ///Reset TestReportDirectory and TestAssetDirectory into of the current test to default into RunSettingManager. Use it in [TearDown] 
         ///</summary>
-        internal void ResetTestReportAndAssetDirectoriesPathes()
+        internal void ResetTestReportAndAssetDirectoriesPathes(LogManager logManager)
         {
-            TestReportDirectory = TestReportDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
-            TestAssetDirectory = TestAssetDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
+            logManager.LogAction(LogLevels.local, $"Finished execution.");
+            logManager.LogAction(LogLevels.global, $"The '{TestContext.CurrentContext.Test.Name}' test finished execution. All test logs: {TestReportDirectory} ");
+
+            TestsReportDirectory = TestsReportDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
+            TestsAssetDirectory = TestsAssetDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
         }
     }
 }
