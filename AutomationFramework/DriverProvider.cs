@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static AutomationFramework.Entities.WebDriverProvider;
+using static AutomationFramework.Entities.WebDriverManager;
 
 namespace AutomationFramework.Entities
 {
@@ -19,7 +19,7 @@ namespace AutomationFramework.Entities
         {
             if (_driver == null)
             {
-                _driver = WebDriverProvider.GetWebDriverInstance(browser);
+                _driver = WebDriverManager.GetWebDriverInstance(browser);
             }
             return _driver;
         }

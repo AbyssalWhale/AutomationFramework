@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace AutomationFramework.Entities
 {
-    public class WebDriverProvider
+    public class WebDriverManager
     {
         private static Dictionary<Browsers, List<string>> BrowsersProcessesNames = new Dictionary<Browsers, List<string>>
         {

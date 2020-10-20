@@ -1,28 +1,27 @@
 ﻿using AutomationFramework.Entities;
+using AutomationFramework.Enums;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using System;
-using System.IO;
-using static AutomationFramework.Entities.WebDriverProvider;
+using static AutomationFramework.Entities.WebDriverManager;
 
 namespace AutomationFramework
 {
     public class TestBase
     {
-        FolderManager folderManager;
-        protected RunSettingManager runSettings;
-        protected IWebDriver driver;
+        protected RunSettingManager _runSettingsSettings;
+        protected FolderManager _folderManager;
+        protected LogManager _logManager;
+        protected IWebDriver _driver;
 
         ///<summary>
         ///Initializes base objects for tests including IWebDriver, RunSettingManager etc... Use 1 time for all project tests in [OneTimeSetUp]  
         ///</summary>
         public virtual void OneTimeSetUp()
         {
-            folderManager = new FolderManager();
-            runSettings = new RunSettingManager();
-            driver = DriverProvider.Driver(runSettings.Browser);
-
-            folderManager.CreateTestsDataMainFolders(runSettings);
+            _runSettingsSettings = new RunSettingManager();
+            _logManager = new LogManager();
+            _folderManager = new FolderManager(_runSettingsSettings, _logManager);
+            _driver = DriverProvider.Driver(_runSettingsSettings.Browser);
         }
 
         ///<summary>
@@ -30,15 +29,15 @@ namespace AutomationFramework
         ///</summary>
         public virtual void SetUp()
         {
-            folderManager.CreateTestDataFolders(runSettings, TestContext.CurrentContext);
+            _folderManager.CreateTestDataFolders(TestContext.CurrentContext);
         }
 
         ///<summary>
-        ///Perform actions that are required after each test run and prepare for the next test. Use in [TearDown]  
+        ///Perform actions that are required after each test run and do steps for the next test. Use in [TearDown]  
         ///</summary>
         public virtual void TearDown()
         {
-            runSettings.ResetTestReportAndAssetDirectoriesPathes();
+            _runSettingsSettings.ResetTestReportAndAssetDirectoriesPathes(_logManager);
         }
 
         ///<summary>
@@ -46,7 +45,8 @@ namespace AutomationFramework
         ///</summary>
         public virtual void OneTimeTearDown()
         {
-            CloseWebDriverPrecesses(runSettings.Browser);
+            CloseWebDriverPrecesses(_runSettingsSettings.Browser);
+            _logManager.LogAction(LogLevels.global, $"Tests finished execution");
         }
     }
 }
