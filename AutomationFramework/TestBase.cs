@@ -11,7 +11,7 @@ namespace AutomationFramework
         protected RunSettingManager _runSettingsSettings;
         protected FolderManager _folderManager;
         protected LogManager _logManager;
-        protected IWebDriver _driver;
+        protected WebDriverManager _webDriverManager;
 
         ///<summary>
         ///Initializes base objects for tests including IWebDriver, RunSettingManager etc... Use 1 time for all project tests in [OneTimeSetUp]  
@@ -21,7 +21,7 @@ namespace AutomationFramework
             _runSettingsSettings = new RunSettingManager();
             _logManager = new LogManager();
             _folderManager = new FolderManager(_runSettingsSettings, _logManager);
-            _driver = DriverProvider.Driver(_runSettingsSettings.Browser);
+            _webDriverManager = GetWebDriverManager(_runSettingsSettings.Browser);
         }
 
         ///<summary>
@@ -45,7 +45,7 @@ namespace AutomationFramework
         ///</summary>
         public virtual void OneTimeTearDown()
         {
-            CloseWebDriverPrecesses(_runSettingsSettings.Browser);
+            _webDriverManager.Quit(_runSettingsSettings.Browser);
             _logManager.LogAction(LogLevels.global, $"Tests finished execution");
         }
     }

@@ -2,6 +2,6 @@
 {
     public enum Browsers
     {
-        chrome, firefox, ie
+        chrome, firefox
     }
 }
