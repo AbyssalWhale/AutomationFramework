@@ -9,25 +9,31 @@ using OpenQA.Selenium.Firefox;
 using AutomationFramework.Enums;
 using NUnit.Framework;
 using System.Threading;
+using System;
 
 namespace AutomationFramework.Entities
 {
     public class WebDriverManager
     {
-        private static WebDriverManager webDriverManager;
+        private static WebDriverManager _webDriverManager;
+        private LogManager _logManager;
         internal IWebDriver _driver;
 
-        protected WebDriverManager(string driverName){
+        protected WebDriverManager(string driverName, LogManager logManager)
+        {
             _driver = SetUpDriver(driverName);
+            _logManager = logManager;
+
+            _logManager.LogAction(LogLevels.global, $"Initializing the '{driverName}' browser");
         }
 
-        public static WebDriverManager GetWebDriverManager(string driverName)
+        internal static WebDriverManager GetWebDriverManager(string driverName, LogManager logManager)
         {
-            if (webDriverManager == null) {
-                webDriverManager = new WebDriverManager(driverName);
+            if (_webDriverManager == null) {
+                _webDriverManager = new WebDriverManager(driverName, logManager);
             }
-            
-            return webDriverManager;
+
+            return _webDriverManager;
         }
 
 
@@ -126,6 +132,7 @@ namespace AutomationFramework.Entities
         ///</summary>
         public bool GoToUrl(string url)
         {
+            _logManager.LogAction(LogLevels.local, $"Going to the url: {url}");
             _driver.Navigate().GoToUrl(url);
             return IsPageLoaded();
         }
@@ -135,6 +142,8 @@ namespace AutomationFramework.Entities
         ///</summary>
         public bool IsPageLoaded()
         {
+            _logManager.LogAction(LogLevels.local, $"Checking if a page is fully loaded...");
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -160,6 +169,7 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void Quit(string browser)
         {
+            _logManager.LogAction(LogLevels.local, $"Quit browser");
             _driver.Quit();
             CloseWebDriverProcesses(browser);
         }
@@ -169,6 +179,7 @@ namespace AutomationFramework.Entities
         ///</summary>
         public object ExecuteJSScript(string script)
         {
+            _logManager.LogAction(LogLevels.local, $"Running JS script: {script}...");
             return ((IJavaScriptExecutor)_driver).ExecuteScript(script);
         }
 
@@ -177,6 +188,8 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void SwitchTabByTitle(string tabTitle, int tabsExpected, bool isHardCheck = false)
         {
+            _logManager.LogAction(LogLevels.local, $"Trying to switch tab with title: {tabTitle}...");
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -205,6 +218,111 @@ namespace AutomationFramework.Entities
                 }
             }
         }
+
+        ///<summary>
+        ///Return the name of current page
+        ///</summary>
+        public string GetPageTitle()
+        {
+            return _driver.Title;
+        }
+
+        #region IteractionWithWebElements
+        ///<summary>
+        ///Wait and search element for set time. Default is 60 seconds
+        ///</summary>
+        public IWebElement FindElement(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
+        {
+            _logManager.LogAction(LogLevels.local, $"Searching for elemnt with locator: {elementLocator.ToString()}...");
+
+            var message = string.Empty;
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            while (true)
+            {
+                if (stopwatch.ElapsedMilliseconds > secondsToWait * 1000)
+                    Assert.Fail($"It is impossible to find element by locator [{elementLocator}]. Exception message: {message}");
+
+                try
+                {
+                    var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
+                    return element;
+                }
+                catch (NoSuchElementException e)
+                {
+                    message = e.Message;
+                }
+                catch (StaleElementReferenceException e)
+                {
+                    message = e.Message;
+                }
+                catch (AssertionException e)
+                {
+                    message = e.Message;
+                }
+                catch (Exception e)
+                {
+                    message = e.Message;
+                }
+
+                Thread.Sleep(500);
+            }
+        }
+
+        ///<summary>
+        ///Send text into elements
+        ///</summary>
+        public void SendKeys(By elementLocator, string textToSend, IWebElement parent = null, int secondsToWait = 60)
+        {
+            _logManager.LogAction(LogLevels.local, $"Trying to send text: '{textToSend}' into element with locator: {elementLocator.ToString()}");
+            var element = FindElement(elementLocator, parent, secondsToWait);
+            element.Clear();
+            element.SendKeys(textToSend);
+        }
+
+        ///<summary>
+        ///Click on element
+        ///</summary>
+        public void ClickOnElement(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
+        {
+            _logManager.LogAction(LogLevels.local, $"Trying click on the element with locator: {elementLocator.ToString()}");
+
+
+            IWebElement element = FindElement(elementLocator, parent, secondsToWait);
+            var message = string.Empty;
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            while (true)
+            {
+                if (stopwatch.ElapsedMilliseconds > secondsToWait * 1000)
+                    Assert.Fail($"It is impossible to click element by locator [{elementLocator}]. Message: {message}");
+
+                try
+                {
+                    element.Click();
+                    break;
+                }
+                catch (ElementClickInterceptedException e)
+                {
+                    message = e.GetType().FullName + " - " + e.Message;
+                }
+                catch (ElementNotInteractableException e)
+                {
+                    message = e.GetType().FullName + " - " + e.Message;
+                }
+                catch (StaleElementReferenceException)
+                {
+                    element = FindElement(elementLocator, parent, secondsToWait);
+                }
+
+                Thread.Sleep(250);
+            }
+        }
+        #endregion
         #endregion
     }
 }
