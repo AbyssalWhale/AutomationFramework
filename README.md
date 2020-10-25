@@ -5,5 +5,5 @@ The solution allows to create different types of automation tests. It uses follo
 - Selenium; 
 - NUnit; 
 - Serilog; 
-- Dapper; 
-- Restsharp. 
+- Dapper (in progress...); 
+- RestSharp (in progress...). 
