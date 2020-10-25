@@ -1,9 +1,11 @@
 ﻿using AutomationFramework.Enums;
+using AutomationFramework.Utils;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Serilog;
 using Serilog.Core;
 using Serilog.Formatting.Json;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -19,14 +21,24 @@ namespace AutomationFramework.Entities
         RunSettingManager _settingsManager { get; set; }
         int screenshootCounter { get; set; }
 
+        #region CSV
+        private string _csvTestLogPath { get; set; }
+        private string _csvGlobalLogPath { get; set; }
+        private List<string> _allGlobalLogs { get; set; }
+        private List<string> _allTestLogs { get; set; }
+        #endregion
+
         ///<summary>
         ///Create the 'TestsExecutionGlobalLog' file for loggin of high level steps of tests execution. Folder where the file is saved can be found in path: .runSettings.TestsReportDirectory
         ///</summary>
         internal void CreateGlobalLog(RunSettingManager settingsManager)
         {
             string globalLogFileName = "TestsExecutionGlobalLog.json";
+            _csvGlobalLogPath = $"{settingsManager.TestsReportDirectory}/CSVTestsReport.csv";
+            _allGlobalLogs = new List<string>();
 
             _globalLog = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{settingsManager.TestsReportDirectory}/{globalLogFileName}").CreateLogger();
+
             LogAction(LogLevels.global, $"GlobalTestLog was initialized and {globalLogFileName} was created;");
         }
 
@@ -40,8 +52,11 @@ namespace AutomationFramework.Entities
             screenshootCounter = 0;
 
             string localLogFileName = "TestExecutionLocalLog.json";
+            _csvTestLogPath = $"{settingsManager.TestReportDirectory}/CSVTestReport.csv";
+            _allTestLogs = new List<string>();
 
             _testExecutionLocalLogger = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{settingsManager.TestReportDirectory}/{localLogFileName}").CreateLogger();
+
             LogAction(LogLevels.local, $"Start execution. TestLog was initialized and {localLogFileName} was created;");
         }
 
@@ -59,6 +74,8 @@ namespace AutomationFramework.Entities
             {
                 if (element == null) MakeLogScreenshoot(); else MakeLogScreenshoot(element);
             }
+
+            if (logLevel.Equals(LogLevels.local)) _allTestLogs.Add(message); else _allGlobalLogs.Add(message);
         }
 
         public void MakeLogScreenshoot()
@@ -75,6 +92,26 @@ namespace AutomationFramework.Entities
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
 
             screenshootCounter++;
+        }
+
+        internal void CreateFinalCSVLog(LogLevels logLevel)
+        {
+            string path = logLevel.Equals(LogLevels.global) ? _csvGlobalLogPath : _csvTestLogPath;
+            var allLogs = logLevel.Equals(LogLevels.global) ? _allGlobalLogs : _allTestLogs;
+
+            File.Create(path).Close();
+
+            var file = new StreamWriter(path, true);
+
+            foreach (var log in allLogs)
+            {
+                file.WriteLine(log);
+            }
+
+            file.Flush();
+            file.Close();
+
+            _allTestLogs = new List<string>();
         }
     }
 }
