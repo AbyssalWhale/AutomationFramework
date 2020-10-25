@@ -5,7 +5,7 @@ using static TestsBaseConfigurator.POM.GoogleMapsPage;
 
 namespace RegressionTests.UITests
 {
-    class CoordinatsTests : RegressionTestBase
+    class CoordinatsTests : RegressionUiTestsBase
     {
         private const string expectedGigaBerlinCoordinates = "52.4°N 13.8°E";
         private const string expectedGigaBerlinAddress = "Grünheide, 15537 Grünheide (Mark)";

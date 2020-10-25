@@ -1,14 +1,11 @@
 using AutomationFramework;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using TestsBaseConfigurator.Enums;
 using TestsBaseConfigurator.POM;
-using static TestsBaseConfigurator.POM.GoogleMapsPage;
 
 namespace Tests
 {
     [TestFixture]
-    public class RegressionTestBase : TestBase
+    public class RegressionUiTestsBase : TestBase
     {
         public GooglePage googlePage;
 
