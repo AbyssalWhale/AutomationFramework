@@ -3,7 +3,7 @@
   <TestRunParameters>
     <Parameter name="InstanceUrl" value="https://www.google.com/" />
     <!--Browser should be: chrome, firefox-->
-    <Parameter name="Browser" value="firefox" />
+    <Parameter name="Browser" value="chrome" />
     <Parameter name="StepRecordingEnabled" value="true" />
     <Parameter name="Username" value="User" />
     <Parameter name="Password" value="Password1234" />
