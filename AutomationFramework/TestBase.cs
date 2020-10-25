@@ -22,6 +22,8 @@ namespace AutomationFramework
             _logManager = new LogManager();
             _folderManager = new FolderManager(_runSettingsSettings, _logManager);
             _webDriverManager = GetWebDriverManager(_runSettingsSettings.Browser, _logManager);
+
+            _logManager._driver = _webDriverManager._driver;
         }
 
         ///<summary>

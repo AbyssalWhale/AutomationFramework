@@ -1,5 +1,6 @@
 ﻿using AutomationFramework;
 using AutomationFramework.Entities;
+using AutomationFramework.Enums;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
@@ -28,6 +29,12 @@ namespace TestsBaseConfigurator.POM
         {
             _webDriverManager.GoToUrl("https://www.wikipedia.org/");
             return new WikipediaPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager);
+        }
+
+        public GoogleMapsPage GoToGoogleMaps()
+        {
+            _webDriverManager.GoToUrl("https://www.google.com/maps/");
+            return new GoogleMapsPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager);
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Configuration;
 using System.IO;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
@@ -132,8 +130,8 @@ namespace AutomationFramework.Entities
         ///</summary>
         public bool GoToUrl(string url)
         {
-            _logManager.LogAction(LogLevels.local, $"Going to the url: {url}");
             _driver.Navigate().GoToUrl(url);
+            _logManager.LogAction(LogLevels.local, $"Going to the url: {url}...");
             return IsPageLoaded();
         }
 
@@ -142,8 +140,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public bool IsPageLoaded()
         {
-            _logManager.LogAction(LogLevels.local, $"Checking if a page is fully loaded...");
-
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -160,6 +156,8 @@ namespace AutomationFramework.Entities
 
                 Thread.Sleep(500);
             }
+
+            _logManager.LogAction(LogLevels.local, $"Checked the '{GetPageTitle()}' page is fully loaded", true);
 
             return true;
         }
@@ -233,7 +231,7 @@ namespace AutomationFramework.Entities
         ///</summary>
         public IWebElement FindElement(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
         {
-            _logManager.LogAction(LogLevels.local, $"Searching for elemnt with locator: {elementLocator.ToString()}...");
+            _logManager.LogAction(LogLevels.local, $"Searching for element. Locator: {elementLocator.ToString()}...");
 
             var message = string.Empty;
 
@@ -266,8 +264,6 @@ namespace AutomationFramework.Entities
                 {
                     message = e.Message;
                 }
-
-                Thread.Sleep(500);
             }
         }
 
@@ -276,10 +272,10 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void SendKeys(By elementLocator, string textToSend, IWebElement parent = null, int secondsToWait = 60)
         {
-            _logManager.LogAction(LogLevels.local, $"Trying to send text: '{textToSend}' into element with locator: {elementLocator.ToString()}");
             var element = FindElement(elementLocator, parent, secondsToWait);
             element.Clear();
             element.SendKeys(textToSend);
+            _logManager.LogAction(LogLevels.local, $"Text: '{textToSend}' was sent into element. Locator: {elementLocator.ToString()};", true, element);
         }
 
         ///<summary>
@@ -287,10 +283,8 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void ClickOnElement(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
         {
-            _logManager.LogAction(LogLevels.local, $"Trying click on the element with locator: {elementLocator.ToString()}");
-
-
             IWebElement element = FindElement(elementLocator, parent, secondsToWait);
+            _logManager.LogAction(LogLevels.local, $"Trying to click on the element. Locator: {elementLocator.ToString()};", true, element);
             var message = string.Empty;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -321,6 +315,79 @@ namespace AutomationFramework.Entities
 
                 Thread.Sleep(250);
             }
+        }
+
+        ///<summary>
+        ///Returns TRUE if element exists in DOM otherwise FALSE.
+        ///</summary>
+        public bool IsElementExistInDOM(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
+        {
+            var result = false;
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            while (true)
+            {
+                if (stopwatch.ElapsedMilliseconds > secondsToWait * 1000)
+                {
+                    _logManager.LogAction(LogLevels.local, $"Not found element in DOM. Locator: {elementLocator.ToString()};");
+                    return result;
+                }
+
+                try
+                {
+                    var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
+                    result = true;
+                    _logManager.LogAction(LogLevels.local, $"Found element in DOM. Locator: {elementLocator.ToString()};", true, element);
+                    return result;
+                }
+                catch (NoSuchElementException e)
+                {
+                    
+                }
+                catch (StaleElementReferenceException e)
+                {
+                    
+                }
+                catch (AssertionException e)
+                {
+                    
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
+        }
+
+        ///<summary>
+        ///Returns TRUE if iframe exists in DOM and driver was switched - otherwise FALSE.
+        ///</summary>
+        public bool SwitchToIFrame(By frameLocator)
+        {
+            var result = false;
+
+            if (IsElementExistInDOM(frameLocator))
+            {
+                _driver.SwitchTo().Frame(FindElement(frameLocator));
+                result = true;
+            }
+
+            _logManager.LogAction(LogLevels.local, $"Tried to switch to iframe. Result of operation: {result}. Locator: {frameLocator.ToString()}...");
+
+            return result;
+        }
+
+        ///<summary>
+        ///Switches driver back to default content if driver was switched on iframe.
+        ///</summary>
+        public void SwitchToDefaultContent()
+        {
+            _driver.SwitchTo().DefaultContent();
+            _driver.SwitchTo().ActiveElement();
+
+            _logManager.LogAction(LogLevels.local, $"Switching to default and active content...");
         }
         #endregion
         #endregion
