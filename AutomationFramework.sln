@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFramework", "AutomationFramework\AutomationFramework.csproj", "{7689D184-CA61-4677-AAD5-8FE06FFC3BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsBaseConfigurator", "TestsBaseConfigurator\TestsBaseConfigurator.csproj", "{A822FADE-D692-4400-B721-F0F322AE3EA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegressionTests", "TestsBaseConfigurator\RegressionTests.csproj", "{A822FADE-D692-4400-B721-F0F322AE3EA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
