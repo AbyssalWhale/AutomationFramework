@@ -92,7 +92,7 @@ namespace AutomationFramework.Entities
             fireFoxOptions.SetPreference("browser.helperApps.neverAsk.saveToDisk", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain");
             fireFoxOptions.AddArgument("--disable-popup-blocking");
             fireFoxOptions.AddArgument("--width=1920");
-            fireFoxOptions.AddArgument("--height=1080");
+            fireFoxOptions.AddArgument("--height=1000");
             fireFoxOptions.SetPreference("browser.download.dir", "provide folder");
 
             return fireFoxOptions;
@@ -134,13 +134,24 @@ namespace AutomationFramework.Entities
         #region All External Methods
 
         ///<summary>
-        ///Go to thr provided URL address and wait until page is fully loaded
+        ///Go to the provided URL address and wait until page is fully loaded
         ///</summary>
         public bool GoToUrl(string url)
         {
             _driver.Navigate().GoToUrl(url);
             _logManager.LogAction(LogLevels.local, $"Going to the url: {url}...");
             return IsPageLoaded();
+        }
+
+        ///<summary>
+        ///Open new tab in the current browser. Go to the provided URL address and wait until page is fully loaded
+        ///</summary>
+        public bool GoToUrlInNewTab(string url)
+        {
+            ExecuteJSScript("window.open();");
+            _driver.SwitchTo().Window(_driver.WindowHandles[_driver.WindowHandles.Count - 1]);
+            _logManager.LogAction(LogLevels.local, $"New tab was opened in the browser", true);
+            return GoToUrl(url);
         }
 
         ///<summary>
