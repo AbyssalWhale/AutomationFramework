@@ -33,7 +33,7 @@ namespace TestsBaseConfigurator.POM
 
         public GoogleMapsPage GoToGoogleMaps()
         {
-            _webDriverManager.GoToUrl("https://www.google.com/maps/");
+            _webDriverManager.GoToUrlInNewTab("https://www.google.com/maps/");
             return new GoogleMapsPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager);
         }
     }
