@@ -40,6 +40,7 @@ namespace AutomationFramework
         public virtual void TearDown()
         {
             _runSettingsSettings.ResetTestReportAndAssetDirectoriesPathes(_logManager);
+            _logManager.CreateFinalCSVLog(LogLevels.local);
         }
 
         ///<summary>
@@ -49,6 +50,7 @@ namespace AutomationFramework
         {
             _webDriverManager.Quit(_runSettingsSettings.Browser);
             _logManager.LogAction(LogLevels.global, $"Tests finished execution");
+            _logManager.CreateFinalCSVLog(LogLevels.global);
         }
     }
 }
