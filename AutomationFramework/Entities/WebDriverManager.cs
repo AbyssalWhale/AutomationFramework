@@ -68,7 +68,7 @@ namespace AutomationFramework.Entities
 
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                driver = new ChromeDriver($"{debugPath}{browsersDriversFolder}");
+                driver = new ChromeDriver($"{debugPath}{browsersDriversFolder}", SetChrome());
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
             {
@@ -96,6 +96,14 @@ namespace AutomationFramework.Entities
             fireFoxOptions.SetPreference("browser.download.dir", "provide folder");
 
             return fireFoxOptions;
+        }
+
+        private ChromeOptions SetChrome()
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+
+            return options;
         }
         #endregion
 
