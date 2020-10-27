@@ -1,5 +1,6 @@
 using AutomationFramework;
 using NUnit.Framework;
+using RegressionUiTests.POM;
 using TestsBaseConfigurator.POM;
 
 namespace Tests
@@ -7,7 +8,7 @@ namespace Tests
     [TestFixture]
     public class RegressionUiTestsBase : TestBase
     {
-        public GooglePage googlePage;
+        public FactorialPage _factorialPage;
 
         [OneTimeSetUp]
         public override void OneTimeSetUp()
@@ -19,7 +20,7 @@ namespace Tests
         public override void SetUp()
         {
             base.SetUp();
-            googlePage = new GooglePage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager);
+            _factorialPage = new FactorialPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager);
         }
 
         [TearDown]

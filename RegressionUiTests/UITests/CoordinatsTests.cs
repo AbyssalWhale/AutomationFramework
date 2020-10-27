@@ -1,34 +1,58 @@
-﻿using NUnit.Framework;
+﻿using AutomationFramework.Utils;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using Tests;
-using TestsBaseConfigurator.Enums;
-using static TestsBaseConfigurator.POM.GoogleMapsPage;
+using static RegressionUiTests.POM.FactorialPage;
 
 namespace RegressionTests.UITests
 {
-    class CoordinatsTests : RegressionUiTestsBase
+    class Tests : RegressionUiTestsBase
     {
-        private const string expectedGigaBerlinCoordinates = "52.4°N 13.8°E";
-        private const string expectedGigaBerlinAddress = "Grünheide, 15537 Grünheide (Mark)";
-        private const string expectedGigaBerlinPlusCodes = "CR22+22 Grünheide (Mark)";
-        private const string expectedGigaBerlinHeaderPhoto = "https://lh5.googleusercontent.com/p/AF1QipNElNemO0juJzP9RvAUmNxOO7ztyD0XW-oW-HZE=w426-h240-k-no";
+        private Dictionary<int, string> NonInfinityNumbersWithResults = new Dictionary<int, string>()
+        {
+            { 0, "1" },
+            { 1, "1" },
+            { 21 , "51090942171709440000" },
+            { 22 , "1.1240007277776077e+21" },
+            { 169, "4.269068009004705e+304" },
+            { 170, "7.257415615307999e+306" },
+        };
+
+        private List<string> InvalidIputs = new List<string>() { " ", "!", "1a", "q", "null" };
 
         [Test]
-        public void CheckArticleCoordinates()
+        public void LayoutTest()
         {
-            var wikipediaPage = googlePage.GoToWikipedia();
-            var gigaBerlinPage = wikipediaPage.OpenGigaBerlinArticle(WikiArticles.GigaBerlin);
-            Assert.IsNotNull(gigaBerlinPage, "It's expected page not be NULL after moving to this page from the 'Home' page");
+            Assert.IsTrue(_factorialPage.IsHeaderHasExpectedDesign(), "Header title style is not match with expected");
+            Assert.IsTrue(_factorialPage.IsEnterIntegerFiledHasExpectedDesign(), "the 'Enter Integer' field style is not match with expected");
+            Assert.IsTrue(_factorialPage.IsCalculateButtonHasExpectedDesign(), "the 'Calculate' button style is not match with expected");
+            Assert.IsTrue(_factorialPage.IsLinkBroken(AllFactorialLinks.TermsAndConditions), "Verification element is not found for the 'Terms and Conditions' link broken");
+            Assert.IsTrue(_factorialPage.IsLinkBroken(AllFactorialLinks.Privacy), "Verification element is not found for the 'Privacy' link broken");
+            Assert.IsTrue(_factorialPage.IsLinkBroken(AllFactorialLinks.Qxf2Services), "Verification element is not found for the 'Qxf2Services' link broken");
+        }
 
-            //Get Coordinats
-            var actualGigaBerlinCoordinates = gigaBerlinPage.GetCoordinates();
-            Assert.AreEqual(expectedGigaBerlinCoordinates, actualGigaBerlinCoordinates, "Assert is failed because actual Giga Berlin coordinates are not match with expected");
+        [Test]
+        public void CheckNonInfinityFactorials([Values(0, 1, 21, 22, 169, 170)] int factorialNumberToCalculate)
+        {
+            var actualResult = _factorialPage.CalculateFactorial(factorialNumberToCalculate);
+            Assert.AreEqual(NonInfinityNumbersWithResults[factorialNumberToCalculate], actualResult, "Actual result of factorial calculation is not match with expected");
+        }
 
-            //Go to maps
-            var googleMapsPage = googlePage.GoToGoogleMaps();
-            googleMapsPage.Search(actualGigaBerlinCoordinates);
-            Assert.IsTrue(googleMapsPage.IsSearchResultHasExpectedDemographicInfo(GoogleMapDemographicInfo.Address, expectedGigaBerlinAddress), $"It's expected the the result search has ADDRESS: {expectedGigaBerlinAddress}. BUT it was NOT");
-            Assert.IsTrue(googleMapsPage.IsSearchResultHasExpectedDemographicInfo(GoogleMapDemographicInfo.PlusCodes, expectedGigaBerlinPlusCodes), $"It's expected the the result search has PLUS CODES: {expectedGigaBerlinPlusCodes}. BUT it was NOT");
-            Assert.IsTrue(googleMapsPage.IsSearchResultHasExpectedDemographicInfo(GoogleMapDemographicInfo.HeaderPhoto, expectedGigaBerlinHeaderPhoto), $"It's expected the the result search has header picture has url: {expectedGigaBerlinHeaderPhoto}. BUT it was another");
+        [Test]
+        public void CheckInfinityFactorial()
+        {
+            var randomNumber = new Random().Next(171, 990);
+            Assert.IsTrue(_factorialPage.IsInifinityNumberNotCalculated(randomNumber), "Error is not displayed: 'The factorial of {randomNumber} is: Infinity'");
+        }
+
+        [Test]
+        public void InvalidScenarious()
+        {
+            foreach (var input in InvalidIputs)
+            {
+                Assert.IsTrue(_factorialPage.IsErrorDisplayedWithInvalidInput(input), $"Error is not displayed for value: {input}");
+            }
         }
     }
 }

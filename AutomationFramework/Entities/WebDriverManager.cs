@@ -201,6 +201,16 @@ namespace AutomationFramework.Entities
         }
 
         ///<summary>
+        ///Close tabs by title and switch to another one
+        ///</summary>
+        public void CloseTabe(string tabTitleToClose, string tabTitleToSwitch)
+        {
+            _driver.SwitchTo().Window(tabTitleToClose);
+            _driver.Close();
+            _driver.SwitchTo().Window(tabTitleToSwitch);
+        }
+
+        ///<summary>
         ///Allows to switch tabs by name
         ///</summary>
         public void SwitchTabByTitle(string tabTitle, int tabsExpected, bool isHardCheck = false)
@@ -237,6 +247,14 @@ namespace AutomationFramework.Entities
         }
 
         ///<summary>
+        ///Allows to previous page from current page
+        ///</summary>
+        public void NavigateBack()
+        {
+            _driver.Navigate().Back();
+        }
+
+        ///<summary>
         ///Return the name of current page
         ///</summary>
         public string GetPageTitle()
@@ -250,8 +268,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public IWebElement FindElement(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
         {
-            _logManager.LogAction(LogLevels.local, $"Searching for element. Locator: {elementLocator.ToString()}...");
-
             var message = string.Empty;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -265,6 +281,7 @@ namespace AutomationFramework.Entities
                 try
                 {
                     var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
+                    _logManager.LogAction(LogLevels.local, $"Element was found. Locator: {elementLocator.ToString()}...", true, element);
                     return element;
                 }
                 catch (NoSuchElementException e)
