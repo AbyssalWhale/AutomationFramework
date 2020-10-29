@@ -20,7 +20,7 @@ namespace Tests
         public override void SetUp()
         {
             base.SetUp();
-            _factorialPage = new FactorialPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager);
+            _factorialPage = new FactorialPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager, _utilsManager);
         }
 
         [TearDown]

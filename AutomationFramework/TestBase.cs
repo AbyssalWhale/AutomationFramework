@@ -12,6 +12,7 @@ namespace AutomationFramework
         protected FolderManager _folderManager;
         protected LogManager _logManager;
         protected WebDriverManager _webDriverManager;
+        protected UtilsManager _utilsManager;
 
         ///<summary>
         ///Initializes base objects for tests including IWebDriver, RunSettingManager etc... Use 1 time for all project tests in [OneTimeSetUp]  
@@ -22,6 +23,7 @@ namespace AutomationFramework
             _logManager = new LogManager();
             _folderManager = new FolderManager(_runSettingsSettings, _logManager);
             _webDriverManager = GetWebDriverManager(_runSettingsSettings.Browser, _logManager);
+            _utilsManager = new UtilsManager(_runSettingsSettings);
 
             _logManager._driver = _webDriverManager._driver;
         }
