@@ -43,8 +43,13 @@ namespace RegressionUiTests.POM
 
         #region External Methods
 
-        public FactorialPage(WebDriverManager webDriverManager, RunSettingManager runSettingsManager, LogManager logManager, FolderManager folderManager) :
-            base(webDriverManager, runSettingsManager, logManager, folderManager)
+        public FactorialPage(
+            WebDriverManager webDriverManager, 
+            RunSettingManager runSettingsManager, 
+            LogManager logManager, 
+            FolderManager folderManager,
+            UtilsManager utilsManager) :
+            base(webDriverManager, runSettingsManager, logManager, folderManager, utilsManager)
         {
             _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
             Assert.IsTrue(IsAt(), $"It's expected page be: {Title} but was: {_webDriverManager.GetPageTitle()}");
@@ -102,7 +107,7 @@ namespace RegressionUiTests.POM
         {
             var result = false;
 
-            _webDriverManager.ClickOnElement(By.XPath(EnumExtension.GetEnumStringValue(typeof(AllFactorialLinks), link)));
+            _webDriverManager.ClickOnElement(By.XPath(_utilsManager.Enum.GetEnumStringValue(typeof(AllFactorialLinks), link)));
 
             IWebElement verificationElement = _webDriverManager.FindElement(AllFactorialLinksVerificationElements[link]);
        
