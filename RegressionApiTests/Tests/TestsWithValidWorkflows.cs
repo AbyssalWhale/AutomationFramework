@@ -6,7 +6,7 @@ using Tests;
 
 namespace RegressionApiTests.Tests
 {
-    class TestsWithValidWorkflows : RegressionUiTestsBase
+    class TestsWithValidWorkflows : RegressionApiTestsBase
     {
         [Test]
         public void GetAllBoards()

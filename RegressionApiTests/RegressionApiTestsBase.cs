@@ -4,12 +4,12 @@ using NUnit.Framework;
 namespace Tests
 {
     [TestFixture]
-    public class RegressionUiTestsBase : TestBase
+    public class RegressionApiTestsBase : TestBase
     {
         [OneTimeSetUp]
         public override void OneTimeSetUp()
         {
-            base.OneTimeSetUp();
+            base.OneTimeSetUpApiWithOutUi();
         }
 
         [SetUp]
@@ -27,7 +27,7 @@ namespace Tests
         [OneTimeTearDown]
         public override void OneTimeTearDown()
         {
-            base.OneTimeTearDown();
+            base.OneTimeTearDownApiWithOutUi();
         }
     }
 }
