@@ -22,10 +22,22 @@ namespace AutomationFramework
             _runSettingsSettings = new RunSettingManager();
             _logManager = new LogManager();
             _folderManager = new FolderManager(_runSettingsSettings, _logManager);
-            _webDriverManager = GetWebDriverManager(_runSettingsSettings.Browser, _logManager);
             _utilsManager = new UtilsManager(_runSettingsSettings);
 
+            _webDriverManager = GetWebDriverManager(_runSettingsSettings, _logManager);
             _logManager._driver = _webDriverManager._driver;
+
+        }
+
+        ///<summary>
+        ///Initializes base objects for tests without IWebDriver. Use 1 time for all project tests in [OneTimeSetUp]  
+        ///</summary>
+        public void OneTimeSetUpApiWithOutUi()
+        {
+            _runSettingsSettings = new RunSettingManager();
+            _logManager = new LogManager();
+            _folderManager = new FolderManager(_runSettingsSettings, _logManager);
+            _utilsManager = new UtilsManager(_runSettingsSettings);
         }
 
         ///<summary>
@@ -49,6 +61,16 @@ namespace AutomationFramework
         ///Perform actions that are required after all tests were run. Use 1 time for all project tests in [OneTimeTearDown]  
         ///</summary>
         public virtual void OneTimeTearDown()
+        {
+            _webDriverManager.Quit(_runSettingsSettings.Browser);
+            _logManager.LogAction(LogLevels.global, $"Tests finished execution");
+            _logManager.CreateFinalCSVLog(LogLevels.global);
+        }
+
+        ///<summary>
+        ///Perform actions that are required after all API tests without UI were run. Use 1 time for all project tests in [OneTimeTearDown]  
+        ///</summary>
+        public virtual void OneTimeTearDownApiWithOutUi()
         {
             _webDriverManager.Quit(_runSettingsSettings.Browser);
             _logManager.LogAction(LogLevels.global, $"Tests finished execution");

@@ -54,21 +54,5 @@ namespace AutomationFramework.Entities
 
             _localLogManager.CreateLogForTest(_localRunSettingManager, testContext);
         }
-
-        ///<summary>
-        ///Create new global folder for all tests in path: RunSettingManager.TestsReportDirectory. Returns new folder path in the end.
-        ///</summary>
-        public string CreateFolderForAllTests(string folderName)
-        {
-            return string.Empty;
-        }
-
-        ///<summary>
-        ///Create new folder for current text in path: RunSettingManager.TestsAssetDirectory. Returns new folder path in the end.
-        ///</summary>
-        public string CreateFolderInTestDirectory()
-        {
-            return string.Empty;
-        }
     }
 }

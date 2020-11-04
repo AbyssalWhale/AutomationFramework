@@ -8,6 +8,7 @@ using AutomationFramework.Enums;
 using NUnit.Framework;
 using System.Threading;
 using System;
+using OpenQA.Selenium.Interactions;
 
 namespace AutomationFramework.Entities
 {
@@ -15,20 +16,22 @@ namespace AutomationFramework.Entities
     {
         private static WebDriverManager _webDriverManager;
         private LogManager _logManager;
+        private RunSettingManager _runSettingManager;
         internal IWebDriver _driver;
 
-        protected WebDriverManager(string driverName, LogManager logManager)
+        protected WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
         {
-            _driver = SetUpDriver(driverName);
+            _runSettingManager = runSettingManager;
+            _driver = SetUpDriver(_runSettingManager.Browser);
             _logManager = logManager;
 
-            _logManager.LogAction(LogLevels.global, $"Initializing the '{driverName}' browser");
+            _logManager.LogAction(LogLevels.global, $"Initializing the '{runSettingManager.Browser}' browser");
         }
 
-        internal static WebDriverManager GetWebDriverManager(string driverName, LogManager logManager)
+        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
         {
             if (_webDriverManager == null) {
-                _webDriverManager = new WebDriverManager(driverName, logManager);
+                _webDriverManager = new WebDriverManager(runSettingManager, logManager);
             }
 
             return _webDriverManager;
@@ -63,16 +66,13 @@ namespace AutomationFramework.Entities
         {
             IWebDriver driver = null;
 
-            string debugPath = Path.GetDirectoryName($"{System.AppDomain.CurrentDomain.BaseDirectory}");
-            string browsersDriversFolder = "/drivers";
-
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                driver = new ChromeDriver($"{debugPath}{browsersDriversFolder}", SetChrome());
+                driver = new ChromeDriver($"{_runSettingManager.BrowserDriversPath}", SetChrome());
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
             {
-                driver = new FirefoxDriver($"{debugPath}{browsersDriversFolder}", SetFirefox());
+                driver = new FirefoxDriver($"{_runSettingManager.BrowserDriversPath}", SetFirefox());
             }
             else
             {
@@ -163,15 +163,15 @@ namespace AutomationFramework.Entities
             stopwatch.Start();
 
             string loadingScript = "return document.readyState";
-            IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
-            string pageState = (string)js.ExecuteScript(loadingScript);
+
+            string pageState = (string)ExecuteJSScript(loadingScript);
 
             while (pageState != "complete")
             {
                 if (stopwatch.ElapsedMilliseconds > 60000)
                     Assert.Fail($"It is impossible to load page.");
 
-                pageState = (string)js.ExecuteScript(loadingScript);
+                pageState = (string)ExecuteJSScript(loadingScript);
 
                 Thread.Sleep(500);
             }
@@ -180,6 +180,8 @@ namespace AutomationFramework.Entities
 
             return true;
         }
+
+        #region Browser
 
         ///<summary>
         ///Allows to quit browser and kill all processors
@@ -192,7 +194,7 @@ namespace AutomationFramework.Entities
         }
 
         ///<summary>
-        ///Allows to execute JS script
+        ///Allows to execute JS 
         ///</summary>
         public object ExecuteJSScript(string script)
         {
@@ -201,9 +203,18 @@ namespace AutomationFramework.Entities
         }
 
         ///<summary>
+        ///Allows to execute JS for elements
+        ///</summary>
+        public object ExecuteJSScript(string script, IWebElement[] elements)
+        {
+            _logManager.LogAction(LogLevels.local, $"JS script will be execuded for element {elements.Length}: {script}...", true, elements[0]);
+            return ((IJavaScriptExecutor)_driver).ExecuteScript(script, elements);
+        }
+
+        ///<summary>
         ///Close tabs by title and switch to another one
         ///</summary>
-        public void CloseTabe(string tabTitleToClose, string tabTitleToSwitch)
+        public void CloseTab(string tabTitleToClose, string tabTitleToSwitch)
         {
             _driver.SwitchTo().Window(tabTitleToClose);
             _driver.Close();
@@ -252,6 +263,24 @@ namespace AutomationFramework.Entities
         public void NavigateBack()
         {
             _driver.Navigate().Back();
+            IsPageLoaded();
+        }
+
+        ///<summary>
+        ///Delete all current cookies
+        ///</summary>
+        public void DeleteAllCookies()
+        {
+            _driver.Manage().Cookies.DeleteAllCookies();
+        }
+
+        ///<summary>
+        ///Accepts page allert and if the page is loaded after accepting
+        ///</summary>
+        public void AcceptAlert()
+        {
+            _driver.SwitchTo().Alert().Accept();
+            IsPageLoaded();
         }
 
         ///<summary>
@@ -262,7 +291,10 @@ namespace AutomationFramework.Entities
             return _driver.Title;
         }
 
+        #endregion
+
         #region IteractionWithWebElements
+
         ///<summary>
         ///Wait and search element for set time. Default is 60 seconds
         ///</summary>
@@ -398,6 +430,36 @@ namespace AutomationFramework.Entities
         }
 
         ///<summary>
+        ///Scrool the browser until element is visible
+        ///</summary>
+        public void MoveToElement(By locator)
+        {
+            if(IsElementExistInDOM(locator)){
+                ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView(true);", FindElement(locator));
+            } else
+            {
+                Assert.IsNull($"Element doesn't exist in DOM. Locator: {locator}");
+            }
+        }
+
+        ///<summary>
+        ///Hover the cursor over an element
+        ///</summary>
+        public void HoverElement(By locator)
+        {
+            if (IsElementExistInDOM(locator))
+            {
+                var actions = new Actions(_driver);
+                actions.MoveToElement(FindElement(locator)).Perform();
+            }
+            else
+            {
+                Assert.IsNull($"Element doesn't exist in DOM. Locator: {locator}");
+            }
+
+        }
+
+        ///<summary>
         ///Returns TRUE if iframe exists in DOM and driver was switched - otherwise FALSE.
         ///</summary>
         public bool SwitchToIFrame(By frameLocator)
@@ -425,7 +487,9 @@ namespace AutomationFramework.Entities
 
             _logManager.LogAction(LogLevels.local, $"Switching to default and active content...");
         }
+        
         #endregion
+
         #endregion
     }
 }
