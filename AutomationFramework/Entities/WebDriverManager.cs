@@ -16,20 +16,22 @@ namespace AutomationFramework.Entities
     {
         private static WebDriverManager _webDriverManager;
         private LogManager _logManager;
+        private RunSettingManager _runSettingManager;
         internal IWebDriver _driver;
 
-        protected WebDriverManager(string driverName, LogManager logManager)
+        protected WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
         {
-            _driver = SetUpDriver(driverName);
+            _runSettingManager = runSettingManager;
+            _driver = SetUpDriver(_runSettingManager.Browser);
             _logManager = logManager;
 
-            _logManager.LogAction(LogLevels.global, $"Initializing the '{driverName}' browser");
+            _logManager.LogAction(LogLevels.global, $"Initializing the '{runSettingManager.Browser}' browser");
         }
 
-        internal static WebDriverManager GetWebDriverManager(string driverName, LogManager logManager)
+        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
         {
             if (_webDriverManager == null) {
-                _webDriverManager = new WebDriverManager(driverName, logManager);
+                _webDriverManager = new WebDriverManager(runSettingManager, logManager);
             }
 
             return _webDriverManager;
@@ -64,16 +66,13 @@ namespace AutomationFramework.Entities
         {
             IWebDriver driver = null;
 
-            string debugPath = Path.GetDirectoryName($"{System.AppDomain.CurrentDomain.BaseDirectory}");
-            string browsersDriversFolder = "/drivers";
-
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                driver = new ChromeDriver($"{debugPath}{browsersDriversFolder}", SetChrome());
+                driver = new ChromeDriver($"{_runSettingManager.BrowserDriversPath}", SetChrome());
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
             {
-                driver = new FirefoxDriver($"{debugPath}{browsersDriversFolder}", SetFirefox());
+                driver = new FirefoxDriver($"{_runSettingManager.BrowserDriversPath}", SetFirefox());
             }
             else
             {

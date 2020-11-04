@@ -11,6 +11,7 @@ namespace AutomationFramework.Entities
     {
         public string InstanceUrl { get; set; }
         public string ApiInstanceUrl { get; set; }
+        public string BrowserDriversPath { get; set; }
         public string Browser { get; set; }
         public string StepRecordingEnabled { get; set; }
         public string Username { get; set; }
@@ -31,6 +32,7 @@ namespace AutomationFramework.Entities
         {
             InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
             ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));
+            BrowserDriversPath = TryToParseTestContext(nameof(BrowserDriversPath));
             Browser = TryToParseTestContext(nameof(Browser));
             StepRecordingEnabled = TryToParseTestContext(nameof(StepRecordingEnabled));
             Username = TryToParseTestContext(nameof(Username));

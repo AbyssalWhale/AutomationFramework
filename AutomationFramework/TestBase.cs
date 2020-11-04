@@ -22,7 +22,7 @@ namespace AutomationFramework
             _runSettingsSettings = new RunSettingManager();
             _logManager = new LogManager();
             _folderManager = new FolderManager(_runSettingsSettings, _logManager);
-            _webDriverManager = GetWebDriverManager(_runSettingsSettings.Browser, _logManager);
+            _webDriverManager = GetWebDriverManager(_runSettingsSettings, _logManager);
             _utilsManager = new UtilsManager(_runSettingsSettings);
 
             _logManager._driver = _webDriverManager._driver;

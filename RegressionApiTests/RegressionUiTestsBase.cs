@@ -9,7 +9,7 @@ namespace Tests
         [OneTimeSetUp]
         public override void OneTimeSetUp()
         {
-            base.OneTimeSetUpApi();
+            base.OneTimeSetUp();
         }
 
         [SetUp]
@@ -27,7 +27,7 @@ namespace Tests
         [OneTimeTearDown]
         public override void OneTimeTearDown()
         {
-            base.OneTimeSetUpApi();
+            base.OneTimeTearDown();
         }
     }
 }
