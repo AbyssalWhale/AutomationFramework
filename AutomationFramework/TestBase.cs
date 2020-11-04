@@ -29,6 +29,19 @@ namespace AutomationFramework
         }
 
         ///<summary>
+        ///Initializes base objects for API tests without IWebDriver. Use 1 time for all project tests in [OneTimeSetUp]  
+        ///</summary>
+        public virtual void OneTimeSetUpApi()
+        {
+            _runSettingsSettings = new RunSettingManager();
+            _logManager = new LogManager();
+            _folderManager = new FolderManager(_runSettingsSettings, _logManager);
+            _utilsManager = new UtilsManager(_runSettingsSettings);
+
+            _webDriverManager = null;
+        }
+
+        ///<summary>
         ///Perform actions that are required for each test before run. Use in [SetUp]  
         ///</summary>
         public virtual void SetUp()
@@ -52,6 +65,15 @@ namespace AutomationFramework
         {
             _webDriverManager.Quit(_runSettingsSettings.Browser);
             _logManager.LogAction(LogLevels.global, $"Tests finished execution");
+            _logManager.CreateFinalCSVLog(LogLevels.global);
+        }
+
+        ///<summary>
+        ///Perform actions that are required after all API tests were run. Use 1 time for all project tests in [OneTimeTearDown]  
+        ///</summary>
+        public virtual void OneTimeTearDownAPI()
+        {
+            _logManager.LogAction(LogLevels.global, $"API tests finished execution");
             _logManager.CreateFinalCSVLog(LogLevels.global);
         }
     }

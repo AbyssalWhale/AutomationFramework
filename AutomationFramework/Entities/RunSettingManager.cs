@@ -1,5 +1,6 @@
 ﻿using AutomationFramework.Enums;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace AutomationFramework.Entities
@@ -9,6 +10,7 @@ namespace AutomationFramework.Entities
     public class RunSettingManager
     {
         public string InstanceUrl { get; set; }
+        public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
         public string StepRecordingEnabled { get; set; }
         public string Username { get; set; }
@@ -18,6 +20,8 @@ namespace AutomationFramework.Entities
         public string TestsAssetDirectory { get; set; }
         public string TestAssetDirectory { get; set; }
         public string ApiKey { get; set; }
+        public string ApiToken { get; set; }
+        public List<KeyValuePair<string, string>> APIHeaders { get; set; }
         public string DBServer { get; set; }
         public string DBName { get; set; }
         public string DBUserId { get; set; }
@@ -26,6 +30,7 @@ namespace AutomationFramework.Entities
         public RunSettingManager()
         {
             InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
+            ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));
             Browser = TryToParseTestContext(nameof(Browser));
             StepRecordingEnabled = TryToParseTestContext(nameof(StepRecordingEnabled));
             Username = TryToParseTestContext(nameof(Username));
@@ -35,6 +40,8 @@ namespace AutomationFramework.Entities
             TestsAssetDirectory = TryToParseTestContext(nameof(TestsAssetDirectory));
             TestAssetDirectory = string.Empty;
             ApiKey = TryToParseTestContext(nameof(ApiKey));
+            ApiToken = TryToParseTestContext(nameof(ApiToken));
+            APIHeaders = new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>("CCAPIKey", "Newman"), };
             DBServer = TryToParseTestContext(nameof(DBServer));
             DBName = TryToParseTestContext(nameof(DBName));
             DBUserId = TryToParseTestContext(nameof(DBUserId));

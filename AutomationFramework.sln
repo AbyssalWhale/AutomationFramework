@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFramework", "AutomationFramework\AutomationFramework.csproj", "{7689D184-CA61-4677-AAD5-8FE06FFC3BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionUiTests", "RegressionUiTests\RegressionUiTests.csproj", "{8D353FAC-F0EF-4999-B46F-D7EB45673AA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegressionUiTests", "RegressionUiTests\RegressionUiTests.csproj", "{8D353FAC-F0EF-4999-B46F-D7EB45673AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionApiTests", "RegressionApiTests\RegressionApiTests.csproj", "{B70C26C8-E4C1-47A1-973A-79D8F0FA8B55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8D353FAC-F0EF-4999-B46F-D7EB45673AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D353FAC-F0EF-4999-B46F-D7EB45673AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D353FAC-F0EF-4999-B46F-D7EB45673AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B70C26C8-E4C1-47A1-973A-79D8F0FA8B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B70C26C8-E4C1-47A1-973A-79D8F0FA8B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B70C26C8-E4C1-47A1-973A-79D8F0FA8B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B70C26C8-E4C1-47A1-973A-79D8F0FA8B55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
