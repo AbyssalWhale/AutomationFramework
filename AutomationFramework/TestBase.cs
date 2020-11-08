@@ -72,7 +72,6 @@ namespace AutomationFramework
         ///</summary>
         public virtual void OneTimeTearDownApiWithOutUi()
         {
-            _webDriverManager.Quit(_runSettingsSettings.Browser);
             _logManager.LogAction(LogLevels.global, $"Tests finished execution");
             _logManager.CreateFinalCSVLog(LogLevels.global);
         }

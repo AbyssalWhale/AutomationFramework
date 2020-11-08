@@ -43,7 +43,9 @@ namespace AutomationFramework.Entities
             TestAssetDirectory = string.Empty;
             ApiKey = TryToParseTestContext(nameof(ApiKey));
             ApiToken = TryToParseTestContext(nameof(ApiToken));
-            APIHeaders = new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>("CCAPIKey", "Newman"), };
+            APIHeaders = new List<KeyValuePair<string, string>> {
+                new KeyValuePair<string, string>("header1Name", "Header1Value")
+            };
             DBServer = TryToParseTestContext(nameof(DBServer));
             DBName = TryToParseTestContext(nameof(DBName));
             DBUserId = TryToParseTestContext(nameof(DBUserId));
