@@ -12,12 +12,12 @@ namespace AutomationFramework.Entities
         public StringHelper String { get; private set; }
         public ApiHelper API { get; private set; }
 
-        public UtilsManager(RunSettingManager runSettingManager)
+        public UtilsManager(RunSettingManager runSettingManager, LogManager logManager)
         {
             DataBase = new DataBaseHelper(runSettingManager.DBServer, runSettingManager.DBName, runSettingManager.DBUserId, runSettingManager.DBUserPass);
             Enum = new EnumHelper();
             String = new StringHelper();
-            API = new ApiHelper(runSettingManager);
+            API = new ApiHelper(runSettingManager, logManager);
         }
     }
 }
