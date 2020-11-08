@@ -19,10 +19,7 @@ namespace AutomationFramework
         ///</summary>
         public virtual void OneTimeSetUp()
         {
-            _runSettingsSettings = new RunSettingManager();
-            _logManager = new LogManager();
-            _folderManager = new FolderManager(_runSettingsSettings, _logManager);
-            _utilsManager = new UtilsManager(_runSettingsSettings);
+            GeneralOneTimeSetup();
 
             _webDriverManager = GetWebDriverManager(_runSettingsSettings, _logManager);
             _logManager._driver = _webDriverManager._driver;
@@ -34,11 +31,17 @@ namespace AutomationFramework
         ///</summary>
         public void OneTimeSetUpApiWithOutUi()
         {
+            GeneralOneTimeSetup();
+        }
+
+        private void GeneralOneTimeSetup()
+        {
             _runSettingsSettings = new RunSettingManager();
             _logManager = new LogManager();
             _folderManager = new FolderManager(_runSettingsSettings, _logManager);
-            _utilsManager = new UtilsManager(_runSettingsSettings);
+            _utilsManager = new UtilsManager(_runSettingsSettings, _logManager);
         }
+
 
         ///<summary>
         ///Perform actions that are required for each test before run. Use in [SetUp]  
