@@ -1,5 +1,6 @@
 ﻿using AutomationFramework.Enums;
 using NUnit.Framework;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 
@@ -22,7 +23,7 @@ namespace AutomationFramework.Entities
         public string TestAssetDirectory { get; set; }
         public string ApiKey { get; set; }
         public string ApiToken { get; set; }
-        public List<KeyValuePair<string, string>> APIHeaders { get; set; }
+        public ConcurrentDictionary<string, string> APIHeaders { get; set; }
         public string DBServer { get; set; }
         public string DBName { get; set; }
         public string DBUserId { get; set; }
@@ -43,9 +44,7 @@ namespace AutomationFramework.Entities
             TestAssetDirectory = string.Empty;
             ApiKey = TryToParseTestContext(nameof(ApiKey));
             ApiToken = TryToParseTestContext(nameof(ApiToken));
-            APIHeaders = new List<KeyValuePair<string, string>> {
-                new KeyValuePair<string, string>("header1Name", "Header1Value")
-            };
+            APIHeaders = new ConcurrentDictionary<string, string>();
             DBServer = TryToParseTestContext(nameof(DBServer));
             DBName = TryToParseTestContext(nameof(DBName));
             DBUserId = TryToParseTestContext(nameof(DBUserId));

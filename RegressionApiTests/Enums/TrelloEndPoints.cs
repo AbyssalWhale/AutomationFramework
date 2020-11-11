@@ -7,6 +7,10 @@ namespace RegressionApiTests.Enums
     public enum TrelloEndPoints
     {
         [EnumMember(Value = "members/me/boards")]
-        MyAllBoards
+        MyAllBoards,
+        [EnumMember(Value = "boards/")]
+        PostBoard,
+        [EnumMember(Value = "boards/")]
+        RemoveBoard
     }
 }

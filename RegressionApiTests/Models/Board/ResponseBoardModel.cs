@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RegressionApiTests.Models.Board
 {
-    class ResponseBoardModel : IRestObject
+    public class ResponseBoardModel : IRestObject
     {
         public string name { get; set; }
         public string desc { get; set; }

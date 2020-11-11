@@ -12,7 +12,7 @@ namespace AutomationFramework
         protected FolderManager _folderManager;
         protected LogManager _logManager;
         protected WebDriverManager _webDriverManager;
-        protected UtilsManager _utilsManager;
+        public UtilsManager _utilsManager;
 
         ///<summary>
         ///Initializes base objects for tests including IWebDriver, RunSettingManager etc... Use 1 time for all project tests in [OneTimeSetUp]  
@@ -66,14 +66,18 @@ namespace AutomationFramework
         public virtual void OneTimeTearDown()
         {
             _webDriverManager.Quit(_runSettingsSettings.Browser);
-            _logManager.LogAction(LogLevels.global, $"Tests finished execution");
-            _logManager.CreateFinalCSVLog(LogLevels.global);
+            GeneralOneTimeTearDown();
         }
 
         ///<summary>
         ///Perform actions that are required after all API tests without UI were run. Use 1 time for all project tests in [OneTimeTearDown]  
         ///</summary>
         public virtual void OneTimeTearDownApiWithOutUi()
+        {
+            GeneralOneTimeTearDown();
+        }
+
+        private void GeneralOneTimeTearDown()
         {
             _logManager.LogAction(LogLevels.global, $"Tests finished execution");
             _logManager.CreateFinalCSVLog(LogLevels.global);

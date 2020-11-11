@@ -1,15 +1,19 @@
 using AutomationFramework;
 using NUnit.Framework;
+using RegressionApiTests.Workflows;
 
 namespace Tests
 {
     [TestFixture]
-    public class RegressionApiTestsBase : TestBase
+    public class RegressionApiTestsBaseNoUI : TestBase
     {
+        internal BoardWorkflow _boardWorkflow;
+
         [OneTimeSetUp]
         public override void OneTimeSetUp()
         {
-            base.OneTimeSetUpApiWithOutUi();
+            OneTimeSetUpApiWithOutUi();
+            _boardWorkflow = new BoardWorkflow(_utilsManager);
         }
 
         [SetUp]

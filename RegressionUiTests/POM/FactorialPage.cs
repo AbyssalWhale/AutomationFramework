@@ -107,7 +107,7 @@ namespace RegressionUiTests.POM
         {
             var result = false;
 
-            _webDriverManager.ClickOnElement(By.XPath(_utilsManager.Enum.GetEnumStringValue(typeof(AllFactorialLinks), link)));
+            _webDriverManager.ClickOnElement(By.XPath(_utilsManager._enum.GetEnumStringValue(typeof(AllFactorialLinks), link)));
 
             IWebElement verificationElement = _webDriverManager.FindElement(AllFactorialLinksVerificationElements[link]);
        

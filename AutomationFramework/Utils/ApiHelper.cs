@@ -1,8 +1,12 @@
 ﻿using AutomationFramework.Entities;
 using AutomationFramework.Enums;
 using AutomationFramework.Models;
+using NUnit.Framework;
 using RestSharp;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace AutomationFramework.Utils
@@ -12,18 +16,46 @@ namespace AutomationFramework.Utils
         internal IRestClient _client;
         private RunSettingManager _runSettingsManger;
         private LogManager _logManager;
-        public ApiHelper(RunSettingManager runSettingsManger, LogManager logManager)
+        private StringHelper _stringHelper;
+        public ApiHelper(RunSettingManager runSettingsManger, LogManager logManager, StringHelper stringHelper)
         {
             _runSettingsManger = runSettingsManger;
             _logManager = logManager;
+            _stringHelper = stringHelper;
             _client = new RestClient(runSettingsManger.ApiInstanceUrl);
         }
 
-        public async Task<IRestResponse<T>> RestResponseAsync<T>(string endPoint, Method method, ICollection<KeyValuePair<string, string>> headers = null, IRestObject restObject = null) where T : new()
+        public async Task<IRestResponse<T>> RestResponseAsync<T>(
+            string endPoint, Method method,
+            ConcurrentDictionary<string, string> headers = null,
+            ConcurrentDictionary<string, string> parameters = null,
+            IRestObject restObject = null) where T : new()
         {
-            string url = $"{endPoint}?key={_runSettingsManger.ApiKey}&token={_runSettingsManger.ApiToken}";
+            var request = CreateRequest(endPoint, method, headers, parameters, restObject);
 
-            var request = new RestRequest(url, method);
+            return await _client.ExecuteAsync<T>(request);
+        }
+
+        public IRestResponse<T> RestResponse<T>(
+            string endPoint, Method method,
+            ConcurrentDictionary<string, string> headers = null,
+            ConcurrentDictionary<string, string> parameters = null,
+            IRestObject restObject = null) where T : new()
+        {
+            var request = CreateRequest(endPoint, method, headers, parameters, restObject);
+            return _client.Execute<T>(request);
+        }
+
+        private RestRequest CreateRequest(
+            string endPoint, 
+            Method method,
+            ConcurrentDictionary<string, string> headers = null,
+            ConcurrentDictionary<string, string> parameters = null,
+            IRestObject restObject = null)
+        {
+            var request = new RestRequest(endPoint, method);
+            request.AddParameter("key", _runSettingsManger.ApiKey);
+            request.AddParameter("token", _runSettingsManger.ApiToken);
 
             _logManager.LogAction(LogLevels.local, $"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint}");
 
@@ -32,12 +64,17 @@ namespace AutomationFramework.Utils
                 Parallel.ForEach(headers, header => { request.AddParameter(header.Key, header.Value, ParameterType.UrlSegment); });
             }
 
-            if (restObject != null)
+            if (parameters != null)
             {
-                request.AddJsonBody(restObject);
+                Parallel.ForEach(parameters, parameter => { request.AddParameter(parameter.Key, parameter.Value); });
             }
 
-            return await _client.ExecuteAsync<T>(request);
+            if (restObject != null)
+            {
+                Parallel.ForEach(_stringHelper.GetAllClassPropertiesWithValuesAsStrings(restObject), property => { request.AddParameter(property.Key, property.Value); });
+            }
+
+            return request;
         }
     }
 }
