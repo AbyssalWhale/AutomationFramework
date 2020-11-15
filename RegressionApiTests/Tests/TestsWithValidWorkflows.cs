@@ -1,11 +1,9 @@
 ﻿using NUnit.Framework;
 using RegressionApiTests.Enums;
 using RegressionApiTests.Models.Board;
-using RegressionApiTests.Models.Board.Enums;
 using RestSharp;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using Tests;
 
 namespace RegressionApiTests.Tests
