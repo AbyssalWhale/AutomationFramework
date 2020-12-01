@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <RunSettings>
   <TestRunParameters>
-    <Parameter name="InstanceUrl" value="http://qainterview.pythonanywhere.com/" />
+    <Parameter name="InstanceUrl" value="https://api.trello.com/" />
     <Parameter name="ApiInstanceUrl" value="https://api.trello.com/1/" />
     <!--Browser should be: chrome, firefox-->
     <Parameter name="BrowserDriversPath" value="..\..\..\..\RegressionUiTests\bin\Debug\netcoreapp2.1\drivers" />
