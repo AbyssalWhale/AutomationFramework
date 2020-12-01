@@ -410,19 +410,19 @@ namespace AutomationFramework.Entities
                     _logManager.LogAction(LogLevels.local, $"Found element in DOM. Locator: {elementLocator.ToString()};", true, element);
                     return result;
                 }
-                catch (NoSuchElementException e)
+                catch (NoSuchElementException)
+                {
+                    continue;
+                }
+                catch (StaleElementReferenceException)
+                {
+
+                }
+                catch (AssertionException)
                 {
                     
                 }
-                catch (StaleElementReferenceException e)
-                {
-                    
-                }
-                catch (AssertionException e)
-                {
-                    
-                }
-                catch (Exception e)
+                catch (Exception)
                 {
                     
                 }
