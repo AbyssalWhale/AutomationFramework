@@ -16,8 +16,4 @@
     <ProjectReference Include="..\AutomationFramework\AutomationFramework.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
-
 </Project>

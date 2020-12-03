@@ -1,19 +1,19 @@
-﻿using AutomationFramework.Utils;
-using NUnit.Framework;
-using RestSharp;
-using System;
-using System.Collections.Generic;
+﻿using NUnit.Framework;
+using RegressionUiTests.Enums;
 using Tests;
-using static RegressionUiTests.POM.FactorialPage;
 
 namespace RegressionTests.UITests
 {
     class BoardsTests : RegressionUiTestsBase
     {
         [Test]
-        public void LayoutTest()
+        public void CheckBoardCreation()
         {
-            
+            var boardsPage = _homePage.GoToLogin().Login();
+            boardsPage.CloaseAtlassinWindow();
+            var newBoardDetailsPage = boardsPage.CreateNewBoard(BoardsTypes.Personal, out string newBoardName);
+
+            Assert.AreEqual(newBoardName, newBoardDetailsPage.GetCurrentBoardTitle(), $"It's expected that new board had the name that was provided in the process of creation. Expected name: {newBoardName}");
         }
     }
 }

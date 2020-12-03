@@ -5,21 +5,22 @@ using TestsBaseConfigurator.POM;
 
 namespace RegressionUiTests.POM
 {
-    public class HomePage : BasePagePOM
+    public class LoginPage : BasePagePOM
     {
-        public override string Title => "Trello";
+        public override string Title => "Log in to Trello";
 
-        private By _loginButton => By.XPath("//a[@class='btn btn-sm btn-link text-white']");
+        private By _loginField => By.CssSelector("input#user");
+        private By _passwordField => By.CssSelector("input#password");
+        private By _loginButton => By.CssSelector("input#login");
 
-        public HomePage(
+        public LoginPage(
             WebDriverManager webDriverManager,
             RunSettingManager runSettingsManager,
             LogManager logManager,
             FolderManager folderManager,
-            UtilsManager utilsManager) : 
+            UtilsManager utilsManager) :
             base(webDriverManager, runSettingsManager, logManager, folderManager, utilsManager)
         {
-            _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
             Assert.IsTrue(IsAt(), $"It's expected page be: {Title} but was: {_webDriverManager.GetPageTitle()}");
         }
 
@@ -29,11 +30,15 @@ namespace RegressionUiTests.POM
             return _webDriverManager.GetPageTitle().Equals(Title);
         }
 
-        public LoginPage GoToLogin()
+        public BoardsPage Login()
         {
+            _webDriverManager.SendKeys(_loginField, _runSettingsSettings.Email);
+            _webDriverManager.SendKeys(_passwordField, _runSettingsSettings.Password);
             _webDriverManager.ClickOnElement(_loginButton);
+
             _webDriverManager.IsPageLoaded();
-            return new LoginPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager, _utilsManager);
+
+            return new BoardsPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager, _utilsManager);
         }
     }
 }

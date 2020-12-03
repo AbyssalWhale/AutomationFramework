@@ -5,35 +5,35 @@ using TestsBaseConfigurator.POM;
 
 namespace RegressionUiTests.POM
 {
-    public class HomePage : BasePagePOM
+    public class BoardDetailsPage : BasePagePOM
     {
-        public override string Title => "Trello";
+        public override string Title => "| Trello";
 
-        private By _loginButton => By.XPath("//a[@class='btn btn-sm btn-link text-white']");
+        private By BoardTitle => By.XPath("//div[@class='board-header-btn mod-board-name inline-rename-board js-rename-board']/h1");
 
-        public HomePage(
+        public BoardDetailsPage(
             WebDriverManager webDriverManager,
             RunSettingManager runSettingsManager,
             LogManager logManager,
             FolderManager folderManager,
-            UtilsManager utilsManager) : 
+            UtilsManager utilsManager) :
             base(webDriverManager, runSettingsManager, logManager, folderManager, utilsManager)
         {
-            _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
+            _webDriverManager.IsPageLoaded();
             Assert.IsTrue(IsAt(), $"It's expected page be: {Title} but was: {_webDriverManager.GetPageTitle()}");
         }
 
         protected override bool IsAt()
         {
             _webDriverManager.IsPageLoaded();
-            return _webDriverManager.GetPageTitle().Equals(Title);
+            return _webDriverManager.GetPageTitle().Contains(Title);
         }
 
-        public LoginPage GoToLogin()
+        public string GetCurrentBoardTitle()
         {
-            _webDriverManager.ClickOnElement(_loginButton);
-            _webDriverManager.IsPageLoaded();
-            return new LoginPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager, _utilsManager);
+            var element = _webDriverManager.FindElement(BoardTitle);
+
+            return element.Text;
         }
     }
 }

@@ -8,7 +8,8 @@
     <Parameter name="Browser" value="chrome" />
     <Parameter name="StepRecordingEnabled" value="true" />
     <Parameter name="Username" value="User" />
-    <Parameter name="Password" value="Password1234" />
+    <Parameter name="Password" value="0662378428Og" />
+	<Parameter name="Email" value="olegenikus@gmail.com" />
     <Parameter name="TestsReportDirectory" value="../../../TestsData/TestsReports" />
     <Parameter name="TestsAssetDirectory" value="../../../TestsData/TestsAssets" />
     <!--API-->
