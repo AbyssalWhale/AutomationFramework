@@ -17,6 +17,7 @@ namespace AutomationFramework.Entities
         public string StepRecordingEnabled { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string Email { get; set; }
         public string TestsReportDirectory { get; set; }
         public string TestReportDirectory { get; set; }
         public string TestsAssetDirectory { get; set; }
@@ -38,6 +39,7 @@ namespace AutomationFramework.Entities
             StepRecordingEnabled = TryToParseTestContext(nameof(StepRecordingEnabled));
             Username = TryToParseTestContext(nameof(Username));
             Password = TryToParseTestContext(nameof(Password));
+            Email = TryToParseTestContext(nameof(Email));
             TestsReportDirectory = TryToParseTestContext(nameof(TestsReportDirectory));
             TestReportDirectory = string.Empty;
             TestsAssetDirectory = TryToParseTestContext(nameof(TestsAssetDirectory));
