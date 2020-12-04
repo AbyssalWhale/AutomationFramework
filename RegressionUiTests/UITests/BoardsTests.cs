@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using RegressionUiTests.Enums;
-using Tests;
+using TestConfigurator.Enums.UI;
+using TestConfigurator.TestFixtures;
 
 namespace RegressionTests.UITests
 {

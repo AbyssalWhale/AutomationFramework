@@ -1,15 +1,15 @@
 ﻿using NUnit.Framework;
-using RegressionApiTests.Enums;
 using RegressionApiTests.Models.Board;
 using RestSharp;
 using System.Collections.Generic;
 using System.Net;
-using Tests;
+using TestConfigurator.Enums.API;
+using TestConfigurator.TestFixtures;
 
 namespace RegressionApiTests.Tests
 {
     [Parallelizable(ParallelScope.All)]
-    class TestsWithValidWorkflows : RegressionApiTestsBaseNoUI
+    class TestsWithValidWorkflows : ApiTestsBase
     {
         [Test]
         public void CheckGetAllBoards()
