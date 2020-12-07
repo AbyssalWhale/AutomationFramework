@@ -1,6 +1,8 @@
 ﻿using AutomationFramework.Entities;
 using RegressionApiTests.Models.Board;
 using RestSharp;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TestConfigurator.Enums.API;
 using TestConfigurator.Models.API.Board.Enums;
@@ -46,6 +48,12 @@ namespace TestConfigurator.Workflows.API
         {
             var result = await _utilsManager._api.RestResponseAsync<object>($"{_utilsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.RemoveBoard)}{id}", Method.DELETE);
             return result;
+        }
+
+        public void RemoveAllBaordsAsync()
+        {
+            var allBoardsGetResponse =  _utilsManager._api.RestResponseAsync<List<ResponseBoardModel>>(_utilsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.MyAllBoards), Method.GET);
+            Parallel.ForEach(allBoardsGetResponse.Result.Data, async board => { await RemoveBoardAsync(board.id); });
         }
     }
 }

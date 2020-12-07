@@ -7,7 +7,7 @@ namespace TestConfigurator.Models.UI
 {
     public class BoardsPage : BasePagePOM
     {
-        public override string Title => "Boards | Trello";
+        public override string Title => "Trello";
 
         private By _closeAtlassingWindow => By.XPath("//*[@id='layer-manager-overlay']//span[@aria-label='CloseIcon']");
 
@@ -26,12 +26,12 @@ namespace TestConfigurator.Models.UI
         protected override bool IsAt()
         {
             _webDriverManager.IsPageLoaded();
-            return _webDriverManager.GetPageTitle().Equals(Title);
+            return _webDriverManager.GetPageTitle().Contains(Title);
         }
 
         public void CloaseAtlassinWindow()
         {
-            if (_webDriverManager.IsElementExistInDOM(_closeAtlassingWindow))
+            if (_webDriverManager.IsElementExistInDOM(_closeAtlassingWindow, secondsToWait: 15))
             {
                 _webDriverManager.ClickOnElement(_closeAtlassingWindow);
             }

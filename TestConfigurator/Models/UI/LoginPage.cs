@@ -10,7 +10,8 @@ namespace TestConfigurator.Models.UI
 
         private By _loginField => By.CssSelector("input#user");
         private By _passwordField => By.CssSelector("input#password");
-        private By _loginButton => By.CssSelector("input#login");
+        private By _loginWithAtlassinButton => By.CssSelector("input#login");
+        private By _loginButton => By.XPath("//span[text()='Log in']");
 
         public LoginPage(
             WebDriverManager webDriverManager,
@@ -32,9 +33,13 @@ namespace TestConfigurator.Models.UI
         public BoardsPage Login()
         {
             _webDriverManager.SendKeys(_loginField, _runSettingsSettings.Email);
+            IsAt();
+            _webDriverManager.ClickOnElement(_loginWithAtlassinButton);
+            IsAt();
             _webDriverManager.SendKeys(_passwordField, _runSettingsSettings.Password);
             _webDriverManager.ClickOnElement(_loginButton);
 
+            _webDriverManager.IsPageLoaded();
             _webDriverManager.IsPageLoaded();
 
             return new BoardsPage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager, _utilsManager);

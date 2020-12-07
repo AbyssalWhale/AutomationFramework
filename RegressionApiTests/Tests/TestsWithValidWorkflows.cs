@@ -8,7 +8,6 @@ using TestConfigurator.TestFixtures;
 
 namespace RegressionApiTests.Tests
 {
-    [Parallelizable(ParallelScope.All)]
     class TestsWithValidWorkflows : ApiTestsBase
     {
         [Test]

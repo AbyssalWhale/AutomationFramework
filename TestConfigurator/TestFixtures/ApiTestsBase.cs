@@ -31,6 +31,7 @@ namespace TestConfigurator.TestFixtures
         [OneTimeTearDown]
         public override void OneTimeTearDown()
         {
+            _boardWorkflow.RemoveAllBaordsAsync();
             base.OneTimeTearDownApiWithOutUi();
         }
     }
