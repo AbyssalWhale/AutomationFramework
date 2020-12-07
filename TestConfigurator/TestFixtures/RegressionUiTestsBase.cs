@@ -1,13 +1,15 @@
 using AutomationFramework;
 using NUnit.Framework;
 using TestConfigurator.Models.UI;
+using TestConfigurator.Workflows.API;
 
 namespace TestConfigurator.TestFixtures
 {
     [TestFixture]
     public class RegressionUiTestsBase : TestBase
     {
-        public HomePage _homePage;
+        protected HomePage _homePage;
+        protected BoardWorkflow _boardWorkflow;
 
         [OneTimeSetUp]
         public override void OneTimeSetUp()
@@ -20,6 +22,7 @@ namespace TestConfigurator.TestFixtures
         {
             base.SetUp();
             _homePage = new HomePage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager, _utilsManager);
+            _boardWorkflow = new BoardWorkflow(_utilsManager);
         }
 
         [TearDown]
@@ -31,6 +34,7 @@ namespace TestConfigurator.TestFixtures
         [OneTimeTearDown]
         public override void OneTimeTearDown()
         {
+            _boardWorkflow.RemoveAllBaordsAsync();
             base.OneTimeTearDown();
         }
     }

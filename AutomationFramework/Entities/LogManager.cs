@@ -94,7 +94,10 @@ namespace AutomationFramework.Entities
             screenshootCounter++;
         }
 
-        internal void CreateFinalCSVLog(LogLevels logLevel)
+        ///<summary>
+        ///Allows to create log CSV file
+        ///</summary>
+        internal async void CreateFinalCSVLog(LogLevels logLevel)
         {
             string path = logLevel.Equals(LogLevels.global) ? _csvGlobalLogPath : _csvTestLogPath;
             var allLogs = logLevel.Equals(LogLevels.global) ? _allGlobalLogs : _allTestLogs;
@@ -105,7 +108,7 @@ namespace AutomationFramework.Entities
 
             foreach (var log in allLogs)
             {
-                file.WriteLine(log);
+                await file.WriteLineAsync(log);
             }
 
             file.Flush();
