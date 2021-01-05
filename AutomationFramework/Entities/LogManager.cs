@@ -30,18 +30,16 @@ namespace AutomationFramework.Entities
         private List<string> _allTestLogs { get; set; }
         #endregion
 
-        protected LogManager(RunSettingManager settingsManager, TestContext testContext)
+        protected LogManager(RunSettingManager settingsManager)
         {
             _settingsManager = settingsManager;
-            _currentTestContext = testContext;
-            CreateTestFoldersAndLog(_settingsManager);
         }
 
-        internal static LogManager GetLogManager(RunSettingManager settingsManager, TestContext testContext)
+        internal static LogManager GetLogManager(RunSettingManager settingsManager)
         {
             if (_logManager == null)
             {
-                _logManager = new LogManager(settingsManager, testContext);
+                _logManager = new LogManager(settingsManager);
             }
 
             return _logManager;
@@ -50,9 +48,9 @@ namespace AutomationFramework.Entities
         ///<summary>
         ///Create the 'TestExecutionLocalLog' file for loggin of steps of a current tests. Folder where the file is saved can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        internal async void CreateTestFoldersAndLog(RunSettingManager settingsManager)
+        internal async void CreateTestFoldersAndLog(TestContext testContext)
         {
-            _settingsManager = settingsManager;
+            _currentTestContext = testContext;
 
             screenshootCounter = 0;
 

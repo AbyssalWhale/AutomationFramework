@@ -3,7 +3,6 @@ using AutomationFramework.Enums;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using System.IO;
-using static AutomationFramework.Entities.WebDriverManager;
 
 namespace AutomationFramework
 {
@@ -87,19 +86,6 @@ namespace AutomationFramework
         ///<summary>
         ///Once Before UI Tests for parallel execution
         ///</summary>
-        public virtual void OneTimeSetUpConsecutiveExec()
-        {
-            _runSettingsSettings = new RunSettingManager();
-
-            Directory.CreateDirectory(_runSettingsSettings.TestsReportDirectory);
-            Directory.CreateDirectory(_runSettingsSettings.TestsAssetDirectory);
-            
-
-        }
-
-        ///<summary>
-        ///Once Before UI Tests for parallel execution
-        ///</summary>
         public virtual void OneTimeSetUpParallelExec()
         {
             _runSettingsSettings = new RunSettingManager();
@@ -117,9 +103,12 @@ namespace AutomationFramework
             out WebDriverManager webDriverManager
             )
         {
-            logManager = LogManager.GetLogManager(_runSettingsSettings, TestContext.CurrentContext);
+            logManager = LogManager.GetLogManager(_runSettingsSettings);
+            logManager.CreateTestFoldersAndLog(TestContext.CurrentContext);
+
             toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, logManager);
-            webDriverManager = GetWebDriverManager(_runSettingsSettings, logManager);
+            webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings, logManager);
+            
             logManager._driver = webDriverManager._driver;
         }
 
