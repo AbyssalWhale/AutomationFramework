@@ -12,7 +12,7 @@ namespace TestConfigurator.Workflows.API
 {
     public class BoardWorkflow : ApiWorkflowBase
     {
-        public BoardWorkflow(UtilsManager utilsManager) : base(utilsManager) { }
+        public BoardWorkflow(ToolsManager utilsManager) : base(utilsManager) { }
 
         public PostBoardModel GenerateSimpleBoardForPOST()
         {

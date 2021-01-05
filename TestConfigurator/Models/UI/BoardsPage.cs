@@ -15,7 +15,7 @@ namespace TestConfigurator.Models.UI
             WebDriverManager webDriverManager,
             RunSettingManager runSettingsManager,
             LogManager logManager,
-            UtilsManager utilsManager) :
+            ToolsManager utilsManager) :
             base(webDriverManager, runSettingsManager, logManager, utilsManager)
         {
             _webDriverManager.IsPageLoaded();

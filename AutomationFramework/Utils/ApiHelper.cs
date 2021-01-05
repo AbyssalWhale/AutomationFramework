@@ -57,7 +57,7 @@ namespace AutomationFramework.Utils
             request.AddParameter("key", _runSettingsManger.ApiKey);
             request.AddParameter("token", _runSettingsManger.ApiToken);
 
-            //_logManager.LogAction(LogLevels.local, $"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint}");
+            _logManager.LogAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint}");
 
             if (headers != null)
             {

@@ -5,7 +5,7 @@ using TestConfigurator.Workflows.API;
 namespace TestConfigurator.TestFixtures
 {
     [TestFixture]
-    public class ApiTestsBase : TestBase
+    public class ApiTestsBase : ParallelTestBase
     {
         //protected BoardWorkflow _boardWorkflow;
 

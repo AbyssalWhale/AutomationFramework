@@ -4,8 +4,8 @@ namespace TestConfigurator.Workflows.API
 {
     public class ApiWorkflowBase
     {
-        internal UtilsManager _utilsManager;
-        public ApiWorkflowBase(UtilsManager utilsManager)
+        internal ToolsManager _utilsManager;
+        public ApiWorkflowBase(ToolsManager utilsManager)
         {
             _utilsManager = utilsManager;
         }

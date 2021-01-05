@@ -15,15 +15,28 @@ namespace AutomationFramework.Entities
     public class WebDriverManager
     {
         private static WebDriverManager _webDriverManager;
+        private LogManager _logManager;
         private RunSettingManager _runSettingManager;
         internal IWebDriver _driver;
 
-        public WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
+        protected WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
         {
             _runSettingManager = runSettingManager;
+            _logManager = logManager;
             _driver = SetUpDriver(_runSettingManager.Browser);
+
+            _logManager.LogAction($"the '{runSettingManager.Browser}' browser was initialized;");
         }
 
+        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
+        {
+            if (_webDriverManager == null)
+            {
+                _webDriverManager = new WebDriverManager(runSettingManager, logManager);
+            }
+
+            return _webDriverManager;
+        }
 
         private static Dictionary<Browsers, List<string>> BrowsersProcessesNames = new Dictionary<Browsers, List<string>>
         {

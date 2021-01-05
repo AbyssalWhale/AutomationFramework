@@ -13,9 +13,9 @@ namespace RegressionTests.UITests
         [Test]
         public void CheckBoardCreation()
         {
-            UITestSetup(
+            UITestSetUpParallelExec(
             out LogManager _logManager,
-            out UtilsManager _utilsManager,
+            out ToolsManager _utilsManager,
             out WebDriverManager _webDriverManager
                 );
 
@@ -23,20 +23,15 @@ namespace RegressionTests.UITests
             Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
             _webDriverManager.ClickOnElement(By.XPath("//a[text()='Більше о нас']"));
 
-            UITestTearDown(
-                _runSettingsSettings,
-                _logManager,
-                _utilsManager,
-                _webDriverManager
-                );
+            UITestTearDownParallelExec(_webDriverManager);
         }
 
         [Test]
         public void CheckBoardCreation_1()
         {
-            UITestSetup(
+            UITestSetUpParallelExec(
                 out LogManager _logManager,
-                out UtilsManager _utilsManager,
+                out ToolsManager _utilsManager,
                 out WebDriverManager _webDriverManager
         );
 
@@ -44,12 +39,7 @@ namespace RegressionTests.UITests
             Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
             _webDriverManager.ClickOnElement(By.XPath("//a[text()='Більше о нас']"));
 
-            UITestTearDown(
-                _runSettingsSettings,
-                _logManager,
-                _utilsManager,
-                _webDriverManager
-                );
+            UITestTearDownParallelExec(_webDriverManager);
         }
     }
 }

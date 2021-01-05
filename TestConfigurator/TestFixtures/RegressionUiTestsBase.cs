@@ -7,12 +7,12 @@ namespace TestConfigurator.TestFixtures
 {
     [Parallelizable(ParallelScope.All)]
     [TestFixture]
-    public class RegressionUiTestsBase : TestBase
+    public class RegressionUiTestsBase : ParallelTestBase
     {
         [OneTimeSetUp]
-        public override void OneTimeSetUp()
+        public override void OneTimeSetUpParallelExec()
         {
-            base.OneTimeSetUp();
+            base.OneTimeSetUpParallelExec();
         }
     }
 }

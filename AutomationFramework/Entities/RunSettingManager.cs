@@ -23,7 +23,6 @@ namespace AutomationFramework.Entities
         public string TestsReportDirectory { get; set; }
         public string TestReportDirectory { get; set; }
         public string TestsAssetDirectory { get; set; }
-        public string TestAssetDirectory { get; set; }
         public string ApiKey { get; set; }
         public string ApiToken { get; set; }
         public ConcurrentDictionary<string, string> APIHeaders { get; set; }
@@ -46,7 +45,6 @@ namespace AutomationFramework.Entities
             TestsReportDirectory = $"../../../TestsData/{RunId}/TestsReports";
             TestReportDirectory = string.Empty;
             TestsAssetDirectory = $"../../../TestsData/{RunId}/TestsAssets";
-            TestAssetDirectory = string.Empty;
             ApiKey = TryToParseTestContext(nameof(ApiKey));
             ApiToken = TryToParseTestContext(nameof(ApiToken));
             APIHeaders = new ConcurrentDictionary<string, string>();

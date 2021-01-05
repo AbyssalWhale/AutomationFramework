@@ -7,7 +7,7 @@ using static AutomationFramework.Entities.WebDriverManager;
 
 namespace AutomationFramework
 {
-    public class TestBase
+    public class ParallelTestBase
     {
         protected RunSettingManager _runSettingsSettings;
         //protected FolderManager _folderManager;
@@ -84,7 +84,23 @@ namespace AutomationFramework
         //    _logManager.CreateFinalCSVLog(LogLevels.global);
         //}
 
-        public virtual void OneTimeSetUp()
+        ///<summary>
+        ///Once Before UI Tests for parallel execution
+        ///</summary>
+        public virtual void OneTimeSetUpConsecutiveExec()
+        {
+            _runSettingsSettings = new RunSettingManager();
+
+            Directory.CreateDirectory(_runSettingsSettings.TestsReportDirectory);
+            Directory.CreateDirectory(_runSettingsSettings.TestsAssetDirectory);
+            
+
+        }
+
+        ///<summary>
+        ///Once Before UI Tests for parallel execution
+        ///</summary>
+        public virtual void OneTimeSetUpParallelExec()
         {
             _runSettingsSettings = new RunSettingManager();
 
@@ -93,34 +109,26 @@ namespace AutomationFramework
         }
 
         ///<summary>
-        ///Before Each Test
+        ///Before Each UI Test for parallel execution
         ///</summary>
-        public void UITestSetup(
+        public void UITestSetUpParallelExec(
             out LogManager logManager,
-            out UtilsManager utilsManager,
+            out ToolsManager toolsManager,
             out WebDriverManager webDriverManager
             )
         {
-            logManager = new LogManager(_runSettingsSettings, TestContext.CurrentContext);
-            
-            utilsManager = new UtilsManager(_runSettingsSettings, logManager);
-
-            webDriverManager = new WebDriverManager(_runSettingsSettings, logManager);
+            logManager = LogManager.GetLogManager(_runSettingsSettings, TestContext.CurrentContext);
+            toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, logManager);
+            webDriverManager = GetWebDriverManager(_runSettingsSettings, logManager);
             logManager._driver = webDriverManager._driver;
-            
         }
 
         ///<summary>
-        ///After Each Test
+        ///After Each UI Test for parallel execution
         ///</summary>
-        public void UITestTearDown(
-            RunSettingManager runSettingsSettings,
-            LogManager logManager,
-            UtilsManager utilsManager,
-            WebDriverManager webDriverManager
-            )
+        public void UITestTearDownParallelExec(WebDriverManager webDriverManager)
         {
-            webDriverManager.Quit(runSettingsSettings.Browser);
+            webDriverManager.Quit(_runSettingsSettings.Browser);
         }
     }
 }

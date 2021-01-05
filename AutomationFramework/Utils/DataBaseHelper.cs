@@ -34,10 +34,12 @@ namespace AutomationFramework.Utils
             }
             return results;
         }
+
         public void RunDBQuery(string yourQuery)
         {
             DataBaseConnectionString.Query(yourQuery, commandTimeout: CommandTimeOut);
         }
+
         public static string TrimStringForPkey(string notTrimedString)
         {
             if (!string.IsNullOrEmpty(notTrimedString))
