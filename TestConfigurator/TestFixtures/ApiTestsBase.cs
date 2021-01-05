@@ -7,32 +7,32 @@ namespace TestConfigurator.TestFixtures
     [TestFixture]
     public class ApiTestsBase : TestBase
     {
-        protected BoardWorkflow _boardWorkflow;
+        //protected BoardWorkflow _boardWorkflow;
 
-        [OneTimeSetUp]
-        public override void OneTimeSetUp()
-        {
-            OneTimeSetUpApiWithOutUi();
-            _boardWorkflow = new BoardWorkflow(_utilsManager);
-        }
+        //[OneTimeSetUp]
+        //public override void OneTimeSetUp()
+        //{
+        //    OneTimeSetUpApiWithOutUi();
+        //    _boardWorkflow = new BoardWorkflow(_utilsManager);
+        //}
 
-        [SetUp]
-        public override void SetUp()
-        {
-            base.SetUp();
-        }
+        //[SetUp]
+        //public override void SetUp()
+        //{
+        //    base.SetUp();
+        //}
 
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-        }
+        //[TearDown]
+        //public override void TearDown()
+        //{
+        //    base.TearDown();
+        //}
 
-        [OneTimeTearDown]
-        public override void OneTimeTearDown()
-        {
-            _boardWorkflow.RemoveAllBaordsAsync();
-            base.OneTimeTearDownApiWithOutUi();
-        }
+        //[OneTimeTearDown]
+        //public override void OneTimeTearDown()
+        //{
+        //    _boardWorkflow.RemoveAllBaordsAsync();
+        //    base.OneTimeTearDownApiWithOutUi();
+        //}
     }
 }

@@ -22,11 +22,18 @@ namespace AutomationFramework.Entities
         int screenshootCounter { get; set; }
 
         #region CSV
-        private string _csvTestLogPath { get; set; }
-        private string _csvGlobalLogPath { get; set; }
-        private List<string> _allGlobalLogs { get; set; }
-        private List<string> _allTestLogs { get; set; }
+        //private string _csvTestLogPath { get; set; }
+        //private string _csvGlobalLogPath { get; set; }
+        //private List<string> _allGlobalLogs { get; set; }
+        //private List<string> _allTestLogs { get; set; }
         #endregion
+
+
+        public LogManager(RunSettingManager settingsManager, TestContext testContext)
+        {
+            _settingsManager = settingsManager;
+            CreateTestFoldersAndLog(_settingsManager, testContext);
+        }
 
         ///<summary>
         ///Create the 'TestsExecutionGlobalLog' file for loggin of high level steps of tests execution. Folder where the file is saved can be found in path: .runSettings.TestsReportDirectory
@@ -34,30 +41,30 @@ namespace AutomationFramework.Entities
         internal void CreateGlobalLog(RunSettingManager settingsManager)
         {
             string globalLogFileName = "TestsExecutionGlobalLog.json";
-            _csvGlobalLogPath = $"{settingsManager.TestsReportDirectory}/CSVTestsReport.csv";
-            _allGlobalLogs = new List<string>();
+            
 
             _globalLog = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{settingsManager.TestsReportDirectory}/{globalLogFileName}").CreateLogger();
 
-            LogAction(LogLevels.global, $"GlobalTestLog was initialized and {globalLogFileName} was created;");
+            //LogAction(LogLevels.global, $"GlobalTestLog was initialized and {globalLogFileName} was created;");
         }
 
         ///<summary>
         ///Create the 'TestExecutionLocalLog' file for loggin of steps of a current tests. Folder where the file is saved can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        internal void CreateLogForTest(RunSettingManager settingsManager, TestContext testContext)
+        internal void CreateTestFoldersAndLog(RunSettingManager settingsManager, TestContext testContext)
         {
             _settingsManager = settingsManager;
 
             screenshootCounter = 0;
 
-            string localLogFileName = "TestExecutionLocalLog.json";
-            _csvTestLogPath = $"{settingsManager.TestReportDirectory}/CSVTestReport.csv";
-            _allTestLogs = new List<string>();
+            string localLogFileName = $"{testContext.Test.Name}_Log.json";
 
-            _testExecutionLocalLogger = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{settingsManager.TestReportDirectory}/{localLogFileName}").CreateLogger();
+            Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}");
+            Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{testContext.Test.Name}");
 
-            LogAction(LogLevels.local, $"Start execution. TestLog was initialized and {localLogFileName} was created;");
+            _testExecutionLocalLogger = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{localLogFileName}").CreateLogger();
+
+            //LogAction(LogLevels.local, $"Start execution. TestLog was initialized and {localLogFileName} was created;");
         }
 
         ///<summary>
@@ -74,8 +81,6 @@ namespace AutomationFramework.Entities
             {
                 if (element == null) MakeLogScreenshoot(); else MakeLogScreenshoot(element);
             }
-
-            if (logLevel.Equals(LogLevels.local)) _allTestLogs.Add(message); else _allGlobalLogs.Add(message);
         }
 
         public void MakeLogScreenshoot()
@@ -99,22 +104,22 @@ namespace AutomationFramework.Entities
         ///</summary>
         internal async void CreateFinalCSVLog(LogLevels logLevel)
         {
-            string path = logLevel.Equals(LogLevels.global) ? _csvGlobalLogPath : _csvTestLogPath;
-            var allLogs = logLevel.Equals(LogLevels.global) ? _allGlobalLogs : _allTestLogs;
+            //string path = logLevel.Equals(LogLevels.global) ? _csvGlobalLogPath : _csvTestLogPath;
+            //var allLogs = logLevel.Equals(LogLevels.global) ? _allGlobalLogs : _allTestLogs;
 
-            File.Create(path).Close();
+            //File.Create(path).Close();
 
-            var file = new StreamWriter(path, true);
+            //var file = new StreamWriter(path, true);
 
-            foreach (var log in allLogs)
-            {
-                await file.WriteLineAsync(log);
-            }
+            //foreach (var log in allLogs)
+            //{
+            //    await file.WriteLineAsync(log);
+            //}
 
-            file.Flush();
-            file.Close();
+            //file.Flush();
+            //file.Close();
 
-            _allTestLogs = new List<string>();
+            //_allTestLogs = new List<string>();
         }
     }
 }

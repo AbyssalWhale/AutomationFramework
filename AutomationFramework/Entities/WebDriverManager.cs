@@ -15,26 +15,13 @@ namespace AutomationFramework.Entities
     public class WebDriverManager
     {
         private static WebDriverManager _webDriverManager;
-        private LogManager _logManager;
         private RunSettingManager _runSettingManager;
         internal IWebDriver _driver;
 
-        protected WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
+        public WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
         {
             _runSettingManager = runSettingManager;
             _driver = SetUpDriver(_runSettingManager.Browser);
-            _logManager = logManager;
-
-            _logManager.LogAction(LogLevels.global, $"Initializing the '{runSettingManager.Browser}' browser");
-        }
-
-        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
-        {
-            if (_webDriverManager == null) {
-                _webDriverManager = new WebDriverManager(runSettingManager, logManager);
-            }
-
-            return _webDriverManager;
         }
 
 
@@ -48,7 +35,7 @@ namespace AutomationFramework.Entities
         #region All Internal Methods
 
         ///<summary>
-        ///Kill all processes for selected browser on local machine. Create new copy of selected IWebDriver with default settings and return it.
+        ///Create new copy of selected IWebDriver with default settings and return it.
         ///</summary>
         internal IWebDriver SetUpDriver(string browser)
         {
@@ -101,7 +88,7 @@ namespace AutomationFramework.Entities
         private ChromeOptions SetChrome()
         {
             ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--start-maximized");
+            //options.AddArgument("--start-maximized");
 
             return options;
         }
@@ -112,22 +99,22 @@ namespace AutomationFramework.Entities
         ///</summary>
         internal void CloseWebDriverProcesses(string browser)
         {
-            foreach (var BrowserProcessNames in BrowsersProcessesNames)
-            {
-                if (BrowserProcessNames.Key.ToString().Equals(browser.ToLower()))
-                {
-                    foreach (var processName in BrowserProcessNames.Value)
-                    {
-                        var processes = Process.GetProcessesByName(processName);
+            //foreach (var BrowserProcessNames in BrowsersProcessesNames)
+            //{
+            //    if (BrowserProcessNames.Key.ToString().Equals(browser.ToLower()))
+            //    {
+            //        foreach (var processName in BrowserProcessNames.Value)
+            //        {
+            //            var processes = Process.GetProcessesByName(processName);
 
-                        foreach (var process in processes) process.Kill();
+            //            foreach (var process in processes) process.Kill();
 
-                        break;
-                    }
+            //            break;
+            //        }
 
-                    break;
-                }
-            }
+            //        break;
+            //    }
+            //}
         }
         #endregion
 
@@ -139,7 +126,6 @@ namespace AutomationFramework.Entities
         public bool GoToUrl(string url)
         {
             _driver.Navigate().GoToUrl(url);
-            _logManager.LogAction(LogLevels.local, $"Going to the url: {url}...");
             return IsPageLoaded();
         }
 
@@ -150,7 +136,6 @@ namespace AutomationFramework.Entities
         {
             ExecuteJSScript("window.open();");
             _driver.SwitchTo().Window(_driver.WindowHandles[_driver.WindowHandles.Count - 1]);
-            _logManager.LogAction(LogLevels.local, $"New tab was opened in the browser", true);
             return GoToUrl(url);
         }
 
@@ -176,8 +161,6 @@ namespace AutomationFramework.Entities
                 Thread.Sleep(500);
             }
 
-            _logManager.LogAction(LogLevels.local, $"Checked the '{GetPageTitle()}' page is fully loaded", true);
-
             return true;
         }
 
@@ -188,7 +171,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void Quit(string browser)
         {
-            _logManager.LogAction(LogLevels.local, $"Quit browser");
             _driver.Quit();
             CloseWebDriverProcesses(browser);
         }
@@ -198,7 +180,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public object ExecuteJSScript(string script)
         {
-            _logManager.LogAction(LogLevels.local, $"Running JS script: {script}...");
             return ((IJavaScriptExecutor)_driver).ExecuteScript(script);
         }
 
@@ -207,7 +188,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public object ExecuteJSScript(string script, IWebElement[] elements)
         {
-            _logManager.LogAction(LogLevels.local, $"JS script will be execuded for element {elements.Length}: {script}...", true, elements[0]);
             return ((IJavaScriptExecutor)_driver).ExecuteScript(script, elements);
         }
 
@@ -226,8 +206,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void SwitchTabByTitle(string tabTitle, int tabsExpected, bool isHardCheck = false)
         {
-            _logManager.LogAction(LogLevels.local, $"Trying to switch tab with title: {tabTitle}...");
-
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -313,7 +291,6 @@ namespace AutomationFramework.Entities
                 try
                 {
                     var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
-                    _logManager.LogAction(LogLevels.local, $"Element was found. Locator: {elementLocator.ToString()}...", true, element);
                     return element;
                 }
                 catch (NoSuchElementException e)
@@ -343,7 +320,6 @@ namespace AutomationFramework.Entities
             var element = FindElement(elementLocator, parent, secondsToWait);
             element.Clear();
             element.SendKeys(textToSend);
-            _logManager.LogAction(LogLevels.local, $"Text: '{textToSend}' was sent into element. Locator: {elementLocator.ToString()};", true, element);
         }
 
         ///<summary>
@@ -352,7 +328,6 @@ namespace AutomationFramework.Entities
         public void ClickOnElement(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
         {
             IWebElement element = FindElement(elementLocator, parent, secondsToWait);
-            _logManager.LogAction(LogLevels.local, $"Trying to click on the element. Locator: {elementLocator.ToString()};", true, element);
             var message = string.Empty;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -399,7 +374,6 @@ namespace AutomationFramework.Entities
             {
                 if (stopwatch.ElapsedMilliseconds > secondsToWait * 1000)
                 {
-                    _logManager.LogAction(LogLevels.local, $"Not found element in DOM. Locator: {elementLocator.ToString()};");
                     return result;
                 }
 
@@ -407,7 +381,6 @@ namespace AutomationFramework.Entities
                 {
                     var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
                     result = true;
-                    _logManager.LogAction(LogLevels.local, $"Found element in DOM. Locator: {elementLocator.ToString()};", true, element);
                     return result;
                 }
                 catch (NoSuchElementException)
@@ -472,8 +445,6 @@ namespace AutomationFramework.Entities
                 result = true;
             }
 
-            _logManager.LogAction(LogLevels.local, $"Tried to switch to iframe. Result of operation: {result}. Locator: {frameLocator.ToString()}...");
-
             return result;
         }
 
@@ -484,8 +455,6 @@ namespace AutomationFramework.Entities
         {
             _driver.SwitchTo().DefaultContent();
             _driver.SwitchTo().ActiveElement();
-
-            _logManager.LogAction(LogLevels.local, $"Switching to default and active content...");
         }
         
         #endregion

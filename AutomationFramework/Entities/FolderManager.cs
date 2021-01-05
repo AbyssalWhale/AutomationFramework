@@ -10,13 +10,11 @@ namespace AutomationFramework.Entities
     /// </summary>
     public class FolderManager
     {
-        private LogManager _localLogManager;
         private RunSettingManager _localRunSettingManager;
 
-        public FolderManager(RunSettingManager settingsManager, LogManager logManager)
+        public FolderManager(RunSettingManager settingsManager)
         {
             _localRunSettingManager = settingsManager;
-            _localLogManager = logManager;
 
             CreateTestsDataMainFolders();
         }
@@ -26,33 +24,8 @@ namespace AutomationFramework.Entities
         ///</summary>
         private void CreateTestsDataMainFolders()
         {
-            if (Directory.Exists(_localRunSettingManager.TestsReportDirectory)) Directory.Delete(_localRunSettingManager.TestsReportDirectory, true);
             Directory.CreateDirectory(_localRunSettingManager.TestsReportDirectory);
-
-            if (Directory.Exists(_localRunSettingManager.TestsAssetDirectory)) Directory.Delete(_localRunSettingManager.TestsAssetDirectory, true);
             Directory.CreateDirectory(_localRunSettingManager.TestsAssetDirectory);
-
-            _localLogManager.CreateGlobalLog(_localRunSettingManager);
-            _localLogManager.LogAction(LogLevels.global, "Test's assets and reports folders with global log were created;");
-        }
-
-        ///<summary>
-        ///Creates report and assets folders for current test cases by using RunSettingManager and TestContext. If folders are existed - folders will be deleted. Use in [SetUp] 
-        ///</summary>
-        internal void CreateTestDataFolders(TestContext testContext)
-        {
-            _localLogManager.LogAction(LogLevels.global, $"Start executing of the '{TestContext.CurrentContext.Test.Name}' test...;");
-
-            _localRunSettingManager.TestReportDirectory = $"{_localRunSettingManager.TestsReportDirectory}/{testContext.Test.Name}";
-            _localRunSettingManager.TestAssetDirectory = $"{_localRunSettingManager.TestsAssetDirectory}/{testContext.Test.Name}";
-
-            if (Directory.Exists(_localRunSettingManager.TestReportDirectory)) Directory.Delete(_localRunSettingManager.TestReportDirectory, true);
-            Directory.CreateDirectory(_localRunSettingManager.TestReportDirectory);
-
-            if (Directory.Exists(_localRunSettingManager.TestAssetDirectory)) Directory.Delete(_localRunSettingManager.TestAssetDirectory, true);
-            Directory.CreateDirectory(_localRunSettingManager.TestAssetDirectory);
-
-            _localLogManager.CreateLogForTest(_localRunSettingManager, testContext);
         }
     }
 }
