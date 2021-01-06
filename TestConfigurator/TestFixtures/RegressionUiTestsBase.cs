@@ -7,7 +7,7 @@ namespace TestConfigurator.TestFixtures
 {
     [Parallelizable(ParallelScope.All)]
     [TestFixture]
-    public class RegressionUiTestsBase : ParallelTestBase
+    public class RegressionUiTestsBase : UIParallelTestBase
     {
         [OneTimeSetUp]
         public override void OneTimeSetUpParallelExec()

@@ -6,7 +6,7 @@ using System.IO;
 
 namespace AutomationFramework
 {
-    public class ParallelTestBase
+    public class UIParallelTestBase
     {
         protected RunSettingManager _runSettingsSettings;
         //protected FolderManager _folderManager;

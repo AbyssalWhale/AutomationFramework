@@ -1,10 +1,7 @@
 ﻿using AutomationFramework.Entities;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using TestConfigurator.Enums.UI;
-using TestConfigurator.Models.UI;
 using TestConfigurator.TestFixtures;
-using TestConfigurator.Workflows.API;
 
 namespace RegressionTests.UITests
 {

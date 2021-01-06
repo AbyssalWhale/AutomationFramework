@@ -5,34 +5,27 @@ using TestConfigurator.Workflows.API;
 namespace TestConfigurator.TestFixtures
 {
     [TestFixture]
-    public class ApiTestsBase : ParallelTestBase
+    public class ApiTestsBase : APITestBase
     {
-        //protected BoardWorkflow _boardWorkflow;
+        protected BoardWorkflow _boardWorkflow;
 
-        //[OneTimeSetUp]
-        //public override void OneTimeSetUp()
-        //{
-        //    OneTimeSetUpApiWithOutUi();
-        //    _boardWorkflow = new BoardWorkflow(_utilsManager);
-        //}
+        [OneTimeSetUp]
+        public override void OneTimeSetUp()
+        {
+            base.OneTimeSetUp();
+        }
 
-        //[SetUp]
-        //public override void SetUp()
-        //{
-        //    base.SetUp();
-        //}
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
+            _boardWorkflow = new BoardWorkflow(_toolsManager);
+        }
 
-        //[TearDown]
-        //public override void TearDown()
-        //{
-        //    base.TearDown();
-        //}
-
-        //[OneTimeTearDown]
-        //public override void OneTimeTearDown()
-        //{
-        //    _boardWorkflow.RemoveAllBaordsAsync();
-        //    base.OneTimeTearDownApiWithOutUi();
-        //}
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            _boardWorkflow.RemoveAllBaordsAsync();
+        }
     }
 }
