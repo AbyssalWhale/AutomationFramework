@@ -1,13 +1,10 @@
-﻿using AutomationFramework.Enums;
-using AutomationFramework.Utils;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using Serilog;
 using Serilog.Core;
 using Serilog.Formatting.Json;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,7 +16,6 @@ namespace AutomationFramework.Entities
     {
         ConcurrentDictionary<string, Logger> _allTestsLoger;
         private static LogManager _logManager;
-        internal Logger _testExecutionLocalLogger { get; private set; }
         internal IWebDriver _driver { get; set; }
         RunSettingManager _settingsManager { get; set; }
         int screenshootCounter { get; set; }
@@ -82,6 +78,9 @@ namespace AutomationFramework.Entities
             }
         }
 
+        ///<summary>
+        ///Allows to make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
+        ///</summary>
         public async void MakeLogScreenshoot()
         {
             var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{screenshootCounter}.jpg";
