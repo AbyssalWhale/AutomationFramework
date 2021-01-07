@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using Serilog;
 using Serilog.Core;
 using Serilog.Formatting.Json;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -16,8 +17,8 @@ namespace AutomationFramework.Entities
     /// </summary>
     public class LogManager
     {
+        ConcurrentDictionary<string, Logger> _allTestsLoger;
         private static LogManager _logManager;
-        internal TestContext _currentTestContext;
         internal Logger _testExecutionLocalLogger { get; private set; }
         internal IWebDriver _driver { get; set; }
         RunSettingManager _settingsManager { get; set; }
@@ -33,6 +34,7 @@ namespace AutomationFramework.Entities
         protected LogManager(RunSettingManager settingsManager)
         {
             _settingsManager = settingsManager;
+            _allTestsLoger = new ConcurrentDictionary<string, Logger>();
         }
 
         internal static LogManager GetLogManager(RunSettingManager settingsManager)
@@ -48,30 +50,31 @@ namespace AutomationFramework.Entities
         ///<summary>
         ///Create the 'TestExecutionLocalLog' file for loggin of steps of a current tests. Folder where the file is saved can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        internal async void CreateTestFoldersAndLog(TestContext testContext)
+        internal void CreateTestFoldersAndLog(TestContext testContext)
         {
-            _currentTestContext = testContext;
-
             screenshootCounter = 0;
 
-            string localLogFileName = $"{_currentTestContext.Test.Name}_Log.json";
+            string localLogFileName = $"{testContext.Test.Name}_Log.json";
 
-            Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{_currentTestContext.Test.Name}");
-            Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{_currentTestContext.Test.Name}");
+            Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}");
+            Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{testContext.Test.Name}");
 
-            _testExecutionLocalLogger =  new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{_settingsManager.TestsReportDirectory}/{_currentTestContext.Test.Name}/{localLogFileName}").CreateLogger();
+            _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{localLogFileName}").CreateLogger());
 
-            await Task.Run(() => LogAction($"Start execution. Folder and Log for the '{_currentTestContext.Test.Name}' test were created;"));
+            LogAction($"Start execution. Folder and Log for the '{testContext.Test.Name}' test were created;");
+
         }
 
         ///<summary>
         ///Allows to log action and write it into global or test local log file. Test log files can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        public async void LogAction(string message, bool makeScreenshoot = false, IWebElement element = null)
+        public void LogAction(string message, bool makeScreenshoot = false, IWebElement element = null)
         {
             Assert.IsNotNull(message, $"Empty message can not be written into the log");
 
-            await Task.Run(() => _testExecutionLocalLogger.Information(message));
+            var record = new { Test = $"{TestContext.CurrentContext.Test.Name}", Message = $"{message}" };
+
+            _allTestsLoger[TestContext.CurrentContext.Test.Name].Information($"{record}");
 
             if (makeScreenshoot)
             {
@@ -81,7 +84,7 @@ namespace AutomationFramework.Entities
 
         public async void MakeLogScreenshoot()
         {
-            var path = $"{_settingsManager.TestsReportDirectory}/{_currentTestContext.Test.Name}/{screenshootCounter}.jpg";
+            var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{screenshootCounter}.jpg";
             var screenShoot = ((ITakesScreenshot)_driver).GetScreenshot();
             await Task.Run(() => screenShoot.SaveAsFile(path));
             screenshootCounter++;
