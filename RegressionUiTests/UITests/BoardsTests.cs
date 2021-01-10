@@ -11,8 +11,6 @@ namespace RegressionTests.UITests
         public void CheckBoardCreation()
         {
             UITestSetUpParallelExec(
-            out LogManager _logManager,
-            out ToolsManager _utilsManager,
             out WebDriverManager _webDriverManager
                 );
 
@@ -27,8 +25,6 @@ namespace RegressionTests.UITests
         public void CheckBoardCreation_1()
         {
             UITestSetUpParallelExec(
-                out LogManager _logManager,
-                out ToolsManager _utilsManager,
                 out WebDriverManager _webDriverManager
         );
 
