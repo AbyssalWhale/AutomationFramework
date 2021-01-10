@@ -6,6 +6,7 @@ using Serilog.Formatting.Json;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AutomationFramework.Entities
@@ -16,7 +17,7 @@ namespace AutomationFramework.Entities
     {
         ConcurrentDictionary<string, Logger> _allTestsLoger;
         private static LogManager _logManager;
-        internal IWebDriver _driver { get; set; }
+        private IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
         RunSettingManager _settingsManager { get; set; }
         int screenshootCounter { get; set; }
 
@@ -81,23 +82,28 @@ namespace AutomationFramework.Entities
         ///<summary>
         ///Allows to make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
         ///</summary>
-        public async void MakeLogScreenshoot()
+        public void MakeLogScreenshoot()
         {
             var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{screenshootCounter}.jpg";
             var screenShoot = ((ITakesScreenshot)_driver).GetScreenshot();
-            await Task.Run(() => screenShoot.SaveAsFile(path));
+            screenShoot.SaveAsFile(path);
             screenshootCounter++;
         }
 
+
+        //Start
         public void MakeLogScreenshoot(IWebElement element)
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+            WebDriverManager.GetWebDriverManager(_settingsManager).MoveToElement(element);
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");            
             MakeLogScreenshoot();
-            js.ExecuteAsyncScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
+            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
             screenshootCounter++;
         }
 
+
+        //End
         ///<summary>
         ///Allows to create log CSV file
         ///</summary>

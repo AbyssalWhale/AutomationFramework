@@ -23,19 +23,16 @@ namespace AutomationFramework
             _logManager = LogManager.GetLogManager(_runSettingsSettings);
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
 
-            _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings, _logManager);
+            _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings);
         }
 
         ///<summary>
         ///Before Each UI Test for parallel execution
         ///</summary>
-        public void UITestSetUpParallelExec(
-            )
+        public void UITestSetUpParallelExec()
         {
             _logManager.CreateTestFoldersAndLog(TestContext.CurrentContext);
             _webDriverManager.AddWebDriverForTest();
-
-            _logManager._driver = _webDriverManager._driver;
         }
 
         ///<summary>
@@ -43,7 +40,7 @@ namespace AutomationFramework
         ///</summary>
         public void UITestTearDownParallelExec(WebDriverManager webDriverManager)
         {
-            webDriverManager.Quit(_runSettingsSettings.Browser);
+            webDriverManager.Quit();
         }
     }
 }

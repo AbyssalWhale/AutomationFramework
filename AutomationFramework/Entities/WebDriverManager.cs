@@ -16,23 +16,26 @@ namespace AutomationFramework.Entities
     public class WebDriverManager
     {
         private static WebDriverManager _webDriverManager;
-        private LogManager _logManager;
+        private LogManager _logManager { get { return LogManager.GetLogManager(_runSettingManager); } }
         private RunSettingManager _runSettingManager;
         internal IWebDriver _driver { get { return _allTestsWebDrivers[TestContext.CurrentContext.Test.Name]; } }
         ConcurrentDictionary<string, IWebDriver> _allTestsWebDrivers;
 
-        protected WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
+        #region CONST
+        private const string MoveToElementJSCommand = "arguments[0].scrollIntoView({block: 'nearest'});";
+        #endregion
+
+        protected WebDriverManager(RunSettingManager runSettingManager)
         {
             _runSettingManager = runSettingManager;
             _allTestsWebDrivers = new ConcurrentDictionary<string, IWebDriver>();
-            _logManager = logManager;
         }
 
-        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
+        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager)
         {
             if (_webDriverManager == null)
             {
-                _webDriverManager = new WebDriverManager(runSettingManager, logManager);
+                _webDriverManager = new WebDriverManager(runSettingManager);
             }
 
             return _webDriverManager;
@@ -43,52 +46,6 @@ namespace AutomationFramework.Entities
             { Browsers.chrome, new List<string>() { "chrome", "chromedriver", "Google Chrome" } },
             { Browsers.firefox, new List<string>() { "Firefox", "geckodriver" } }
         };
-
-
-        #region All Internal Methods
-
-        internal void AddWebDriverForTest()
-        {
-            if (_allTestsWebDrivers.TryAdd(TestContext.CurrentContext.Test.Name, SetUpDriver(_runSettingManager.Browser)))
-            {
-                _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was initialized;");
-            }
-        }
-
-        ///<summary>
-        ///Create new copy of selected IWebDriver with default settings and return it.
-        ///</summary>
-        internal IWebDriver SetUpDriver(string browser)
-        {
-            browser = browser.ToLower();
-
-            IWebDriver driver = null;
-
-            CloseWebDriverProcesses(browser);
-            driver = InitNewCopyOfWebDriver(browser);
-
-            return driver;
-        }
-
-        private IWebDriver InitNewCopyOfWebDriver(string browser)
-        {
-            IWebDriver driver = null;
-
-            if (browser.Equals(Browsers.chrome.ToString()))
-            {
-                driver = new ChromeDriver($"{_runSettingManager.BrowserDriversPath}", SetChrome());
-            }
-            else if (browser.Equals(Browsers.firefox.ToString()))
-            {
-                driver = new FirefoxDriver($"{_runSettingManager.BrowserDriversPath}", SetFirefox());
-            }
-            else
-            {
-                Assert.IsNull($"Unknown browser is tried to be initialized: {browser}");
-            }
-
-            return driver;
-        }
 
         #region Browser SetUp
         private FirefoxOptions SetFirefox()
@@ -115,27 +72,74 @@ namespace AutomationFramework.Entities
         }
         #endregion
 
+        #region All Internal Methods
+
+        ///<summary>
+        ///Add new copy of IWebDriver in case if test run in parallel
+        ///</summary>
+        internal void AddWebDriverForTest()
+        {
+            if (_allTestsWebDrivers.TryAdd(TestContext.CurrentContext.Test.Name, SetUpDriver(_runSettingManager.Browser)))
+            {
+                _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was initialized;");
+            }
+        }
+
+        ///<summary>
+        ///Create new copy of selected IWebDriver with default settings and return it.
+        ///</summary>
+        internal IWebDriver SetUpDriver(string browser)
+        {
+            browser = browser.ToLower();
+
+            IWebDriver driver = null;
+
+            driver = InitNewCopyOfWebDriver(browser);
+
+            return driver;
+        }
+
+        private IWebDriver InitNewCopyOfWebDriver(string browser)
+        {
+            IWebDriver driver = null;
+
+            if (browser.Equals(Browsers.chrome.ToString()))
+            {
+                driver = new ChromeDriver($"{_runSettingManager.BrowserDriversPath}", SetChrome());
+            }
+            else if (browser.Equals(Browsers.firefox.ToString()))
+            {
+                driver = new FirefoxDriver($"{_runSettingManager.BrowserDriversPath}", SetFirefox());
+            }
+            else
+            {
+                Assert.IsNull($"Unknown browser is tried to be initialized: {browser}");
+            }
+
+            return driver;
+        }
+
         ///<summary>
         ///Close browser through killing all processess on machine 
         ///</summary>
         internal void CloseWebDriverProcesses(string browser)
         {
-            //foreach (var BrowserProcessNames in BrowsersProcessesNames)
-            //{
-            //    if (BrowserProcessNames.Key.ToString().Equals(browser.ToLower()))
-            //    {
-            //        foreach (var processName in BrowserProcessNames.Value)
-            //        {
-            //            var processes = Process.GetProcessesByName(processName);
+            foreach (var BrowserProcessNames in BrowsersProcessesNames)
+            {
+                if (BrowserProcessNames.Key.ToString().Equals(browser.ToLower()))
+                {
+                    foreach (var processName in BrowserProcessNames.Value)
+                    {
+                        var processes = Process.GetProcessesByName(processName);
 
-            //            foreach (var process in processes) process.Kill();
+                        foreach (var process in processes) process.Kill();
 
-            //            break;
-            //        }
+                        break;
+                    }
 
-            //        break;
-            //    }
-            //}
+                    break;
+                }
+            }
         }
         #endregion
 
@@ -147,6 +151,7 @@ namespace AutomationFramework.Entities
         public bool GoToUrl(string url)
         {
             _driver.Navigate().GoToUrl(url);
+            _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was navigated to: {url}. Page was successfully loaded;", makeScreenshoot: true);
             return IsPageLoaded();
         }
 
@@ -190,10 +195,9 @@ namespace AutomationFramework.Entities
         ///<summary>
         ///Allows to quit browser and kill all processors
         ///</summary>
-        public void Quit(string browser)
+        public void Quit()
         {
             _driver.Quit();
-            CloseWebDriverProcesses(browser);
         }
 
         ///<summary>
@@ -312,6 +316,7 @@ namespace AutomationFramework.Entities
                 try
                 {
                     var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
+                    _logManager.LogAction($"WebElement with locator: {elementLocator} was found;", makeScreenshoot: true, element);
                     return element;
                 }
                 catch (NoSuchElementException e)
@@ -429,10 +434,27 @@ namespace AutomationFramework.Entities
         public void MoveToElement(By locator)
         {
             if(IsElementExistInDOM(locator)){
-                ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView(true);", FindElement(locator));
+                IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript(MoveToElementJSCommand, FindElement(locator));
             } else
             {
                 Assert.IsNull($"Element doesn't exist in DOM. Locator: {locator}");
+            }
+        }
+
+        ///<summary>
+        ///Scrool the browser until element is visible
+        ///</summary>
+        public void MoveToElement(IWebElement element)
+        {
+            if (element == null)
+            {
+                Assert.IsNull($"Element can't be NULL for scrolling");
+            }
+            else
+            {
+                IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript(MoveToElementJSCommand, element);
             }
         }
 

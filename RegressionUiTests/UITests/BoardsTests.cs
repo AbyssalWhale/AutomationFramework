@@ -12,10 +12,10 @@ namespace RegressionTests.UITests
         {
             UITestSetUpParallelExec(
                 );
-            
+
             _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
             Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
-            _webDriverManager.ClickOnElement(By.XPath("//a[text()='Більше о нас']"));
+            _webDriverManager.ClickOnElement(By.XPath("//a[text()='Усі викладачі']"));
 
             UITestTearDownParallelExec(_webDriverManager);
         }
@@ -28,7 +28,7 @@ namespace RegressionTests.UITests
 
             _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
             Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
-            _webDriverManager.ClickOnElement(By.XPath("//a[text()='Більше о нас']"));
+            _webDriverManager.ClickOnElement(By.XPath("//a[text()='Усі викладачі']"));
 
             UITestTearDownParallelExec(_webDriverManager);
         }

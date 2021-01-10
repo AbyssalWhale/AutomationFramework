@@ -32,9 +32,7 @@ namespace AutomationFramework
             _logManager.CreateTestFoldersAndLog(TestContext.CurrentContext);
 
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
-            _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings, _logManager);
-
-            _logManager._driver = _webDriverManager._driver;
+            _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings);
         }
 
         ///<summary>
@@ -42,7 +40,7 @@ namespace AutomationFramework
         ///</summary>
         public virtual void OneTearDown()
         {
-            _webDriverManager.Quit(_runSettingsSettings.Browser);
+            _webDriverManager.Quit();
         }
     }
 }
