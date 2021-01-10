@@ -16,4 +16,17 @@
     <ProjectReference Include="..\AutomationFramework\AutomationFramework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="WebDrivers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="WebDrivers\chromedriver.exe">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="WebDrivers\geckodriver.exe">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -99,6 +99,9 @@ namespace AutomationFramework.Entities
             return driver;
         }
 
+        ///<summary>
+        ///Returns new copu of IWebDriver
+        ///</summary>
         private IWebDriver InitNewCopyOfWebDriver(string browser)
         {
             IWebDriver driver = null;
