@@ -5,15 +5,16 @@ using TestConfigurator.Workflows.API;
 namespace TestConfigurator.TestFixtures
 {
     [TestFixture]
-    public class ApiTestsBase : TestBase
+    public class ApiTestsBase : APITestBase
     {
         protected BoardWorkflow _boardWorkflow;
 
         [OneTimeSetUp]
         public override void OneTimeSetUp()
         {
-            OneTimeSetUpApiWithOutUi();
-            _boardWorkflow = new BoardWorkflow(_utilsManager);
+            base.OneTimeSetUp();
+
+            _boardWorkflow = new BoardWorkflow(_toolsManager);
         }
 
         [SetUp]
@@ -22,17 +23,10 @@ namespace TestConfigurator.TestFixtures
             base.SetUp();
         }
 
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-        }
-
         [OneTimeTearDown]
-        public override void OneTimeTearDown()
+        public void OneTimeTearDown()
         {
             _boardWorkflow.RemoveAllBaordsAsync();
-            base.OneTimeTearDownApiWithOutUi();
         }
     }
 }

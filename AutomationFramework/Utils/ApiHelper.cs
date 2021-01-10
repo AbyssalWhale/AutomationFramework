@@ -33,7 +33,11 @@ namespace AutomationFramework.Utils
         {
             var request = CreateRequest(endPoint, method, headers, parameters, restObject);
 
-            return await _client.ExecuteAsync<T>(request);
+            var result = await _client.ExecuteAsync<T>(request);
+
+            _logManager.LogAction($"Status response: {result.StatusCode}");
+
+            return result;
         }
 
         public IRestResponse<T> RestResponse<T>(
@@ -43,7 +47,11 @@ namespace AutomationFramework.Utils
             IRestObject restObject = null) where T : new()
         {
             var request = CreateRequest(endPoint, method, headers, parameters, restObject);
-            return _client.Execute<T>(request);
+            var result = _client.Execute<T>(request);
+
+            _logManager.LogAction($"Status response: {result.StatusCode}");
+
+            return result;
         }
 
         private RestRequest CreateRequest(
@@ -56,8 +64,6 @@ namespace AutomationFramework.Utils
             var request = new RestRequest(endPoint, method);
             request.AddParameter("key", _runSettingsManger.ApiKey);
             request.AddParameter("token", _runSettingsManger.ApiToken);
-
-            _logManager.LogAction(LogLevels.local, $"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint}");
 
             if (headers != null)
             {
@@ -73,6 +79,8 @@ namespace AutomationFramework.Utils
             {
                 Parallel.ForEach(_stringHelper.GetAllClassPropertiesWithValuesAsStrings(restObject), property => { request.AddParameter(property.Key, property.Value); });
             }
+
+            _logManager.LogAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint};");
 
             return request;
         }

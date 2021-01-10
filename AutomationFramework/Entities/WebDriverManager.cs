@@ -9,78 +9,43 @@ using NUnit.Framework;
 using System.Threading;
 using System;
 using OpenQA.Selenium.Interactions;
+using System.Collections.Concurrent;
 
 namespace AutomationFramework.Entities
 {
     public class WebDriverManager
     {
         private static WebDriverManager _webDriverManager;
-        private LogManager _logManager;
+        private LogManager _logManager { get { return LogManager.GetLogManager(_runSettingManager); } }
         private RunSettingManager _runSettingManager;
-        internal IWebDriver _driver;
+        internal IWebDriver _driver { get { return _allTestsWebDrivers[TestContext.CurrentContext.Test.Name]; } }
+        ConcurrentDictionary<string, IWebDriver> _allTestsWebDrivers;
 
-        protected WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
+        #region CONST
+        private const string MoveToElementJSCommand = "arguments[0].scrollIntoView({block: 'nearest'});";
+        #endregion
+
+        protected WebDriverManager(RunSettingManager runSettingManager)
         {
             _runSettingManager = runSettingManager;
-            _driver = SetUpDriver(_runSettingManager.Browser);
-            _logManager = logManager;
-
-            _logManager.LogAction(LogLevels.global, $"Initializing the '{runSettingManager.Browser}' browser");
+            _allTestsWebDrivers = new ConcurrentDictionary<string, IWebDriver>();
         }
 
-        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
+        internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager)
         {
-            if (_webDriverManager == null) {
-                _webDriverManager = new WebDriverManager(runSettingManager, logManager);
+            if (_webDriverManager == null)
+            {
+                _webDriverManager = new WebDriverManager(runSettingManager);
             }
 
             return _webDriverManager;
         }
-
 
         private static Dictionary<Browsers, List<string>> BrowsersProcessesNames = new Dictionary<Browsers, List<string>>
         {
             { Browsers.chrome, new List<string>() { "chrome", "chromedriver", "Google Chrome" } },
             { Browsers.firefox, new List<string>() { "Firefox", "geckodriver" } }
         };
-
-
-        #region All Internal Methods
-
-        ///<summary>
-        ///Kill all processes for selected browser on local machine. Create new copy of selected IWebDriver with default settings and return it.
-        ///</summary>
-        internal IWebDriver SetUpDriver(string browser)
-        {
-            browser = browser.ToLower();
-
-            IWebDriver driver = null;
-
-            CloseWebDriverProcesses(browser);
-            driver = InitNewCopyOfWebDriver(browser);
-
-            return driver;
-        }
-
-        private IWebDriver InitNewCopyOfWebDriver(string browser)
-        {
-            IWebDriver driver = null;
-
-            if (browser.Equals(Browsers.chrome.ToString()))
-            {
-                driver = new ChromeDriver($"{_runSettingManager.BrowserDriversPath}", SetChrome());
-            }
-            else if (browser.Equals(Browsers.firefox.ToString()))
-            {
-                driver = new FirefoxDriver($"{_runSettingManager.BrowserDriversPath}", SetFirefox());
-            }
-            else
-            {
-                Assert.IsNull($"Unknown browser is tried to be initialized: {browser}");
-            }
-
-            return driver;
-        }
 
         #region Browser SetUp
         private FirefoxOptions SetFirefox()
@@ -101,11 +66,61 @@ namespace AutomationFramework.Entities
         private ChromeOptions SetChrome()
         {
             ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--start-maximized");
+            //options.AddArgument("--start-maximized");
 
             return options;
         }
         #endregion
+
+        #region All Internal Methods
+
+        ///<summary>
+        ///Add new copy of IWebDriver in case if test run in parallel
+        ///</summary>
+        internal void AddWebDriverForTest()
+        {
+            if (_allTestsWebDrivers.TryAdd(TestContext.CurrentContext.Test.Name, SetUpDriver(_runSettingManager.Browser)))
+            {
+                _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was initialized;");
+            }
+        }
+
+        ///<summary>
+        ///Create new copy of selected IWebDriver with default settings and return it.
+        ///</summary>
+        internal IWebDriver SetUpDriver(string browser)
+        {
+            browser = browser.ToLower();
+
+            IWebDriver driver = null;
+
+            driver = InitNewCopyOfWebDriver(browser);
+
+            return driver;
+        }
+
+        ///<summary>
+        ///Returns new copu of IWebDriver
+        ///</summary>
+        private IWebDriver InitNewCopyOfWebDriver(string browser)
+        {
+            IWebDriver driver = null;
+
+            if (browser.Equals(Browsers.chrome.ToString()))
+            {
+                driver = new ChromeDriver($"{_runSettingManager.BrowserDriversPath}", SetChrome());
+            }
+            else if (browser.Equals(Browsers.firefox.ToString()))
+            {
+                driver = new FirefoxDriver($"{_runSettingManager.BrowserDriversPath}", SetFirefox());
+            }
+            else
+            {
+                Assert.IsNull($"Unknown browser is tried to be initialized: {browser}");
+            }
+
+            return driver;
+        }
 
         ///<summary>
         ///Close browser through killing all processess on machine 
@@ -139,7 +154,7 @@ namespace AutomationFramework.Entities
         public bool GoToUrl(string url)
         {
             _driver.Navigate().GoToUrl(url);
-            _logManager.LogAction(LogLevels.local, $"Going to the url: {url}...");
+            _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was navigated to: {url}. Page was successfully loaded;", makeScreenshoot: true);
             return IsPageLoaded();
         }
 
@@ -150,7 +165,6 @@ namespace AutomationFramework.Entities
         {
             ExecuteJSScript("window.open();");
             _driver.SwitchTo().Window(_driver.WindowHandles[_driver.WindowHandles.Count - 1]);
-            _logManager.LogAction(LogLevels.local, $"New tab was opened in the browser", true);
             return GoToUrl(url);
         }
 
@@ -176,8 +190,6 @@ namespace AutomationFramework.Entities
                 Thread.Sleep(500);
             }
 
-            _logManager.LogAction(LogLevels.local, $"Checked the '{GetPageTitle()}' page is fully loaded", true);
-
             return true;
         }
 
@@ -186,11 +198,9 @@ namespace AutomationFramework.Entities
         ///<summary>
         ///Allows to quit browser and kill all processors
         ///</summary>
-        public void Quit(string browser)
+        public void Quit()
         {
-            _logManager.LogAction(LogLevels.local, $"Quit browser");
             _driver.Quit();
-            CloseWebDriverProcesses(browser);
         }
 
         ///<summary>
@@ -198,7 +208,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public object ExecuteJSScript(string script)
         {
-            _logManager.LogAction(LogLevels.local, $"Running JS script: {script}...");
             return ((IJavaScriptExecutor)_driver).ExecuteScript(script);
         }
 
@@ -207,7 +216,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public object ExecuteJSScript(string script, IWebElement[] elements)
         {
-            _logManager.LogAction(LogLevels.local, $"JS script will be execuded for element {elements.Length}: {script}...", true, elements[0]);
             return ((IJavaScriptExecutor)_driver).ExecuteScript(script, elements);
         }
 
@@ -226,8 +234,6 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void SwitchTabByTitle(string tabTitle, int tabsExpected, bool isHardCheck = false)
         {
-            _logManager.LogAction(LogLevels.local, $"Trying to switch tab with title: {tabTitle}...");
-
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -313,7 +319,7 @@ namespace AutomationFramework.Entities
                 try
                 {
                     var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
-                    _logManager.LogAction(LogLevels.local, $"Element was found. Locator: {elementLocator.ToString()}...", true, element);
+                    _logManager.LogAction($"WebElement with locator: {elementLocator} was found;", makeScreenshoot: true, element);
                     return element;
                 }
                 catch (NoSuchElementException e)
@@ -343,7 +349,6 @@ namespace AutomationFramework.Entities
             var element = FindElement(elementLocator, parent, secondsToWait);
             element.Clear();
             element.SendKeys(textToSend);
-            _logManager.LogAction(LogLevels.local, $"Text: '{textToSend}' was sent into element. Locator: {elementLocator.ToString()};", true, element);
         }
 
         ///<summary>
@@ -352,7 +357,6 @@ namespace AutomationFramework.Entities
         public void ClickOnElement(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
         {
             IWebElement element = FindElement(elementLocator, parent, secondsToWait);
-            _logManager.LogAction(LogLevels.local, $"Trying to click on the element. Locator: {elementLocator.ToString()};", true, element);
             var message = string.Empty;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -399,7 +403,6 @@ namespace AutomationFramework.Entities
             {
                 if (stopwatch.ElapsedMilliseconds > secondsToWait * 1000)
                 {
-                    _logManager.LogAction(LogLevels.local, $"Not found element in DOM. Locator: {elementLocator.ToString()};");
                     return result;
                 }
 
@@ -407,7 +410,6 @@ namespace AutomationFramework.Entities
                 {
                     var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
                     result = true;
-                    _logManager.LogAction(LogLevels.local, $"Found element in DOM. Locator: {elementLocator.ToString()};", true, element);
                     return result;
                 }
                 catch (NoSuchElementException)
@@ -435,10 +437,27 @@ namespace AutomationFramework.Entities
         public void MoveToElement(By locator)
         {
             if(IsElementExistInDOM(locator)){
-                ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView(true);", FindElement(locator));
+                IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript(MoveToElementJSCommand, FindElement(locator));
             } else
             {
                 Assert.IsNull($"Element doesn't exist in DOM. Locator: {locator}");
+            }
+        }
+
+        ///<summary>
+        ///Scrool the browser until element is visible
+        ///</summary>
+        public void MoveToElement(IWebElement element)
+        {
+            if (element == null)
+            {
+                Assert.IsNull($"Element can't be NULL for scrolling");
+            }
+            else
+            {
+                IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript(MoveToElementJSCommand, element);
             }
         }
 
@@ -472,8 +491,6 @@ namespace AutomationFramework.Entities
                 result = true;
             }
 
-            _logManager.LogAction(LogLevels.local, $"Tried to switch to iframe. Result of operation: {result}. Locator: {frameLocator.ToString()}...");
-
             return result;
         }
 
@@ -484,8 +501,6 @@ namespace AutomationFramework.Entities
         {
             _driver.SwitchTo().DefaultContent();
             _driver.SwitchTo().ActiveElement();
-
-            _logManager.LogAction(LogLevels.local, $"Switching to default and active content...");
         }
         
         #endregion

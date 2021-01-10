@@ -5,37 +5,14 @@ using TestConfigurator.Workflows.API;
 
 namespace TestConfigurator.TestFixtures
 {
+    [Parallelizable(ParallelScope.All)]
     [TestFixture]
-    public class RegressionUiTestsBase : TestBase
+    public class RegressionUiTestsBase : UIParallelTestBase
     {
-        protected HomePage _homePage;
-        protected BoardWorkflow _boardWorkflow;
-
         [OneTimeSetUp]
-        public override void OneTimeSetUp()
+        public override void OneTimeSetUpParallelExec()
         {
-            base.OneTimeSetUp();
-        }
-
-        [SetUp]
-        public override void SetUp()
-        {
-            base.SetUp();
-            _homePage = new HomePage(_webDriverManager, _runSettingsSettings, _logManager, _folderManager, _utilsManager);
-            _boardWorkflow = new BoardWorkflow(_utilsManager);
-        }
-
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-        }
-
-        [OneTimeTearDown]
-        public override void OneTimeTearDown()
-        {
-            _boardWorkflow.RemoveAllBaordsAsync();
-            base.OneTimeTearDown();
+            base.OneTimeSetUpParallelExec();
         }
     }
 }

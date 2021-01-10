@@ -1,5 +1,6 @@
-﻿using NUnit.Framework;
-using TestConfigurator.Enums.UI;
+﻿using AutomationFramework.Entities;
+using NUnit.Framework;
+using OpenQA.Selenium;
 using TestConfigurator.TestFixtures;
 
 namespace RegressionTests.UITests
@@ -9,11 +10,27 @@ namespace RegressionTests.UITests
         [Test]
         public void CheckBoardCreation()
         {
-            var boardsPage = _homePage.GoToLogin().Login();
-            boardsPage.CloaseAtlassinWindow();
-            var newBoardDetailsPage = boardsPage.CreateNewBoard(BoardsTypes.Personal, out string newBoardName);
+            UITestSetUpParallelExec(
+                );
 
-            Assert.AreEqual(newBoardName, newBoardDetailsPage.GetCurrentBoardTitle(), $"It's expected that new board had the name that was provided in the process of creation. Expected name: {newBoardName}");
+            _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
+            Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
+            _webDriverManager.ClickOnElement(By.XPath("//a[text()='Усі викладачі']"));
+
+            UITestTearDownParallelExec(_webDriverManager);
+        }
+
+        [Test]
+        public void CheckBoardCreation_1()
+        {
+            UITestSetUpParallelExec(
+        );
+
+            _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
+            Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
+            _webDriverManager.ClickOnElement(By.XPath("//a[text()='Усі викладачі']"));
+
+            UITestTearDownParallelExec(_webDriverManager);
         }
     }
 }

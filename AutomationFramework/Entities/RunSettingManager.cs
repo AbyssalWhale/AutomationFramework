@@ -1,5 +1,6 @@
 ﻿using AutomationFramework.Enums;
 using NUnit.Framework;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
@@ -18,10 +19,10 @@ namespace AutomationFramework.Entities
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
+        public string RunId { get; set; }
         public string TestsReportDirectory { get; set; }
         public string TestReportDirectory { get; set; }
         public string TestsAssetDirectory { get; set; }
-        public string TestAssetDirectory { get; set; }
         public string ApiKey { get; set; }
         public string ApiToken { get; set; }
         public ConcurrentDictionary<string, string> APIHeaders { get; set; }
@@ -40,10 +41,10 @@ namespace AutomationFramework.Entities
             Username = TryToParseTestContext(nameof(Username));
             Password = TryToParseTestContext(nameof(Password));
             Email = TryToParseTestContext(nameof(Email));
-            TestsReportDirectory = TryToParseTestContext(nameof(TestsReportDirectory));
+            RunId = DateTime.UtcNow.ToString("MM-dd-yyyy, hh-mm-ss").Replace("-", "_").Replace(",", "").Replace(" ", "_");
+            TestsReportDirectory = $"../../../TestsData/{RunId}/TestsReports";
             TestReportDirectory = string.Empty;
-            TestsAssetDirectory = TryToParseTestContext(nameof(TestsAssetDirectory));
-            TestAssetDirectory = string.Empty;
+            TestsAssetDirectory = $"../../../TestsData/{RunId}/TestsAssets";
             ApiKey = TryToParseTestContext(nameof(ApiKey));
             ApiToken = TryToParseTestContext(nameof(ApiToken));
             APIHeaders = new ConcurrentDictionary<string, string>();
@@ -67,8 +68,8 @@ namespace AutomationFramework.Entities
         ///</summary>
         internal void ResetTestReportAndAssetDirectoriesPathes(LogManager logManager)
         {
-            logManager.LogAction(LogLevels.local, $"Finished execution.");
-            logManager.LogAction(LogLevels.global, $"The '{TestContext.CurrentContext.Test.Name}' test finished execution. All test logs: {TestReportDirectory} ");
+            //logManager.LogAction(LogLevels.local, $"Finished execution.");
+            //logManager.LogAction(LogLevels.global, $"The '{TestContext.CurrentContext.Test.Name}' test finished execution. All test logs: {TestReportDirectory} ");
 
             TestsReportDirectory = TestsReportDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
             TestsAssetDirectory = TestsAssetDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);

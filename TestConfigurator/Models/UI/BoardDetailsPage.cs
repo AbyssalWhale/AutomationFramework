@@ -14,9 +14,8 @@ namespace TestConfigurator.Models.UI
             WebDriverManager webDriverManager,
             RunSettingManager runSettingsManager,
             LogManager logManager,
-            FolderManager folderManager,
-            UtilsManager utilsManager) :
-            base(webDriverManager, runSettingsManager, logManager, folderManager, utilsManager)
+            ToolsManager utilsManager) :
+            base(webDriverManager, runSettingsManager, logManager, utilsManager)
         {
             _webDriverManager.IsPageLoaded();
             Assert.IsTrue(IsAt(), $"It's expected page be: {Title} but was: {_webDriverManager.GetPageTitle()}");

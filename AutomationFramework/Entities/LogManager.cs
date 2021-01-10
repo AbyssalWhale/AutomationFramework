@@ -1,13 +1,13 @@
-﻿using AutomationFramework.Enums;
-using AutomationFramework.Utils;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using Serilog;
 using Serilog.Core;
 using Serilog.Formatting.Json;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AutomationFramework.Entities
 {
@@ -15,9 +15,9 @@ namespace AutomationFramework.Entities
     /// </summary>
     public class LogManager
     {
-        internal Logger _globalLog { get; private set; }
-        internal Logger _testExecutionLocalLogger { get; private set; }
-        internal IWebDriver _driver { get; set; }
+        ConcurrentDictionary<string, Logger> _allTestsLoger;
+        private static LogManager _logManager;
+        private IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
         RunSettingManager _settingsManager { get; set; }
         int screenshootCounter { get; set; }
 
@@ -28,93 +28,103 @@ namespace AutomationFramework.Entities
         private List<string> _allTestLogs { get; set; }
         #endregion
 
-        ///<summary>
-        ///Create the 'TestsExecutionGlobalLog' file for loggin of high level steps of tests execution. Folder where the file is saved can be found in path: .runSettings.TestsReportDirectory
-        ///</summary>
-        internal void CreateGlobalLog(RunSettingManager settingsManager)
+        protected LogManager(RunSettingManager settingsManager)
         {
-            string globalLogFileName = "TestsExecutionGlobalLog.json";
-            _csvGlobalLogPath = $"{settingsManager.TestsReportDirectory}/CSVTestsReport.csv";
-            _allGlobalLogs = new List<string>();
+            _settingsManager = settingsManager;
+            _allTestsLoger = new ConcurrentDictionary<string, Logger>();
+        }
 
-            _globalLog = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{settingsManager.TestsReportDirectory}/{globalLogFileName}").CreateLogger();
+        internal static LogManager GetLogManager(RunSettingManager settingsManager)
+        {
+            if (_logManager == null)
+            {
+                _logManager = new LogManager(settingsManager);
+            }
 
-            LogAction(LogLevels.global, $"GlobalTestLog was initialized and {globalLogFileName} was created;");
+            return _logManager;
         }
 
         ///<summary>
         ///Create the 'TestExecutionLocalLog' file for loggin of steps of a current tests. Folder where the file is saved can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        internal void CreateLogForTest(RunSettingManager settingsManager, TestContext testContext)
+        internal void CreateTestFoldersAndLog(TestContext testContext)
         {
-            _settingsManager = settingsManager;
-
             screenshootCounter = 0;
 
-            string localLogFileName = "TestExecutionLocalLog.json";
-            _csvTestLogPath = $"{settingsManager.TestReportDirectory}/CSVTestReport.csv";
-            _allTestLogs = new List<string>();
+            string localLogFileName = $"{testContext.Test.Name}_Log.json";
 
-            _testExecutionLocalLogger = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{settingsManager.TestReportDirectory}/{localLogFileName}").CreateLogger();
+            Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}");
+            Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{testContext.Test.Name}");
 
-            LogAction(LogLevels.local, $"Start execution. TestLog was initialized and {localLogFileName} was created;");
+            _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{localLogFileName}").CreateLogger());
+
+            LogAction($"Start execution. Folder and Log for the '{testContext.Test.Name}' test were created;");
+
         }
 
         ///<summary>
         ///Allows to log action and write it into global or test local log file. Test log files can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        public void LogAction(LogLevels logLevel, string message, bool makeScreenshoot = false, IWebElement element = null)
+        public void LogAction(string message, bool makeScreenshoot = false, IWebElement element = null)
         {
-            Assert.IsNotNull(message, $"Empty message can not be written into the '{logLevel}' log");
+            Assert.IsNotNull(message, $"Empty message can not be written into the log");
 
-            Log.Logger = logLevel.Equals(LogLevels.global) ? _globalLog : _testExecutionLocalLogger;
-            Log.Information(message);
+            var record = new { Test = $"{TestContext.CurrentContext.Test.Name}", Message = $"{message}" };
+
+            _allTestsLoger[TestContext.CurrentContext.Test.Name].Information($"{record}");
 
             if (makeScreenshoot)
             {
                 if (element == null) MakeLogScreenshoot(); else MakeLogScreenshoot(element);
             }
-
-            if (logLevel.Equals(LogLevels.local)) _allTestLogs.Add(message); else _allGlobalLogs.Add(message);
-        }
-
-        public void MakeLogScreenshoot()
-        {
-            var path = $"{_settingsManager.TestReportDirectory}/{screenshootCounter}.jpg";
-            ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(path);
-            screenshootCounter++;
-        }
-        public void MakeLogScreenshoot(IWebElement element)
-        {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
-            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");            
-            MakeLogScreenshoot();
-            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
-
-            screenshootCounter++;
         }
 
         ///<summary>
+        ///Allows to make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
+        ///</summary>
+        public void MakeLogScreenshoot()
+        {
+            var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{screenshootCounter}.jpg";
+            var screenShoot = ((ITakesScreenshot)_driver).GetScreenshot();
+            screenShoot.SaveAsFile(path);
+            screenshootCounter++;
+        }
+
+
+        //Start
+        public void MakeLogScreenshoot(IWebElement element)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+            WebDriverManager.GetWebDriverManager(_settingsManager).MoveToElement(element);
+            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");            
+            MakeLogScreenshoot();
+            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
+            screenshootCounter++;
+        }
+
+
+        //End
+        ///<summary>
         ///Allows to create log CSV file
         ///</summary>
-        internal async void CreateFinalCSVLog(LogLevels logLevel)
+        internal async void CreateFinalCSVLog()
         {
-            string path = logLevel.Equals(LogLevels.global) ? _csvGlobalLogPath : _csvTestLogPath;
-            var allLogs = logLevel.Equals(LogLevels.global) ? _allGlobalLogs : _allTestLogs;
+            File.Create(_csvTestLogPath).Close();
 
-            File.Create(path).Close();
+            await Task.Run(() => {
 
-            var file = new StreamWriter(path, true);
+                var file = new StreamWriter(_csvTestLogPath, true);
 
-            foreach (var log in allLogs)
-            {
-                await file.WriteLineAsync(log);
-            }
+                foreach (var log in _allTestLogs)
+                {
+                    file.WriteLineAsync(log);
+                }
 
-            file.Flush();
-            file.Close();
+                file.Flush();
+                file.Close();
 
-            _allTestLogs = new List<string>();
+                _allTestLogs = new List<string>();
+            });
         }
     }
 }
