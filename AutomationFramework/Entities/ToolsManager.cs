@@ -33,15 +33,5 @@ namespace AutomationFramework.Entities
 
             return _toolsManager;
         }
-
-        //public ToolsManager(RunSettingManager runSettingManager, LogManager logManager)
-        //{
-        //    _dataBase = new DataBaseHelper(runSettingManager.DBServer, runSettingManager.DBName, runSettingManager.DBUserId, runSettingManager.DBUserPass);
-        //    _enum = new EnumHelper();
-        //    _string = new StringHelper();
-        //    _api = new ApiHelper(runSettingManager, logManager, _string);
-        //    _getFakeData = new Faker();
-        //    _getRandom = new Random();
-        //}
     }
 }

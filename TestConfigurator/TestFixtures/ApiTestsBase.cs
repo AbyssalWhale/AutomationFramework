@@ -13,13 +13,14 @@ namespace TestConfigurator.TestFixtures
         public override void OneTimeSetUp()
         {
             base.OneTimeSetUp();
+
+            _boardWorkflow = new BoardWorkflow(_toolsManager);
         }
 
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
-            _boardWorkflow = new BoardWorkflow(_toolsManager);
         }
 
         [OneTimeTearDown]

@@ -16,15 +16,15 @@ namespace AutomationFramework{
 
             Directory.CreateDirectory(_runSettingsSettings.TestsReportDirectory);
             Directory.CreateDirectory(_runSettingsSettings.TestsAssetDirectory);
+
+            _logManager = LogManager.GetLogManager(_runSettingsSettings);
+
+            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
         }
 
         public virtual void SetUp()
         {
-
-            _logManager = LogManager.GetLogManager(_runSettingsSettings);
             _logManager.CreateTestFoldersAndLog(TestContext.CurrentContext);
-
-            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
         }
     }
 }
