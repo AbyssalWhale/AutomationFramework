@@ -11,9 +11,8 @@ namespace RegressionTests.UITests
         public void CheckBoardCreation()
         {
             UITestSetUpParallelExec(
-            out WebDriverManager _webDriverManager
                 );
-
+            
             _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
             Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
             _webDriverManager.ClickOnElement(By.XPath("//a[text()='Більше о нас']"));
@@ -25,7 +24,6 @@ namespace RegressionTests.UITests
         public void CheckBoardCreation_1()
         {
             UITestSetUpParallelExec(
-                out WebDriverManager _webDriverManager
         );
 
             _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);

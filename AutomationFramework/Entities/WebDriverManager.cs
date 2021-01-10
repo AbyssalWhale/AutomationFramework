@@ -9,6 +9,7 @@ using NUnit.Framework;
 using System.Threading;
 using System;
 using OpenQA.Selenium.Interactions;
+using System.Collections.Concurrent;
 
 namespace AutomationFramework.Entities
 {
@@ -17,15 +18,14 @@ namespace AutomationFramework.Entities
         private static WebDriverManager _webDriverManager;
         private LogManager _logManager;
         private RunSettingManager _runSettingManager;
-        internal IWebDriver _driver;
+        internal IWebDriver _driver { get { return _allTestsWebDrivers[TestContext.CurrentContext.Test.Name]; } }
+        ConcurrentDictionary<string, IWebDriver> _allTestsWebDrivers;
 
         protected WebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
         {
             _runSettingManager = runSettingManager;
+            _allTestsWebDrivers = new ConcurrentDictionary<string, IWebDriver>();
             _logManager = logManager;
-            _driver = SetUpDriver(_runSettingManager.Browser);
-
-            _logManager.LogAction($"the '{runSettingManager.Browser}' browser was initialized;");
         }
 
         internal static WebDriverManager GetWebDriverManager(RunSettingManager runSettingManager, LogManager logManager)
@@ -46,6 +46,14 @@ namespace AutomationFramework.Entities
 
 
         #region All Internal Methods
+
+        internal void AddWebDriverForTest()
+        {
+            if (_allTestsWebDrivers.TryAdd(TestContext.CurrentContext.Test.Name, SetUpDriver(_runSettingManager.Browser)))
+            {
+                _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was initialized;");
+            }
+        }
 
         ///<summary>
         ///Create new copy of selected IWebDriver with default settings and return it.

@@ -11,6 +11,7 @@ namespace AutomationFramework
         protected RunSettingManager _runSettingsSettings;
         protected LogManager _logManager;
         protected ToolsManager _toolsManager;
+        protected WebDriverManager _webDriverManager;
 
         public virtual void OneTimeSetUpParallelExec()
         {
@@ -21,20 +22,20 @@ namespace AutomationFramework
 
             _logManager = LogManager.GetLogManager(_runSettingsSettings);
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
+
+            _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings, _logManager);
         }
 
         ///<summary>
         ///Before Each UI Test for parallel execution
         ///</summary>
         public void UITestSetUpParallelExec(
-            out WebDriverManager webDriverManager
             )
         {
             _logManager.CreateTestFoldersAndLog(TestContext.CurrentContext);
+            _webDriverManager.AddWebDriverForTest();
 
-            webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings, _logManager);
-
-            _logManager._driver = webDriverManager._driver;
+            _logManager._driver = _webDriverManager._driver;
         }
 
         ///<summary>
