@@ -81,7 +81,7 @@ namespace AutomationFramework.Entities
         {
             if (_allTestsWebDrivers.TryAdd(TestContext.CurrentContext.Test.Name, SetUpDriver(_runSettingManager.Browser)))
             {
-                _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was initialized;");
+                _logManager.LogTestAction($"the '{_runSettingManager.Browser}' browser was initialized;");
             }
         }
 
@@ -154,7 +154,7 @@ namespace AutomationFramework.Entities
         public bool GoToUrl(string url)
         {
             _driver.Navigate().GoToUrl(url);
-            _logManager.LogAction($"the '{_runSettingManager.Browser}' browser was navigated to: {url}. Page was successfully loaded;", makeScreenshoot: true);
+            _logManager.LogTestAction($"the '{_runSettingManager.Browser}' browser was navigated to: {url}. Page was successfully loaded;", makeScreenshoot: true);
             return IsPageLoaded();
         }
 
@@ -319,7 +319,7 @@ namespace AutomationFramework.Entities
                 try
                 {
                     var element = parent == null ? _driver.FindElement(elementLocator) : parent.FindElement(elementLocator);
-                    _logManager.LogAction($"WebElement with locator: {elementLocator} was found;", makeScreenshoot: true, element);
+                    _logManager.LogTestAction($"WebElement with locator: {elementLocator} was found;", makeScreenshoot: true, element);
                     return element;
                 }
                 catch (NoSuchElementException e)

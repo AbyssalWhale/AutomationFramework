@@ -15,9 +15,10 @@ namespace AutomationFramework.Entities
     /// </summary>
     public class LogManager
     {
+        const string GlobalLogName = "GlobalLog.json";
         ConcurrentDictionary<string, Logger> _allTestsLoger;
-        private static LogManager _logManager;
-        private IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
+        static LogManager _logManager;
+        IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
         RunSettingManager _settingsManager { get; set; }
         int screenshootCounter { get; set; }
 
@@ -45,9 +46,22 @@ namespace AutomationFramework.Entities
         }
 
         ///<summary>
-        ///Create the 'TestExecutionLocalLog' file for loggin of steps of a current tests. Folder where the file is saved can be found in path: .runSettings.TestReportDirectory
+        ///Create global log for tests run
         ///</summary>
-        internal void CreateTestFoldersAndLog(TestContext testContext)
+        internal void CreateGlobalLog()
+        {
+            string logFileNameWithPath = $"{_settingsManager.TestsReportDirectory}/{GlobalLogName}";
+            Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}");
+
+            _allTestsLoger.TryAdd(GlobalLogName, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{logFileNameWithPath}").CreateLogger());
+
+            LogGlobalTestExecutionAction("Global log was created;");
+        }
+
+        ///<summary>
+        ///Create a log file for loggin of steps of a current test execution. Folder where the file is saved can be found in path: .runSettings.TestReportDirectory
+        ///</summary>
+        internal void CreateTestFolderAndLog(TestContext testContext)
         {
             screenshootCounter = 0;
 
@@ -58,14 +72,14 @@ namespace AutomationFramework.Entities
 
             _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{localLogFileName}").CreateLogger());
 
-            LogAction($"Start execution. Folder and Log for the '{testContext.Test.Name}' test were created;");
-
+            LogTestAction($"Folder and Log for the '{testContext.Test.Name}' test were created;");
+            LogGlobalTestExecutionAction($"The {testContext.Test.Name} test started execution;");
         }
 
         ///<summary>
-        ///Allows to log action and write it into global or test local log file. Test log files can be found in path: .runSettings.TestReportDirectory
+        ///Allows to log action and write it into test local log file. Test log files can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        public void LogAction(string message, bool makeScreenshoot = false, IWebElement element = null)
+        public void LogTestAction(string message, bool makeScreenshoot = false, IWebElement element = null)
         {
             Assert.IsNotNull(message, $"Empty message can not be written into the log");
 
@@ -77,6 +91,15 @@ namespace AutomationFramework.Entities
             {
                 if (element == null) MakeLogScreenshoot(); else MakeLogScreenshoot(element);
             }
+        }
+
+        ///<summary>
+        ///Allows to log action and write it into test global test run log file. Test log files can be found in path: .runSettings.TestReportDirectory
+        ///</summary>
+        public async void LogGlobalTestExecutionAction(string message)
+        {
+            Assert.IsNotNull(message, $"Empty message can not be written into the log");
+            await Task.Run(() => { _allTestsLoger[GlobalLogName].Information($"{message}"); });
         }
 
         ///<summary>

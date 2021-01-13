@@ -4,6 +4,7 @@ using TestConfigurator.Workflows.API;
 
 namespace TestConfigurator.TestFixtures
 {
+    [Parallelizable(ParallelScope.All)]
     [TestFixture]
     public class ApiTestsBase : APITestBase
     {
