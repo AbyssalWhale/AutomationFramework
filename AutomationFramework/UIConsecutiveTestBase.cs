@@ -29,7 +29,7 @@ namespace AutomationFramework
         public virtual void SetUp()
         {
             _logManager = LogManager.GetLogManager(_runSettingsSettings);
-            _logManager.CreateTestFoldersAndLog(TestContext.CurrentContext);
+            _logManager.CreateTestFolderAndLog(TestContext.CurrentContext);
 
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
             _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings);

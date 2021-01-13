@@ -35,7 +35,7 @@ namespace AutomationFramework.Utils
 
             var result = await _client.ExecuteAsync<T>(request);
 
-            _logManager.LogAction($"Status response: {result.StatusCode}");
+            _logManager.LogTestAction($"Status response: {result.StatusCode}");
 
             return result;
         }
@@ -49,7 +49,7 @@ namespace AutomationFramework.Utils
             var request = CreateRequest(endPoint, method, headers, parameters, restObject);
             var result = _client.Execute<T>(request);
 
-            _logManager.LogAction($"Status response: {result.StatusCode}");
+            _logManager.LogTestAction($"Status response: {result.StatusCode}");
 
             return result;
         }
@@ -80,7 +80,7 @@ namespace AutomationFramework.Utils
                 Parallel.ForEach(_stringHelper.GetAllClassPropertiesWithValuesAsStrings(restObject), property => { request.AddParameter(property.Key, property.Value); });
             }
 
-            _logManager.LogAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint};");
+            _logManager.LogTestAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint};");
 
             return request;
         }

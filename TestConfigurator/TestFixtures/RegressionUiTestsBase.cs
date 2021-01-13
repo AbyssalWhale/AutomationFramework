@@ -1,7 +1,5 @@
 using AutomationFramework;
 using NUnit.Framework;
-using TestConfigurator.Models.UI;
-using TestConfigurator.Workflows.API;
 
 namespace TestConfigurator.TestFixtures
 {
@@ -10,9 +8,21 @@ namespace TestConfigurator.TestFixtures
     public class RegressionUiTestsBase : UIParallelTestBase
     {
         [OneTimeSetUp]
-        public override void OneTimeSetUpParallelExec()
+        public override void OneTimeSetUp()
         {
-            base.OneTimeSetUpParallelExec();
+            base.OneTimeSetUp();
+        }
+
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
+        }
+
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown();
         }
     }
 }

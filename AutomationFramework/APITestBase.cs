@@ -19,12 +19,16 @@ namespace AutomationFramework{
 
             _logManager = LogManager.GetLogManager(_runSettingsSettings);
 
+            _logManager.CreateGlobalLog();
+
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
+
+            _logManager.LogGlobalTestExecutionAction("One Time Set Up was successfully executed for tests;");
         }
 
         public virtual void SetUp()
         {
-            _logManager.CreateTestFoldersAndLog(TestContext.CurrentContext);
+            _logManager.CreateTestFolderAndLog(TestContext.CurrentContext);
         }
     }
 }
