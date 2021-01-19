@@ -33,6 +33,13 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: '**\*RegressionApiTests*.dll'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    runSettingsFile: '**\AutomationFramework\TestConfigurator\RunSettings.runsettings'
+
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'NUnit'
