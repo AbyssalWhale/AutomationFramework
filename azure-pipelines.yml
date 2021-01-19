@@ -36,7 +36,7 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    testAssemblyVer2: "$(solution)/**/RegressionApiTests/bin/Debug/netcoreapp3.1/RegressionApiTests.dll"
+    testAssemblyVer2: "D:/a/1/s/AutomationFramework/RegressionApiTests/bin/Debug/netcoreapp3.1/RegressionApiTests.dll"
     uiTests: false
-    runSettingsFile: "$(solution)/**/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+    runSettingsFile: "D:/a/1/s/AutomationFramework/TestConfigurator/RunSettings/InstanceSettings.runsettings"
     runTestsInIsolation: true
