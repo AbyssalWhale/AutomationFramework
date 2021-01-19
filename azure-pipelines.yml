@@ -16,6 +16,9 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+  displayName: 'Use NuGet 5.8.0'
+  inputs:
+    versionSpec: 5.8.0
 
 - task: NuGetCommand@2
   inputs:
@@ -29,18 +32,11 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
+  displayName: 'Run API tests'
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-- task: VSTest@2
-  inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: '**\*RegressionApiTests*.dll'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    runSettingsFile: '**\AutomationFramework\TestConfigurator\RunSettings.runsettings'
-
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'NUnit'
-    testResultsFiles: '**/TEST-*.xml'
+    testAssemblyVer2: "**/AutomationFramework/RegressionApiTests/bin/Debug/netcoreapp3.1/RegressionApiTests.dll"
+    uiTests: false
+    runSettingsFile: "**AutomationFramework/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+    runTestsInIsolation: true
