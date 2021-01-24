@@ -12,8 +12,6 @@ namespace TestConfigurator.Workflows.API
 {
     public class BoardWorkflow : ApiWorkflowBase
     {
-        private int counter = 0;
-
         public BoardWorkflow(ToolsManager toolsManager) : base(toolsManager) {}
 
         public PostBoardModel GenerateSimpleBoardForPOST()
@@ -54,8 +52,8 @@ namespace TestConfigurator.Workflows.API
 
         public void RemoveAllBaordsAsync()
         {
-            var allBoardsGetResponse =  _toolsManager._api.RestResponseAsync<List<ResponseBoardModel>>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.MyAllBoards), Method.GET);
-            Parallel.ForEach(allBoardsGetResponse.Result.Data, async board => { await RemoveBoardAsync(board.id); });
+            var allBoardsGetResponse = _toolsManager._api.RestResponseAsync<List<ResponseBoardModel>>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.MyAllBoards), Method.GET);
+            Parallel.ForEach(allBoardsGetResponse.Result.Data, board => { RemoveBoardAsync(board.id); });
         }
     }
 }
