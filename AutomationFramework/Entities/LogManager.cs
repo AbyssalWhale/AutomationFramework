@@ -19,10 +19,10 @@ namespace AutomationFramework.Entities
         const string TestLogFileSuffixAndExtension = "_Log.json";
 
         ConcurrentDictionary<string, Logger> _allTestsLoger;
+        ConcurrentDictionary<string, int> _testsCountersForScreshoots;
         static LogManager _logManager;
         IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
         RunSettingManager _settingsManager { get; set; }
-        int screenshootCounter { get; set; }
 
         #region CSV
         private string _csvTestLogPath { get; set; }
@@ -35,6 +35,7 @@ namespace AutomationFramework.Entities
         {
             _settingsManager = settingsManager;
             _allTestsLoger = new ConcurrentDictionary<string, Logger>();
+            _testsCountersForScreshoots = new ConcurrentDictionary<string, int>();
         }
 
         internal static LogManager GetLogManager(RunSettingManager settingsManager)
@@ -65,14 +66,13 @@ namespace AutomationFramework.Entities
         ///</summary>
         internal void CreateTestFolderAndLog(TestContext testContext)
         {
-            screenshootCounter = 0;
-
             string localLogFileName = $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{testContext.Test.Name}{TestLogFileSuffixAndExtension}";
 
             Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}");
             Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{testContext.Test.Name}");
 
             _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{localLogFileName}").CreateLogger());
+            _testsCountersForScreshoots.TryAdd(TestContext.CurrentContext.Test.Name, 0);
 
             TestContext.AddTestAttachment(localLogFileName);
 
@@ -111,12 +111,12 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void MakeLogScreenshoot()
         {
-            var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{screenshootCounter}.jpg";
+            var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{_testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]}.jpg";
             var screenShoot = ((ITakesScreenshot)_driver).GetScreenshot();
             screenShoot.SaveAsFile(path);
-            TestContext.AddTestAttachment(path, $"Screenshoot {screenshootCounter}");
+            TestContext.AddTestAttachment(path, $"Screenshoot {_testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]}");
 
-            screenshootCounter++;
+            _testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]++;
         }
 
         ///<summary>
@@ -129,7 +129,6 @@ namespace AutomationFramework.Entities
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");            
             MakeLogScreenshoot();
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
-            screenshootCounter++;
         }
 
         ///<summary>
