@@ -23,11 +23,5 @@ namespace TestConfigurator.TestFixtures
         {
             base.SetUp();
         }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            _boardWorkflow.RemoveAllBaordsAsync();
-        }
     }
 }
