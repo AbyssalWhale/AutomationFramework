@@ -66,12 +66,14 @@ namespace AutomationFramework.Entities
         {
             screenshootCounter = 0;
 
-            string localLogFileName = $"{testContext.Test.Name}{TestLogFileSuffixAndExtension}";
+            string localLogFileName = $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{testContext.Test.Name}{TestLogFileSuffixAndExtension}";
 
             Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}");
             Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{testContext.Test.Name}");
 
-            _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{localLogFileName}").CreateLogger());
+            _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{localLogFileName}").CreateLogger());
+
+            TestContext.AddTestAttachment(localLogFileName);
 
             LogTestAction($"Folder and Log for the '{testContext.Test.Name}' test were created;");
             LogGlobalTestExecutionAction($"The {testContext.Test.Name} test started execution;");
@@ -125,12 +127,6 @@ namespace AutomationFramework.Entities
             MakeLogScreenshoot();
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
             screenshootCounter++;
-        }
-
-        public void AttachTestReports()
-        {
-            var filePath = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}";
-            TestContext.AddTestAttachment(filePath, "Test Log file in JSON format");
         }
 
         ///<summary>
