@@ -16,6 +16,7 @@ namespace AutomationFramework.Entities
     public class LogManager
     {
         const string GlobalLogName = "GlobalLog.json";
+        const string TestLogFileSuffixAndExtension = "_Log.json";
         ConcurrentDictionary<string, Logger> _allTestsLoger;
         static LogManager _logManager;
         IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
@@ -65,7 +66,7 @@ namespace AutomationFramework.Entities
         {
             screenshootCounter = 0;
 
-            string localLogFileName = $"{testContext.Test.Name}_Log.json";
+            string localLogFileName = $"{testContext.Test.Name}{TestLogFileSuffixAndExtension}";
 
             Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}");
             Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{testContext.Test.Name}");
@@ -113,8 +114,9 @@ namespace AutomationFramework.Entities
             screenshootCounter++;
         }
 
-
-        //Start
+        ///<summary>
+        ///Allows to highlight WebElement, make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
+        ///</summary>
         public void MakeLogScreenshoot(IWebElement element)
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
@@ -125,11 +127,16 @@ namespace AutomationFramework.Entities
             screenshootCounter++;
         }
 
+        public void AttachTestReports()
+        {
+            var filePath = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}";
+            TestContext.AddTestAttachment(filePath, "Test Log file in JSON format");
+        }
 
-        //End
         ///<summary>
         ///Allows to create log CSV file
         ///</summary>
+        
         internal async void CreateFinalCSVLog()
         {
             File.Create(_csvTestLogPath).Close();

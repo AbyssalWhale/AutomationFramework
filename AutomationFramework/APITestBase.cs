@@ -30,5 +30,10 @@ namespace AutomationFramework{
         {
             _logManager.CreateTestFolderAndLog(TestContext.CurrentContext);
         }
+
+        public virtual void TearDown()
+        {
+            _logManager.AttachTestReports();
+        }
     }
 }

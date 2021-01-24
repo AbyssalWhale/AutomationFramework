@@ -24,6 +24,12 @@ namespace TestConfigurator.TestFixtures
             base.SetUp();
         }
 
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown();
+        }
+
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
