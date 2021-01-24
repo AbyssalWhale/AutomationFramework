@@ -17,6 +17,7 @@ namespace AutomationFramework.Entities
     {
         const string GlobalLogName = "GlobalLog.json";
         const string TestLogFileSuffixAndExtension = "_Log.json";
+
         ConcurrentDictionary<string, Logger> _allTestsLoger;
         static LogManager _logManager;
         IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
@@ -113,6 +114,8 @@ namespace AutomationFramework.Entities
             var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{screenshootCounter}.jpg";
             var screenShoot = ((ITakesScreenshot)_driver).GetScreenshot();
             screenShoot.SaveAsFile(path);
+            TestContext.AddTestAttachment(path, $"Screenshoot {screenshootCounter}");
+
             screenshootCounter++;
         }
 
