@@ -16,11 +16,13 @@ namespace AutomationFramework.Entities
     public class LogManager
     {
         const string GlobalLogName = "GlobalLog.json";
+        const string TestLogFileSuffixAndExtension = "_Log.json";
+
         ConcurrentDictionary<string, Logger> _allTestsLoger;
+        ConcurrentDictionary<string, int> _testsCountersForScreshoots;
         static LogManager _logManager;
         IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
         RunSettingManager _settingsManager { get; set; }
-        int screenshootCounter { get; set; }
 
         #region CSV
         private string _csvTestLogPath { get; set; }
@@ -33,6 +35,7 @@ namespace AutomationFramework.Entities
         {
             _settingsManager = settingsManager;
             _allTestsLoger = new ConcurrentDictionary<string, Logger>();
+            _testsCountersForScreshoots = new ConcurrentDictionary<string, int>();
         }
 
         internal static LogManager GetLogManager(RunSettingManager settingsManager)
@@ -63,14 +66,15 @@ namespace AutomationFramework.Entities
         ///</summary>
         internal void CreateTestFolderAndLog(TestContext testContext)
         {
-            screenshootCounter = 0;
-
-            string localLogFileName = $"{testContext.Test.Name}_Log.json";
+            string localLogFileName = $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{testContext.Test.Name}{TestLogFileSuffixAndExtension}";
 
             Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}");
             Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{testContext.Test.Name}");
 
-            _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{_settingsManager.TestsReportDirectory}/{testContext.Test.Name}/{localLogFileName}").CreateLogger());
+            _allTestsLoger.TryAdd(TestContext.CurrentContext.Test.Name, new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{localLogFileName}").CreateLogger());
+            _testsCountersForScreshoots.TryAdd(TestContext.CurrentContext.Test.Name, 0);
+
+            TestContext.AddTestAttachment(localLogFileName);
 
             LogTestAction($"Folder and Log for the '{testContext.Test.Name}' test were created;");
             LogGlobalTestExecutionAction($"The {testContext.Test.Name} test started execution;");
@@ -107,14 +111,17 @@ namespace AutomationFramework.Entities
         ///</summary>
         public void MakeLogScreenshoot()
         {
-            var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{screenshootCounter}.jpg";
+            var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{_testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]}.jpg";
             var screenShoot = ((ITakesScreenshot)_driver).GetScreenshot();
             screenShoot.SaveAsFile(path);
-            screenshootCounter++;
+            TestContext.AddTestAttachment(path, $"Screenshoot {_testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]}");
+
+            _testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]++;
         }
 
-
-        //Start
+        ///<summary>
+        ///Allows to highlight WebElement, make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
+        ///</summary>
         public void MakeLogScreenshoot(IWebElement element)
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
@@ -122,14 +129,12 @@ namespace AutomationFramework.Entities
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");            
             MakeLogScreenshoot();
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
-            screenshootCounter++;
         }
 
-
-        //End
         ///<summary>
         ///Allows to create log CSV file
         ///</summary>
+        
         internal async void CreateFinalCSVLog()
         {
             File.Create(_csvTestLogPath).Close();
