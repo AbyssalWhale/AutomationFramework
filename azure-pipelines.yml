@@ -53,7 +53,7 @@ steps:
     uiTests: true
     runSettingsFile: 'D:/a/1/s/TestConfigurator/RunSettings/InstanceSettings.runsettings'
     runTestsInIsolation: true
-    testRunTitle: 'UI: Regression'
+    testRunTitle: 'UI: Regr'
     rerunFailedTests: true
     rerunMaxAttempts: 1
     runInParallel: true
