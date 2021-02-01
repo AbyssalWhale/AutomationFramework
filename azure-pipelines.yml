@@ -32,7 +32,7 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
-  displayName: 'Run API tests'
+  displayName: 'API: Regression'
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
@@ -41,9 +41,13 @@ steps:
     runSettingsFile: "D:/a/1/s/TestConfigurator/RunSettings/InstanceSettings.runsettings"
     testRunTitle: 'API: Regression'
     runTestsInIsolation: true
+    rerunFailedTests: true
+    rerunMaxAttempts: 2
+  continueOnError: true
+    
     
 - task: VSTest@2
-  displayName: 'Run Regression E2E Tests'
+  displayName: 'UI: Regression E2E Tests'
   inputs:
     testAssemblyVer2: 'D:/a/1/s/RegressionUiTests/bin/Debug/netcoreapp3.1/RegressionUiTests.dll'
     uiTests: true
