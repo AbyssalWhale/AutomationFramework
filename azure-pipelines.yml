@@ -56,4 +56,5 @@ steps:
     testRunTitle: 'UI: Regression'
     rerunFailedTests: true
     rerunMaxAttempts: 1
+    runInParallel: true
   continueOnError: true
