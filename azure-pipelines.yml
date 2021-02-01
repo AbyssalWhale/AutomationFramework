@@ -39,4 +39,17 @@ steps:
     testAssemblyVer2: "D:/a/1/s/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
     uiTests: false
     runSettingsFile: "D:/a/1/s/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+    testRunTitle: 'API: Regression'
     runTestsInIsolation: true
+    
+- task: VSTest@2
+  displayName: 'Run Regression E2E Tests'
+  inputs:
+    testAssemblyVer2: 'D:/a/1/s/RegressionUiTests/bin/Debug/netcoreapp3.1/RegressionUiTests.dll'
+    uiTests: true
+    runSettingsFile: 'D:/a/1/s/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+    runTestsInIsolation: true
+    testRunTitle: 'UI: Regression'
+    rerunFailedTests: true
+    rerunMaxAttempts: 1
+  continueOnError: true
