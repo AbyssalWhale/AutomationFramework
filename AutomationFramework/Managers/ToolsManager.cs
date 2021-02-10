@@ -2,7 +2,7 @@
 using Bogus;
 using System;
 
-namespace AutomationFramework.Entities
+namespace AutomationFramework.Managers
 {
     public class ToolsManager
     {
@@ -14,21 +14,21 @@ namespace AutomationFramework.Entities
         public Faker _getFakeData { get; private set; }
         public Random _getRandom { get; private set; }
 
-        protected ToolsManager(RunSettingManager runSettingManager, LogManager logManager)
+        protected ToolsManager(RunSettingManager runSettingManager)
         {
-            _dataBase = new DataBaseHelper(runSettingManager.DBServer, runSettingManager.DBName, runSettingManager.DBUserId, runSettingManager.DBUserPass);
+            _dataBase = new DataBaseHelper(runSettingManager);
             _enum = new EnumHelper();
             _string = new StringHelper();
-            _api = new ApiHelper(runSettingManager, logManager, _string);
+            _api = new ApiHelper(runSettingManager, _string);
             _getFakeData = new Faker();
             _getRandom = new Random();
         }
 
-        internal static ToolsManager GetToolsManager(RunSettingManager runSettingManager, LogManager logManager)
+        internal static ToolsManager GetToolsManager(RunSettingManager runSettingManager)
         {
             if (_toolsManager == null)
             {
-                _toolsManager = new ToolsManager(runSettingManager, logManager);
+                _toolsManager = new ToolsManager(runSettingManager);
             }
 
             return _toolsManager;

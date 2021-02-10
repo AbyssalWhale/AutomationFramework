@@ -1,13 +1,12 @@
-﻿using AutomationFramework.Enums;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Configuration;
 
-namespace AutomationFramework.Entities
+namespace AutomationFramework.Managers
 {
-    /// <summary>Class <c>RunSettingManager</c> read all properties from current .runsettings file and provide access to them.
+    /// <summary>
+    /// Class <c>RunSettingManager</c> read all properties from current .runsettings file and provide access to them.
     /// </summary>
     public class RunSettingManager
     {
@@ -53,6 +52,7 @@ namespace AutomationFramework.Entities
             DBUserId = TryToParseTestContext(nameof(DBUserId));
             DBUserPass = TryToParseTestContext(nameof(DBUserPass));
         }
+
         private string TryToParseTestContext(string settingName)
         {
             var value = TestContext.Parameters[settingName];
@@ -61,18 +61,6 @@ namespace AutomationFramework.Entities
             if (value is null) Assert.IsNull($"'{settingName}' setting is not found");
 
             return value;
-        }
-
-        ///<summary>
-        ///Reset TestReportDirectory and TestAssetDirectory into of the current test to default into RunSettingManager. Use it in [TearDown] 
-        ///</summary>
-        internal void ResetTestReportAndAssetDirectoriesPathes(LogManager logManager)
-        {
-            //logManager.LogAction(LogLevels.local, $"Finished execution.");
-            //logManager.LogAction(LogLevels.global, $"The '{TestContext.CurrentContext.Test.Name}' test finished execution. All test logs: {TestReportDirectory} ");
-
-            TestsReportDirectory = TestsReportDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
-            TestsAssetDirectory = TestsAssetDirectory.Replace(TestContext.CurrentContext.Test.Name, string.Empty);
         }
     }
 }

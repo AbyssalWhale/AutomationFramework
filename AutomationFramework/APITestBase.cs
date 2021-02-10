@@ -1,5 +1,4 @@
-﻿
-using AutomationFramework.Entities;
+﻿using AutomationFramework.Managers;
 using NUnit.Framework;
 using System.IO;
 
@@ -21,7 +20,7 @@ namespace AutomationFramework{
 
             _logManager.CreateGlobalLog();
 
-            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
+            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
 
             _logManager.LogGlobalTestExecutionAction("One Time Set Up was successfully executed for tests;");
         }

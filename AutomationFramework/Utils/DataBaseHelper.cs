@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AutomationFramework.Managers;
 using Dapper;
 using NUnit.Framework;
 
@@ -12,13 +13,13 @@ namespace AutomationFramework.Utils
     {
         public const int CommandTimeOut = 600;
         private IDbConnection DataBaseConnectionString;
-        public DataBaseHelper(string server, string dbName, string username, string password = null)
+        public DataBaseHelper(RunSettingManager runSettingManager)
         {
             DataBaseConnectionString = new SqlConnection(
-                $"Server={server};" +
-                $"Database={dbName};" +
-                $"User Id={username};" +
-                $"Password={password}");
+                $"Server={runSettingManager.DBServer};" +
+                $"Database={runSettingManager.DBName};" +
+                $"User Id={runSettingManager.Username};" +
+                $"Password={runSettingManager.Password}");
         }
         public List<T> GetDataFromDb<T>(string yourQuery)
         {

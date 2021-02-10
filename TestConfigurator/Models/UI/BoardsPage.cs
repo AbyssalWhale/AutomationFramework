@@ -1,4 +1,4 @@
-﻿using AutomationFramework.Entities;
+﻿using AutomationFramework.Managers;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using TestConfigurator.Enums.UI;

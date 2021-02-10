@@ -1,5 +1,4 @@
-﻿using AutomationFramework.Entities;
-using AutomationFramework.Enums;
+﻿using AutomationFramework.Managers;
 
 namespace TestConfigurator.Models.UI
 {
@@ -22,8 +21,6 @@ namespace TestConfigurator.Models.UI
             _runSettingsSettings = runSettingManager;
             _logManager = logManager;
             _utilsManager = utilsManager;
-
-            //_logManager.LogAction(LogLevels.local, $"Initializing the '{Title}' page");
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using AutomationFramework.Enums;
@@ -11,7 +10,7 @@ using System;
 using OpenQA.Selenium.Interactions;
 using System.Collections.Concurrent;
 
-namespace AutomationFramework.Entities
+namespace AutomationFramework.Managers
 {
     public class WebDriverManager
     {

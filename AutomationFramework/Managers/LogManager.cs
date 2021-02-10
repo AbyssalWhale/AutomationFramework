@@ -6,10 +6,9 @@ using Serilog.Formatting.Json;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace AutomationFramework.Entities
+namespace AutomationFramework.Managers
 {
     /// <summary>Class <c>LogManager</c> allows to log test actions 
     /// </summary>
@@ -23,13 +22,6 @@ namespace AutomationFramework.Entities
         static LogManager _logManager;
         IWebDriver _driver { get { return WebDriverManager.GetWebDriverManager(_settingsManager)._driver; } }
         RunSettingManager _settingsManager { get; set; }
-
-        #region CSV
-        private string _csvTestLogPath { get; set; }
-        private string _csvGlobalLogPath { get; set; }
-        private List<string> _allGlobalLogs { get; set; }
-        private List<string> _allTestLogs { get; set; }
-        #endregion
 
         protected LogManager(RunSettingManager settingsManager)
         {
@@ -129,30 +121,6 @@ namespace AutomationFramework.Entities
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");            
             MakeLogScreenshoot();
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
-        }
-
-        ///<summary>
-        ///Allows to create log CSV file
-        ///</summary>
-        
-        internal async void CreateFinalCSVLog()
-        {
-            File.Create(_csvTestLogPath).Close();
-
-            await Task.Run(() => {
-
-                var file = new StreamWriter(_csvTestLogPath, true);
-
-                foreach (var log in _allTestLogs)
-                {
-                    file.WriteLineAsync(log);
-                }
-
-                file.Flush();
-                file.Close();
-
-                _allTestLogs = new List<string>();
-            });
         }
     }
 }
