@@ -4,8 +4,8 @@
     <Parameter name="InstanceUrl" value="https://53pto.com/" />
     <Parameter name="ApiInstanceUrl" value="https://api.trello.com/1/" />
     <!--Browser should be: chrome, firefox-->
-    <Parameter name="BrowserDriversPath" value="..\..\..\..\TestConfigurator\WebDrivers" />
     <Parameter name="Browser" value="chrome" />
+	<Parameter name="Headless" value="true" />
     <Parameter name="StepRecordingEnabled" value="true" />
     <Parameter name="Username" value="User" />
     <Parameter name="Password" value="7zCMUuK8trCSLQf" />

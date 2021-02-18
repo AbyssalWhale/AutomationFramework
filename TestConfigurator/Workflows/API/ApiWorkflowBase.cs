@@ -1,4 +1,4 @@
-﻿using AutomationFramework.Entities;
+﻿using AutomationFramework.Managers;
 
 namespace TestConfigurator.Workflows.API
 {

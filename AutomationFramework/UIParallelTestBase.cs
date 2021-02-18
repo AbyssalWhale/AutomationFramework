@@ -1,7 +1,5 @@
-﻿using AutomationFramework.Entities;
-using AutomationFramework.Enums;
+﻿using AutomationFramework.Managers;
 using NUnit.Framework;
-using OpenQA.Selenium;
 using System.IO;
 
 namespace AutomationFramework
@@ -27,7 +25,7 @@ namespace AutomationFramework
 
             _logManager.CreateGlobalLog();
 
-            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings, _logManager);
+            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
 
             _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings);
 

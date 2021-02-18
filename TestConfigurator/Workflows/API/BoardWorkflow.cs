@@ -1,4 +1,4 @@
-﻿using AutomationFramework.Entities;
+﻿using AutomationFramework.Managers;
 using RegressionApiTests.Models.Board;
 using RestSharp;
 using System.Collections.Concurrent;

@@ -1,12 +1,7 @@
-﻿using AutomationFramework.Entities;
-using AutomationFramework.Enums;
+﻿using AutomationFramework.Managers;
 using AutomationFramework.Models;
-using NUnit.Framework;
 using RestSharp;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace AutomationFramework.Utils
@@ -15,12 +10,11 @@ namespace AutomationFramework.Utils
     {
         internal IRestClient _client;
         private RunSettingManager _runSettingsManger;
-        private LogManager _logManager;
+        private LogManager _logManager { get { return LogManager.GetLogManager(_runSettingsManger); } }
         private StringHelper _stringHelper;
-        public ApiHelper(RunSettingManager runSettingsManger, LogManager logManager, StringHelper stringHelper)
+        public ApiHelper(RunSettingManager runSettingsManger, StringHelper stringHelper)
         {
             _runSettingsManger = runSettingsManger;
-            _logManager = logManager;
             _stringHelper = stringHelper;
             _client = new RestClient(runSettingsManger.ApiInstanceUrl);
         }
