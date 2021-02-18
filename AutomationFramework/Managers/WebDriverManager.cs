@@ -107,11 +107,11 @@ namespace AutomationFramework.Managers
 
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                driver = new ChromeDriver($"{_runSettingManager.BrowserDriversPath}", SetChrome());
+                driver = new ChromeDriver(SetChrome());
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
             {
-                driver = new FirefoxDriver($"{_runSettingManager.BrowserDriversPath}", SetFirefox());
+                driver = new FirefoxDriver(SetFirefox());
             }
             else
             {
