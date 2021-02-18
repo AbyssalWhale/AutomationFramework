@@ -57,6 +57,7 @@ namespace AutomationFramework.Managers
             fireFoxOptions.AddArgument("--disable-popup-blocking");
             fireFoxOptions.AddArgument("--width=1920");
             fireFoxOptions.AddArgument("--height=1000");
+            if (_runSettingManager.Headless) fireFoxOptions.AddArguments("--headless"); ;
             fireFoxOptions.SetPreference("browser.download.dir", "provide folder");
 
             return fireFoxOptions;
@@ -65,7 +66,8 @@ namespace AutomationFramework.Managers
         private ChromeOptions SetChrome()
         {
             ChromeOptions options = new ChromeOptions();
-            //options.AddArgument("--start-maximized");
+            options.AddArgument("--start-maximized");
+            if (_runSettingManager.Headless) options.AddArguments("headless");
 
             return options;
         }

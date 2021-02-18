@@ -13,6 +13,7 @@ namespace AutomationFramework.Managers
         public string InstanceUrl { get; set; }
         public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
+        public bool Headless { get; set; }
         public string StepRecordingEnabled { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -34,6 +35,8 @@ namespace AutomationFramework.Managers
             InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
             ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));
             Browser = TryToParseTestContext(nameof(Browser));
+            bool.TryParse(TryToParseTestContext(nameof(Headless)), out bool headless);
+            Headless = headless;
             StepRecordingEnabled = TryToParseTestContext(nameof(StepRecordingEnabled));
             Username = TryToParseTestContext(nameof(Username));
             Password = TryToParseTestContext(nameof(Password));
