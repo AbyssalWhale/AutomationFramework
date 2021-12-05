@@ -6,6 +6,12 @@
 trigger:
 - main
 
+parameters:
+  - name: 'TestUIRegression'
+    displayName: 'Ui Regression Tests'
+    type: boolean
+    default: false
+
 pool:
   vmImage: 'windows-latest'
 
@@ -48,6 +54,21 @@ steps:
     
 - task: VSTest@2
   displayName: 'UI: Regression E2E Tests'
+  inputs:
+    testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
+    uiTests: true
+    runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+    runTestsInIsolation: true
+    testRunTitle: 'UI: Regr'
+    rerunFailedTests: true
+    rerunMaxAttempts: 1
+    runInParallel: true
+  continueOnError: true
+  
+
+- task: VSTest@2
+  displayName: 'UI: Regression E2E Tests2'
+  condition: eq(parameters.TestUIRegression, 'true')
   inputs:
     testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
     uiTests: true
