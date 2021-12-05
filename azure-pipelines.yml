@@ -7,8 +7,12 @@ trigger:
 - main
 
 parameters:
+  - name: 'TestApiRegression'
+    displayName: 'API: Regression Tests'
+    type: boolean
+    default: false
   - name: 'TestUIRegression'
-    displayName: 'Ui Regression Tests'
+    displayName: 'UI Regression Tests'
     type: boolean
     default: false
 
@@ -65,6 +69,20 @@ steps:
     runInParallel: true
   continueOnError: true
   
+- task: VSTest@2
+  displayName: 'UI: Regression API Tests2'
+  condition: eq(parameters.TestApiRegression, 'true')
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
+    uiTests: false
+    runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+    testRunTitle: 'API: Regression'
+    runTestsInIsolation: true
+    rerunFailedTests: true
+    rerunMaxAttempts: 2
+  continueOnError: true
 
 - task: VSTest@2
   displayName: 'UI: Regression E2E Tests2'
