@@ -71,8 +71,14 @@ steps:
 #   continueOnError: true
 
 - task: DotNetCoreCLI@2
+  displayName: 'Run Tests'
   inputs:
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
     arguments: '--logger nunit --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
     testRunTitle: 'UI: Regression API Tests'
+
+- task: CmdLine@2
+  displayName: 'Publish to Jira'
+  inputs:
+    script: 'curl -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4Nzk2NDhhOC0zM2YxLTM2Y2ItOWY2ZC00ZmU2NGQyM2E5YzAiLCJjb250ZXh0Ijp7ImJhc2VVcmwiOiJodHRwczpcL1wvYWR2YXJyYS5hdGxhc3NpYW4ubmV0IiwidXNlciI6eyJhY2NvdW50SWQiOiI2MWU4N2Y0MDc4Y2I2OTAwNzE1YjgxYTQifX0sImlzcyI6ImNvbS5rYW5vYWgudGVzdC1tYW5hZ2VyIiwiZXhwIjoxNjkyMjY4ODAxLCJpYXQiOjE2NjA3MzI4MDF9.pUJFO9wAuXKIdE22n1WbnvbJNvTcN5sGaf5C3r4JasM" -F "file=@"D:\a\_temp\TestResults.xml";type=application/xml" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey=TES&autoCreateTestCases=true'
