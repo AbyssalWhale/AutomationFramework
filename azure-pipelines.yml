@@ -41,31 +41,38 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  displayName: 'UI: Regression API Tests2'
-  condition: eq(${{ parameters.TestApiRegression }}, 'true')
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
-    uiTests: false
-    runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
-    testRunTitle: 'API: Regression'
-    runTestsInIsolation: true
-    rerunFailedTests: true
-    rerunMaxAttempts: 2
-  continueOnError: true
+# - task: VSTest@2
+#   displayName: 'UI: Regression API Tests2'
+#   condition: eq(${{ parameters.TestApiRegression }}, 'true')
+#   inputs:
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+#     testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
+#     uiTests: false
+#     runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+#     testRunTitle: 'API: Regression'
+#     runTestsInIsolation: true
+#     rerunFailedTests: true
+#     rerunMaxAttempts: 2
+#   continueOnError: true
 
-- task: VSTest@2
-  displayName: 'UI: Regression E2E Tests2'
-  condition: eq(${{ parameters.TestUIRegression }}, 'true')
+# - task: VSTest@2
+#   displayName: 'UI: Regression E2E Tests2'
+#   condition: eq(${{ parameters.TestUIRegression }}, 'true')
+#   inputs:
+#     testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
+#     uiTests: true
+#     runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+#     runTestsInIsolation: true
+#     testRunTitle: 'UI: Regr'
+#     rerunFailedTests: true
+#     rerunMaxAttempts: 1
+#     runInParallel: true
+#   continueOnError: true
+
+- task: DotNetCoreCLI@2
   inputs:
-    testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
-    uiTests: true
-    runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
-    runTestsInIsolation: true
-    testRunTitle: 'UI: Regr'
-    rerunFailedTests: true
-    rerunMaxAttempts: 1
-    runInParallel: true
-  continueOnError: true
+    command: 'test'
+    projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
+    arguments: '--logger junit --results-directory .\TestResult'
+    testRunTitle: 'UI: Regression API Tests'
