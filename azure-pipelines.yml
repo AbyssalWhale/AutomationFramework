@@ -123,11 +123,12 @@ steps:
 - task: CmdLine@2
   displayName: 'Print out results'
   inputs:
-    script: 'dir'
-- task: CmdLine@2
+    script: 'dir D:\a\_temp\'
+- task: PowerShell@2
   displayName: 'Create ZIP'
   inputs:
-    script: 'cd D:\a\_temp\ tar.exe -a -c -f out.zip *.xml'
+    targetType: 'inline'
+    script: 'powershell Compress-Archive D:\a\_temp\*.xml D:\a\_temp\JiraResults.zip'
     
 - task: CmdLine@2
   displayName: 'Print out results'
