@@ -127,7 +127,7 @@ steps:
 - task: CmdLine@2
   displayName: 'Create ZIP'
   inputs:
-    script: 'tar.exe -a -c -f .\a\_temp\out.zip .\a\_temp\*.xml'
+    script: 'cd D:\a\_temp\ tar.exe -a -c -f out.zip *.xml'
     
 - task: CmdLine@2
   displayName: 'Print out results'
