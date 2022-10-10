@@ -98,7 +98,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
-    arguments: '--logger trx --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+    arguments: '--logger trx --logger junit --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
     testRunTitle: 'API: Regression API Tests'
 
 - task: DotNetCoreCLI@2
@@ -106,7 +106,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
-    arguments: '--logger trx --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+    arguments: '--logger trx --logger junit'
     testRunTitle: 'UI: Regression UI Tests'
 
 - task: CmdLine@2
