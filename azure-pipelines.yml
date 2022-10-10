@@ -70,7 +70,30 @@ steps:
 #     runInParallel: true
 #   continueOnError: true
 
-- task: DotNetCoreCLI@2
+#
+#
+#
+# - task: DotNetCoreCLI@2
+#   displayName: 'Run API Tests'
+#   inputs:
+#     command: 'test'
+#     publishTestResults: 
+#     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
+#     arguments: '--logger trx --logger junit --results-directory $(Build.Repository.LocalPath)\API --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+#     testRunTitle: 'API: Regression API Tests'
+
+# - task: DotNetCoreCLI@2
+#   displayName: 'Run UI Tests'
+#   inputs:
+#     command: 'test'
+#     projects: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
+#     arguments: '--logger trx --logger junit --results-directory $(Build.Repository.LocalPath)\UI --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+#     testRunTitle: 'UI: Regression API Tests'
+
+#
+#
+#
+- task: CmdLine@2
   displayName: 'Run API Tests'
   inputs:
     command: 'test'
@@ -87,7 +110,7 @@ steps:
     testRunTitle: 'UI: Regression API Tests'
 
 - task: CmdLine@2
-  displayName: 'Jira'
+  displayName: 'Print out results'
   inputs:
     script: 'dir $(Build.Repository.LocalPath)'
 
