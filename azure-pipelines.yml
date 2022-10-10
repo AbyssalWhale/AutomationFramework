@@ -96,22 +96,29 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Run API Tests'
   inputs:
-    workingDirectory: $(Build.Repository.LocalPath)/TestResults/API
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
     arguments: '--logger trx --logger junit --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
     testRunTitle: 'API: Regression API Tests'
   continueOnError: true
+- task: CmdLine@2
+  displayName: 'Renaming API XML Test Results'
+  inputs:
+    script: 'ren $(Build.Repository.LocalPath)TestResults.xml $(Build.Repository.LocalPath)TestResults_API.xml'
 
 - task: DotNetCoreCLI@2
   displayName: 'Run UI Tests'
   inputs:
-    workingDirectory: $(Build.Repository.LocalPath)/TestResults/UI
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
     arguments: '--logger trx --logger junit'
     testRunTitle: 'UI: Regression UI Tests'
   continueOnError: true
+
+- task: CmdLine@2
+  displayName: 'Renaming UI XML Test Results'
+  inputs:
+    script: 'ren $(Build.Repository.LocalPath)TestResults.xml $(Build.Repository.LocalPath)TestResults_UI.xml'
 
 - task: CmdLine@2
   displayName: 'Print out results'
