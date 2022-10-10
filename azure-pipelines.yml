@@ -89,7 +89,7 @@ steps:
 - task: CmdLine@2
   displayName: 'Jira'
   inputs:
-    script: 'dir $(Build.Repository.LocalPath)\API'
+    script: 'dir $(Build.Repository.LocalPath)'
 
 #- task: CmdLine@2
 #  displayName: 'Jira'
