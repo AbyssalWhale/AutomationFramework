@@ -11,7 +11,7 @@ namespace RegressionApiTests.Tests
     class TestsWithValidWorkflows : ApiTestsBase
     {
         [Test]
-        public void TES_T2_CheckGetAllBoards()
+        public void CheckGetAllBoards_TES_T2()
         {
             var boardModelToPost = _boardWorkflow.GenerateSimpleBoardForPOST();
             var actualBoardResponse = _boardWorkflow.CreateBoard(boardModelToPost);
@@ -26,7 +26,7 @@ namespace RegressionApiTests.Tests
 
 
         [Test]
-        public void TES_T3_CheckBoardCreation()
+        public void CheckBoardCreation_TES_T3()
         {
             var boardModelToPost = _boardWorkflow.GenerateSimpleBoardForPOST();
             var actualBoardResponse = _boardWorkflow.CreateBoard(boardModelToPost);

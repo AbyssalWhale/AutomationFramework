@@ -8,7 +8,7 @@ namespace RegressionTests.UITests
     class BoardsTests : RegressionUiTestsBase
     {
         [Test]
-        public void CheckBoardCreation()
+        public void CheckBoardCreation_TES_T4()
         {
             _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
             Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
@@ -16,7 +16,7 @@ namespace RegressionTests.UITests
         }
 
         [Test]
-        public void CheckBoardCreation_1()
+        public void CheckBoardCreation_TES_T1()
         {
             _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
             Assert.IsTrue(_webDriverManager.GetPageTitle().Equals("Головна сторінка"));
