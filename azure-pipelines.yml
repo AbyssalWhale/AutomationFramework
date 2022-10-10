@@ -96,18 +96,22 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Run API Tests'
   inputs:
+    workingDirectory: $(Build.Repository.LocalPath)/TestResults/API
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
     arguments: '--logger trx --logger junit --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
     testRunTitle: 'API: Regression API Tests'
+  continueOnError: true
 
 - task: DotNetCoreCLI@2
   displayName: 'Run UI Tests'
   inputs:
+    workingDirectory: $(Build.Repository.LocalPath)/TestResults/UI
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
     arguments: '--logger trx --logger junit'
     testRunTitle: 'UI: Regression UI Tests'
+  continueOnError: true
 
 - task: CmdLine@2
   displayName: 'Print out results'
