@@ -104,7 +104,7 @@ steps:
 - task: CmdLine@2
   displayName: 'Renaming API XML Test Results'
   inputs:
-    script: 'ren $(Build.Repository.LocalPath)\TestResults.xml $(Build.Repository.LocalPath)TestResults_API.xml'
+    script: 'ren D:\a\_temp\TestResults.xml D:\a\_temp\TestResults_API.xml'
 
 - task: DotNetCoreCLI@2
   displayName: 'Run UI Tests'
@@ -118,12 +118,12 @@ steps:
 - task: CmdLine@2
   displayName: 'Renaming UI XML Test Results'
   inputs:
-    script: 'ren $(Build.Repository.LocalPath)\TestResults.xml $(Build.Repository.LocalPath)TestResults_UI.xml'
+    script: 'ren D:\a\_temp\TestResults.xml D:\a\_temp\TestResults_UI.xml'
 
 - task: CmdLine@2
   displayName: 'Print out results'
   inputs:
-    script: 'dir $(Build.Repository.LocalPath)'
+    script: 'dir D:\a\_temp\'
 
 #- task: CmdLine@2
 #  displayName: 'Jira'
