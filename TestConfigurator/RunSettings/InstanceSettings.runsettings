@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <TestRunParameters>
-    <Parameter name="BuildId" value="3000" />
+    <Parameter name="BuildId" value="0" />
     <Parameter name="Branch" value="develop" />
     <Parameter name="InstanceUrl" value="https://53pto.com/" />
     <Parameter name="ApiInstanceUrl" value="https://api.trello.com/1/" />
