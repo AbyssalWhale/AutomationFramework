@@ -112,7 +112,7 @@ steps:
       #$buildId = $xml.SelectSingleNode("//Parameter[@name='BuildId']")
       #$buildId.value="$(Build.BuildNumber)"
       $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
-      $xml.SelectSingleNode("//Parameter[@name='Branch']").value=${{ parameters.InstanceBranch }}
+      $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
       $xml.Save($filePathToTask)
       ${$filePathToTask}
 
