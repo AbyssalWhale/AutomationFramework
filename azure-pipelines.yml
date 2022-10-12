@@ -102,8 +102,8 @@ steps:
       $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
       $xml = New-Object XML
       $xml.Load($filePathToTask)
-      $element =  $xml.SelectSingleNode("//BuildId")
-      $element.InnerText = $(Build.BuildNumber)
+      $buildId = $xml.SelectSingleNode("//Parameter[@name='BuildId']")
+      $buildId.value=$(Build.BuildNumber)
       $xml.Save($filePathToTask)
       ${$filePathToTask}
 

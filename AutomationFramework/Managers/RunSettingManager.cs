@@ -10,6 +10,7 @@ namespace AutomationFramework.Managers
     /// </summary>
     public class RunSettingManager
     {
+        public string BuildId { get; set; }
         public string Branch { get; set; }
         public string InstanceUrl { get; set; }
         public string ApiInstanceUrl { get; set; }
@@ -33,6 +34,7 @@ namespace AutomationFramework.Managers
 
         public RunSettingManager()
         {
+            BuildId = TryToParseTestContext(nameof(BuildId));
             Branch = TryToParseTestContext(nameof(InstanceUrl));
             InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
             ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));

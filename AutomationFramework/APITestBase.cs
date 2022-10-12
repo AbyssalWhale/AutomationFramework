@@ -43,7 +43,7 @@ namespace AutomationFramework{
             Directory.CreateDirectory(agentTempFolder);
             var configToWrite = new
             {
-                name = $"{DateTime.UtcNow.ToString("dddd, dd MMMM yyyy HH:mm:ss")}",
+                name = $"Build: {_runSettingsSettings.BuildId} Date: {DateTime.UtcNow.ToString("dddd, dd MMMM yyyy HH:mm:ss")}",
 	            description = "Desc",
 	            jiraProjectVersion = 0,
                 folderId = 4245422
