@@ -103,7 +103,7 @@ steps:
       $xml = New-Object XML
       $xml.Load($filePathToTask)
       $buildId = $xml.SelectSingleNode("//Parameter[@name='BuildId']")
-      $buildId.value=$(Build.BuildNumber)
+      $buildId.value="$(Build.BuildNumber)"
       $xml.Save($filePathToTask)
       ${$filePathToTask}
 
