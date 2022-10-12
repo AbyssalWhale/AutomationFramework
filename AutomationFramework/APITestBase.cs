@@ -1,7 +1,10 @@
 ﻿using AutomationFramework.Managers;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace AutomationFramework{
     public class APITestBase
@@ -36,21 +39,31 @@ namespace AutomationFramework{
         private void PrepareZephyrTestCycle()
         {
             var agentTempFolder = @"D:\\a\\_temp\\";
-            var testCycleConfig = "jiraTestCycle.json";
-            var agentConfigPath = $"{agentTempFolder}{testCycleConfig}";
+            var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
+            Directory.CreateDirectory(agentTempFolder);
+            var configToWrite = new
+            {
+                name = $"{DateTime.UtcNow.ToString("dddd, dd MMMM yyyy HH:mm:ss")}",
+	            description = "Desc",
+	            jiraProjectVersion = 0,
+                folderId = 4245422
+            };
+
+
+            File.WriteAllText(agentConfigPath, JsonConvert.SerializeObject(configToWrite));
 
             //Get Root Directory
-            var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (directory != null && !directory.GetFiles("*.sln").Any())
-            {
-                directory = directory.Parent;
-            }
+            //var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+            //while (directory != null && !directory.GetFiles("*.sln").Any())
+            //{
+            //    directory = directory.Parent;
+            //}
 
-            var solutionConfigPath = directory.FullName + @$"\\{testCycleConfig}";
+            //var solutionConfigPath = directory.FullName + @$"\\{testCycleConfig}";
             
-            if (!File.Exists(solutionConfigPath)) throw new FileNotFoundException($"Expected pass: {solutionConfigPath}");
-            Directory.CreateDirectory(agentTempFolder);
-            File.Copy(solutionConfigPath, agentConfigPath);
+            //if (!File.Exists(solutionConfigPath)) throw new FileNotFoundException($"Expected pass: {solutionConfigPath}");
+            //Directory.CreateDirectory(agentTempFolder);
+            //File.Copy(solutionConfigPath, agentConfigPath);
 
             //
         }
