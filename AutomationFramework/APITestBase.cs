@@ -40,32 +40,23 @@ namespace AutomationFramework{
         {
             var agentTempFolder = @"D:\\a\\_temp\\";
             var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
-            Directory.CreateDirectory(agentTempFolder);
-            var configToWrite = new
+
+            Console.WriteLine($"!!!!!!!!!!!{_runSettingsSettings.Branch}");
+
+            if (!File.Exists(agentConfigPath))
             {
-                name = $"Build: {_runSettingsSettings.BuildId} Date: {DateTime.UtcNow.ToString("dddd, dd MMMM yyyy HH:mm:ss")}",
-	            description = "Desc",
-	            jiraProjectVersion = 0,
-                folderId = 4245422
-            };
+                Directory.CreateDirectory(agentTempFolder);
+                var configToWrite = new
+                {
+                    name = $"{DateTime.UtcNow.ToString("dddd, dd MMMM yyyy HH:mm:ss")} Build ID: {_runSettingsSettings.BuildId}",
+                    description = "Desc",
+                    jiraProjectVersion = 0,
+                    folderId = 4245422
+                };
+                Console.WriteLine($"!!!!!!!!!!!{_runSettingsSettings.Branch}");
 
-
-            File.WriteAllText(agentConfigPath, JsonConvert.SerializeObject(configToWrite));
-
-            //Get Root Directory
-            //var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            //while (directory != null && !directory.GetFiles("*.sln").Any())
-            //{
-            //    directory = directory.Parent;
-            //}
-
-            //var solutionConfigPath = directory.FullName + @$"\\{testCycleConfig}";
-            
-            //if (!File.Exists(solutionConfigPath)) throw new FileNotFoundException($"Expected pass: {solutionConfigPath}");
-            //Directory.CreateDirectory(agentTempFolder);
-            //File.Copy(solutionConfigPath, agentConfigPath);
-
-            //
+                File.WriteAllText(agentConfigPath, JsonConvert.SerializeObject(configToWrite));
+            }
         }
     }
 }

@@ -7,6 +7,13 @@ trigger:
 - main
 
 parameters:
+  - name: InstanceBranch
+    displayName: 'Test Instance Branch'
+    default: develop
+    values:
+      - develop
+      - master
+      - release
   - name: 'TestApiRegression'
     displayName: 'API: Regression Tests'
     type: boolean
@@ -102,8 +109,10 @@ steps:
       $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
       $xml = New-Object XML
       $xml.Load($filePathToTask)
-      $buildId = $xml.SelectSingleNode("//Parameter[@name='BuildId']")
-      $buildId.value="$(Build.BuildNumber)"
+      #$buildId = $xml.SelectSingleNode("//Parameter[@name='BuildId']")
+      #$buildId.value="$(Build.BuildNumber)"
+      $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)
+      $xml.SelectSingleNode("//Parameter[@name='Branch']").value="$(InstanceBranch)
       $xml.Save($filePathToTask)
       ${$filePathToTask}
 
@@ -138,8 +147,9 @@ steps:
   displayName: 'Print out results'
   inputs:
     script: 'dir D:\a\_temp\'
+
 - task: PowerShell@2
-  displayName: 'Create ZIP'
+  displayName: 'Create ZIP for Jira Zephyr'
   inputs:
     targetType: 'inline'
     script: 'powershell Compress-Archive D:\a\_temp\*.xml D:\a\_temp\JiraResults.zip'
