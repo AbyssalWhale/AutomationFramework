@@ -41,6 +41,7 @@ namespace AutomationFramework{
         {
             var agentTempFolder = @"D:\\a\\_temp\\";
             var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
+            Assert.Warn($"! '{_runSettingsSettings.Branch}'");
 
             if (!File.Exists(agentConfigPath))
             {
