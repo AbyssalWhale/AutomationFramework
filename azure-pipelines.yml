@@ -26,11 +26,12 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
-  displayName: 'Use NuGet 5.8.0'
+  displayName: 'Install NuGet 5.8.0'
   inputs:
     versionSpec: 5.8.0
 
 - task: NuGetCommand@2
+  displayName: 'Restore NuGets'
   inputs:
     restoreSolution: '$(solution)'
 
@@ -93,6 +94,19 @@ steps:
 #
 #
 #
+- task: PowerShell@2
+  displayName: 'Write down Build ID'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+      $xml = New-Object XML
+      $xml.Load($filePathToTask)
+      $element =  $xml.SelectSingleNode("//BuildId")
+      $element.InnerText = $(Build.BuildNumber)
+      $xml.Save($filePathToTask)
+      ${$filePathToTask}
+
 - task: DotNetCoreCLI@2
   displayName: 'Run API Tests'
   inputs:
