@@ -1,10 +1,10 @@
-﻿using AutomationFramework.Managers;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using TestConfigurator.TestFixtures;
 
 namespace RegressionTests.UITests
 {
+    [TestFixture]
     class BoardsTests : RegressionUiTestsBase
     {
         [Test]

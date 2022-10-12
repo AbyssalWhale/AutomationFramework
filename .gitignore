@@ -87,7 +87,4 @@ orleans.codegen.cs
 
 # TestFolders
 TestsData/
-TestResult/The_Boss_DESKTOP-9FO2I1L_2022-10-09_21_15_32.trx
-TestResult/The_Boss_DESKTOP-9FO2I1L_2022-10-09_21_15_32.xml
-TestResult/The_Boss_DESKTOP-9FO2I1L_2022-10-09_21_15_32/In/3464353a-2177-439c-9735-97f4a87ecb6a/DESKTOP-9FO2I1L/CheckGetAllBoards_Log.json
-TestResult/The_Boss_DESKTOP-9FO2I1L_2022-10-09_21_15_32/In/9b5967ba-e20f-4192-a686-e961b5008726/DESKTOP-9FO2I1L/CheckBoardCreation_Log.json
+TestResult/

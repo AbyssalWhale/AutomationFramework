@@ -8,6 +8,7 @@ using TestConfigurator.TestFixtures;
 
 namespace RegressionApiTests.Tests
 {
+    [TestFixture]
     class TestsWithValidWorkflows : ApiTestsBase
     {
         [Test]
