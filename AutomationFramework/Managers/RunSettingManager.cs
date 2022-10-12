@@ -10,6 +10,7 @@ namespace AutomationFramework.Managers
     /// </summary>
     public class RunSettingManager
     {
+        public string Branch { get; set; }
         public string InstanceUrl { get; set; }
         public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
@@ -32,6 +33,7 @@ namespace AutomationFramework.Managers
 
         public RunSettingManager()
         {
+            Branch = TryToParseTestContext(nameof(InstanceUrl));
             InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
             ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));
             Browser = TryToParseTestContext(nameof(Browser));
