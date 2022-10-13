@@ -41,19 +41,21 @@ namespace AutomationFramework{
         {
             var agentTempFolder = @"D:\\a\\_temp\\";
             var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
-            Assert.Warn($"! '{_runSettingsSettings.Branch}'");
 
             if (!File.Exists(agentConfigPath))
             {
-                Directory.CreateDirectory(agentTempFolder);
+                var zephyrTestCycles = _toolsManager._api.GetZephyrFolders();
+                var runTestCycle = zephyrTestCycles.Values.FirstOrDefault(c => c.Name.ToLower().Equals(_runSettingsSettings.Branch));
+
                 var configToWrite = new
                 {
                     name = $"{DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")} Build ID: {_runSettingsSettings.BuildId}",
                     description = "Desc",
                     jiraProjectVersion = 0,
-                    folderId = 4245422
+                    folderId = runTestCycle.Id
                 };
 
+                Directory.CreateDirectory(agentTempFolder);
                 File.WriteAllText(agentConfigPath, JsonConvert.SerializeObject(configToWrite));
             }
         }

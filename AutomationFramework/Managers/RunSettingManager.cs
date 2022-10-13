@@ -10,6 +10,7 @@ namespace AutomationFramework.Managers
     /// </summary>
     public class RunSettingManager
     {
+        public string ZephyrToken { get; set; }
         public string BuildId { get; set; }
         public string Branch { get; set; }
         public string InstanceUrl { get; set; }
@@ -34,6 +35,7 @@ namespace AutomationFramework.Managers
 
         public RunSettingManager()
         {
+            ZephyrToken = TryToParseTestContext(nameof(ZephyrToken));
             BuildId = TryToParseTestContext(nameof(BuildId));
             Branch = TryToParseTestContext(nameof(Branch));
             InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
