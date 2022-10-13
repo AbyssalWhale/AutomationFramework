@@ -8,9 +8,9 @@ trigger:
 
 parameters:
   - name: 'ZephyrToken'
-    displayName: 'ZephyrToken'
+    displayName: Zephyr Token
     type: string
-    default: None
+    default: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ZTc0MTNiNy0yMDVjLTM2ZDctYmIzNy01YWUxODZhNTE0MTkiLCJjb250ZXh0Ijp7ImJhc2VVcmwiOiJodHRwczpcL1wvYXdvaGEuYXRsYXNzaWFuLm5ldCIsInVzZXIiOnsiYWNjb3VudElkIjoiNTU3MDU4OmE5YTk0NTlkLTRhMTgtNDc3Ni04ZTkyLThmOGY0MjgyMTA2ZCJ9fSwiaXNzIjoiY29tLmthbm9haC50ZXN0LW1hbmFnZXIiLCJleHAiOjE2OTY4NzUyNTAsImlhdCI6MTY2NTMzOTI1MH0.hfT3D0jvO2OKWj48GK6dqFk0II2wGtJFNagnBYVLtTI
   - name: InstanceBranch
     displayName: 'Test Instance Branch'
     default: develop
@@ -106,7 +106,7 @@ steps:
 #
 #
 - task: PowerShell@2
-  displayName: 'Write down Build ID'
+  displayName: 'Update tests .runsettings'
   inputs:
     targetType: 'inline'
     script: |
@@ -117,6 +117,7 @@ steps:
       #$buildId.value="$(Build.BuildNumber)"
       $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
       $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
+      $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="${{ parameters.ZephyrToken }}"
       $xml.Save($filePathToTask)
       ${$filePathToTask}
 
@@ -166,4 +167,4 @@ steps:
 - task: CmdLine@2
   displayName: 'Publish results to Jira Zephyr'
   inputs:
-   script: 'curl -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ZTc0MTNiNy0yMDVjLTM2ZDctYmIzNy01YWUxODZhNTE0MTkiLCJjb250ZXh0Ijp7ImJhc2VVcmwiOiJodHRwczpcL1wvYXdvaGEuYXRsYXNzaWFuLm5ldCIsInVzZXIiOnsiYWNjb3VudElkIjoiNTU3MDU4OmE5YTk0NTlkLTRhMTgtNDc3Ni04ZTkyLThmOGY0MjgyMTA2ZCJ9fSwiaXNzIjoiY29tLmthbm9haC50ZXN0LW1hbmFnZXIiLCJleHAiOjE2OTY4NzUyNTAsImlhdCI6MTY2NTMzOTI1MH0.hfT3D0jvO2OKWj48GK6dqFk0II2wGtJFNagnBYVLtTI" -F "file=@D:\a\_temp\JiraResults.zip;type=multipart/form-data" -F "testCycle=@D:\a\_temp\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
+   script: 'curl -H "Authorization: Bearer ${{ parameters.ZephyrToken }}" -F "file=@D:\a\_temp\JiraResults.zip;type=multipart/form-data" -F "testCycle=@D:\a\_temp\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
