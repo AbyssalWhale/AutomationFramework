@@ -7,6 +7,10 @@ trigger:
 - main
 
 parameters:
+  - name: 'ZephyrToken'
+    displayName: 'ZephyrToken'
+    type: string
+    default: None
   - name: InstanceBranch
     displayName: 'Test Instance Branch'
     default: develop
