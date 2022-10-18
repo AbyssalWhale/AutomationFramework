@@ -39,7 +39,7 @@ namespace AutomationFramework{
 
         private void PrepareZephyrTestCycle()
         {
-            var agentTempFolder = @"D:\\a\\_temp\\";
+            var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
             var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
 
             if (!File.Exists(agentConfigPath))
