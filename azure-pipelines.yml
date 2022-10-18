@@ -120,7 +120,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
-    arguments: '--logger trx --logger junit --results-directory ./API --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+    arguments: '--logger trx --logger junit --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings --results-directory ./API'
     testRunTitle: 'API: Regression API Tests'
   continueOnError: true
 
