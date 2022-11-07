@@ -10,6 +10,10 @@ namespace AutomationFramework.Managers
     /// </summary>
     public class RunSettingManager
     {
+        public bool PublishToZephyr { get; set; }
+        public string ZephyrToken { get; set; }
+        public string BuildId { get; set; }
+        public string Branch { get; set; }
         public string InstanceUrl { get; set; }
         public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
@@ -32,6 +36,11 @@ namespace AutomationFramework.Managers
 
         public RunSettingManager()
         {
+            bool.TryParse(TryToParseTestContext(nameof(PublishToZephyr)), out bool publishToZephyr);
+            PublishToZephyr = publishToZephyr;
+            ZephyrToken = TryToParseTestContext(nameof(ZephyrToken));
+            BuildId = TryToParseTestContext(nameof(BuildId));
+            Branch = TryToParseTestContext(nameof(Branch));
             InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
             ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));
             Browser = TryToParseTestContext(nameof(Browser));
@@ -59,7 +68,7 @@ namespace AutomationFramework.Managers
             var value = TestContext.Parameters[settingName];
 
             if (value is null) value = ConfigurationManager.AppSettings[settingName];
-            if (value is null) Assert.IsNull($"'{settingName}' setting is not found");
+            if (value is null) Assert.Warn($"'{settingName}' setting is not found"); 
 
             return value;
         }

@@ -1,7 +1,9 @@
 ﻿using AutomationFramework.Managers;
 using AutomationFramework.Models;
+using AutomationFramework.Models.Jira.Zephyr;
 using RestSharp;
 using System.Collections.Concurrent;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AutomationFramework.Utils
@@ -74,9 +76,24 @@ namespace AutomationFramework.Utils
                 Parallel.ForEach(_stringHelper.GetAllClassPropertiesWithValuesAsStrings(restObject), property => { request.AddParameter(property.Key, property.Value); });
             }
 
-            _logManager.LogTestAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint};");
+            //_logManager.LogTestAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint};");
 
             return request;
+        }
+    
+        public TestCyclesResponse GetZephyrFolders()
+        {
+            var localCliend = new RestClient("https://api.zephyrscale.smartbear.com");
+            var newRequest = new RestRequest("/v2/folders", Method.GET);
+            newRequest.AddHeader("Authorization", $"{_runSettingsManger.ZephyrToken}");
+
+            var response = localCliend.Execute<TestCyclesResponse>(newRequest);
+            if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            {
+                throw new System.Exception($"Unable to get zephyr test cycle folders. https://api.zephyrscale.smartbear.com/v2/folders returns {response.StatusCode} for GET request");
+            }
+
+            return response.Data;
         }
     }
 }
