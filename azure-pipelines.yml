@@ -123,7 +123,7 @@ stages:
   displayName: 'Publish to Zephyr Scale'
   condition: eq(${{ parameters.PublishToZephyr }}, 'true')
   jobs:
-    - job: Prepare
+    - job: PrepareTestResults
       displayName: 'Prepare test results for publishing'
       steps:
       - task: PowerShell@2
@@ -136,8 +136,8 @@ stages:
         displayName: 'Print out results'
         inputs:
           script: 'dir $(Agent.TempDirectory)\TestResults'
-    - job: Prepare
-      displayName: 'Prepare test results for publishing'
+    - job: PublishTestsResults
+      displayName: 'Publish test results'
       steps:
       - task: CmdLine@2
         condition: eq(${{ parameters.PublishToZephyr }}, 'true')
