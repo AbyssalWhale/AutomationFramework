@@ -22,6 +22,13 @@ parameters:
     displayName: 'UI Regression Tests'
     type: boolean
     default: false
+  - name: 'PublishToZephyr'
+    displayName: 'Publish Test Run to Zephyr Scale'
+    type: boolean
+    default: false
+    values:
+      - true
+      - false
 
 pool:
   vmImage: 'windows-latest'
@@ -49,58 +56,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# - task: VSTest@2
-#   displayName: 'UI: Regression API Tests2'
-#   condition: eq(${{ parameters.TestApiRegression }}, 'true')
-#   inputs:
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
-#     testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
-#     uiTests: false
-#     runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
-#     testRunTitle: 'API: Regression'
-#     runTestsInIsolation: true
-#     rerunFailedTests: true
-#     rerunMaxAttempts: 2
-#   continueOnError: true
-
-# - task: VSTest@2
-#   displayName: 'UI: Regression E2E Tests2'
-#   condition: eq(${{ parameters.TestUIRegression }}, 'true')
-#   inputs:
-#     testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
-#     uiTests: true
-#     runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
-#     runTestsInIsolation: true
-#     testRunTitle: 'UI: Regr'
-#     rerunFailedTests: true
-#     rerunMaxAttempts: 1
-#     runInParallel: true
-#   continueOnError: true
-
-#
-#
-#
-# - task: DotNetCoreCLI@2
-#   displayName: 'Run API Tests'
-#   inputs:
-#     command: 'test'
-#     publishTestResults: 
-#     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
-#     arguments: '--logger trx --logger junit --results-directory $(Build.Repository.LocalPath)\API --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
-#     testRunTitle: 'API: Regression API Tests'
-
-# - task: DotNetCoreCLI@2
-#   displayName: 'Run UI Tests'
-#   inputs:
-#     command: 'test'
-#     projects: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
-#     arguments: '--logger trx --logger junit --results-directory $(Build.Repository.LocalPath)\UI --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
-#     testRunTitle: 'UI: Regression API Tests'
-
-#
-#
-#
 - task: PowerShell@2
   displayName: 'Update tests .runsettings'
   inputs:
@@ -109,6 +64,7 @@ steps:
       $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
       $xml = New-Object XML
       $xml.Load($filePathToTask)
+      $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
       $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
       $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
       $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
@@ -117,6 +73,7 @@ steps:
 
 - task: VSTest@2
   displayName: 'API: Regression API Tests2'
+  condition: eq(${{ parameters.TestApiRegression }}, 'true')
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
@@ -132,7 +89,8 @@ steps:
   continueOnError: true
 
 - task: VSTest@2
-  displayName: 'UI: Regression E2E Tests'
+  displayName: 'UI: Regression UI Tests'
+  condition: eq(${{ parameters.TestUIRegression }}, 'true')
   inputs:
     testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
     uiTests: true
@@ -144,6 +102,7 @@ steps:
   continueOnError: true
 
 - task: PowerShell@2
+  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
   displayName: 'Create ZIP for Jira Zephyr'
   inputs:
     targetType: 'inline'
@@ -155,6 +114,7 @@ steps:
     script: 'dir $(Agent.TempDirectory)\TestResults'
 
 - task: CmdLine@2
+  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
   displayName: 'Publish results to Jira Zephyr'
   inputs:
    script: 'curl -H "Authorization: $(ZephyrToken)" -F "file=@$(Agent.TempDirectory)\TestResults\JiraResults.zip;type=multipart/form-data" -F "testCycle=@$(Agent.TempDirectory)\TestResults\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
