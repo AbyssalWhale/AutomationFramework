@@ -23,7 +23,14 @@ parameters:
     type: boolean
     default: true
   - name: 'PublishToZephyr'
-    displayName: 'Publish Test Run to Zephyr Scale'
+    displayName: '-Publish Test Run to Zephyr Scale-'
+    type: boolean
+    default: false
+    values:
+      - true
+      - false
+  - name: 'NuKeeper'
+    displayName: '-Run NuKeeper-'
     type: boolean
     default: false
     values:
