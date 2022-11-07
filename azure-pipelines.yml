@@ -55,31 +55,31 @@ stages:
             restoreSolution: '$(solution)'
     - job: Build
       displayName: 'Prepare Nugets and Build'
-        steps:
-          - task: VSBuild@1
-            displayName: 'Build Test Solution'
-            inputs:
-              solution: '$(solution)'
-              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-              platform: '$(buildPlatform)'
-              configuration: '$(buildConfiguration)'
+      steps:
+        - task: VSBuild@1
+          displayName: 'Build Test Solution'
+          inputs:
+            solution: '$(solution)'
+            msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+            platform: '$(buildPlatform)'
+            configuration: '$(buildConfiguration)'
     - job: Runsettings
       displayName: 'Update .runsettings'
-        steps:
+      steps:
           - task: PowerShell@2
-          displayName: 'Update tests .runsettings'
-          inputs:
-            targetType: 'inline'
-            script: |
-              $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
-              $xml = New-Object XML
-              $xml.Load($filePathToTask)
-              $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
-              $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
-              $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
-              $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
-              $xml.Save($filePathToTask)
-              ${$filePathToTask}
+            displayName: 'Update tests .runsettings'
+            inputs:
+              targetType: 'inline'
+              script: |
+                $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+                $xml = New-Object XML
+                $xml.Load($filePathToTask)
+                $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
+                $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
+                $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
+                $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
+                $xml.Save($filePathToTask)
+                ${$filePathToTask}
 
 - stage: RunTests
   displayName: 'Run Regression Tests'
