@@ -9,6 +9,10 @@ steps:
 #  displayName: 'Restore Nugets'
 #  inputs:
 #    script: 'dotnet restore $(Build.Repository.LocalPath)/*/* -p:RestoreUseSkipNonexistentTargets=false -nowarn:msb3202,nu1503'
+- task: NuGetCommand@2
+  displayName: 'Restore NuGets'
+  inputs:
+    restoreSolution: '$(solution)'
 - task: UseDotNet@2
   displayName: 'Install SDK 2.x'
   inputs:
