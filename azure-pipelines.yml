@@ -50,11 +50,28 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: VSBuild@1
+  displayName: 'Build Solution'
   inputs:
     solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: PowerShell@2
+  displayName: 'Update tests .runsettings'
+  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
+  inputs:
+    targetType: 'inline'
+    script: |
+      $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+      $xml = New-Object XML
+      $xml.Load($filePathToTask)
+      $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
+      $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
+      $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
+      $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
+      $xml.Save($filePathToTask)
+      ${$filePathToTask}
 
 - task: VSTest@2
   displayName: 'Tests: Regression API'
@@ -85,22 +102,6 @@ steps:
     testRunTitle: 'UI: Regression E2E Tests'
     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
   continueOnError: true
-
-- task: PowerShell@2
-  displayName: 'Update tests .runsettings'
-  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
-  inputs:
-    targetType: 'inline'
-    script: |
-      $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
-      $xml = New-Object XML
-      $xml.Load($filePathToTask)
-      $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
-      $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
-      $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
-      $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
-      $xml.Save($filePathToTask)
-      ${$filePathToTask}
 
 - task: PowerShell@2
   condition: eq(${{ parameters.PublishToZephyr }}, 'true')
