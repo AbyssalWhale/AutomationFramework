@@ -103,9 +103,8 @@ steps:
     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
   continueOnError: true
 
-extends:
-  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
-  template: extyml/zephyrscale.yml
+- ${{ if eq(parameters.PublishToZephyr, true) }}:
+  - template: extyml/zephyrscale.yml
 
 #- task: PowerShell@2
 #  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
