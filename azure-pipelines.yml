@@ -115,14 +115,6 @@ steps:
       $xml.Save($filePathToTask)
       ${$filePathToTask}
 
-# - task: DotNetCoreCLI@2
-#   displayName: 'Run API Tests'
-#   inputs:
-#     command: 'test'
-#     projects: '$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll'
-#     arguments: '--logger trx --logger junit --settings $(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings --results-directory ./API'
-#     testRunTitle: 'API: Regression API Tests'
-#   continueOnError: true
 - task: VSTest@2
   displayName: 'API: Regression API Tests2'
   inputs:
@@ -139,20 +131,6 @@ steps:
     resultsFolder: '$(Agent.TempDirectory)\TestResults\API'
   continueOnError: true
 
-# - task: CmdLine@2
-#   displayName: 'Renaming API XML Test Results'
-#   inputs:
-#     script: 'move D:\a\_temp\TestResults.xml D:\a\_temp\TestResults_API.xml'
-
-# - task: DotNetCoreCLI@2
-#   displayName: 'Run UI Tests'
-#   inputs:
-#     command: 'test'
-#     projects: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
-#     arguments: '--logger trx --logger junit'
-#     testRunTitle: 'UI: Regression UI Tests'
-#   continueOnError: true
-
 - task: VSTest@2
   displayName: 'UI: Regression E2E Tests'
   inputs:
@@ -164,16 +142,6 @@ steps:
     testRunTitle: 'UI: Regression E2E Tests'
     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
   continueOnError: true
-
-# - task: CmdLine@2
-#   displayName: 'Renaming UI XML Test Results'
-#   inputs:
-#     script: 'move D:\a\_temp\TestResults.xml D:\a\_temp\TestResults_UI.xml'
-
-- task: CmdLine@2
-  displayName: 'Print out results'
-  inputs:
-    script: 'dir $(Agent.TempDirectory)\TestResults'
 
 - task: PowerShell@2
   displayName: 'Create ZIP for Jira Zephyr'
@@ -189,4 +157,4 @@ steps:
 - task: CmdLine@2
   displayName: 'Publish results to Jira Zephyr'
   inputs:
-   script: 'curl -H "Authorization: $(ZephyrToken)" -F "file=@$(Agent.TempDirectory)\TestResults\JiraResults.zip;type=multipart/form-data" -F "testCycle=@D:\a\_temp\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
+   script: 'curl -H "Authorization: $(ZephyrToken)" -F "file=@$(Agent.TempDirectory)\TestResults\JiraResults.zip;type=multipart/form-data" -F "testCycle=@$(Agent.TempDirectory)\TestResults\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
