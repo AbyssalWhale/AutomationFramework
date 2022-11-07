@@ -8,7 +8,7 @@ steps:
 - task: CmdLine@2
   displayName: 'Restore Nugets'
   inputs:
-    script: 'dotnet restore D:\a\1\s\TestAZConsoleApp\ConsoleApp1\ConsoleApp1.csproj -p:RestoreUseSkipNonexistentTargets=false -nowarn:msb3202,nu1503'
+    script: 'dotnet restore $(solution) -p:RestoreUseSkipNonexistentTargets=false -nowarn:msb3202,nu1503'
 - task: UseDotNet@2
   displayName: 'Install SDK 2.x'
   inputs:
