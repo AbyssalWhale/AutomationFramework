@@ -104,7 +104,7 @@ steps:
   continueOnError: true
 
 - ${{ if eq(parameters.PublishToZephyr, true) }}:
-  - template: extyml/zephyrscale.yml
+  - template: zephyrscale.yml
 
 #- task: PowerShell@2
 #  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
