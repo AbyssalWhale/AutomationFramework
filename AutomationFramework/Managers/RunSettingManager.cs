@@ -10,6 +10,7 @@ namespace AutomationFramework.Managers
     /// </summary>
     public class RunSettingManager
     {
+        public bool PublishToZephyr { get; set; }
         public string ZephyrToken { get; set; }
         public string BuildId { get; set; }
         public string Branch { get; set; }
@@ -35,6 +36,8 @@ namespace AutomationFramework.Managers
 
         public RunSettingManager()
         {
+            bool.TryParse(TryToParseTestContext(nameof(PublishToZephyr)), out bool publishToZephyr);
+            PublishToZephyr = publishToZephyr;
             ZephyrToken = TryToParseTestContext(nameof(ZephyrToken));
             BuildId = TryToParseTestContext(nameof(BuildId));
             Branch = TryToParseTestContext(nameof(Branch));

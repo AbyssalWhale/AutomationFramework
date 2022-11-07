@@ -1,4 +1,5 @@
 ﻿using AutomationFramework.Managers;
+using Bogus;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
@@ -27,7 +28,10 @@ namespace AutomationFramework{
 
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
 
-            PrepareZephyrTestCycle();
+            if (_runSettingsSettings.PublishToZephyr)
+            {
+                PrepareZephyrTestCycle();
+            }
 
             _logManager.LogGlobalTestExecutionAction("One Time Set Up was successfully executed for tests;");
         }

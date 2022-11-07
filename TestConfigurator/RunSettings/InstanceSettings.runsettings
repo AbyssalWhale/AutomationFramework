@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <TestRunParameters>
-	<Parameter name="ZephyrToken" value="0" />
-    <Parameter name="BuildId" value="0" />
-    <Parameter name="Branch" value="develop" />
     <Parameter name="InstanceUrl" value="https://53pto.com/" />
     <Parameter name="ApiInstanceUrl" value="https://api.trello.com/1/" />
     <!--Browser should be: chrome, firefox-->
@@ -18,12 +15,15 @@
     <!--API-->
     <Parameter name="ApiKey" value="caa74d61a0599b24da6eab8f96524343" />
     <Parameter name="ApiToken" value="1e96f1a913c85887a39d395ec4417b6030f08a6b10a8bf90818534a79f27eb60" />
-    <!--API-->
     <!--DB-->
-    <Parameter name="DBServer" value="Not set" />
-    <Parameter name="DBName" value="Not set" />
-    <Parameter name="DBUserId" value="Not set" />
-    <Parameter name="DBUserPass" value="Not set" />
-    <!--end-->
+    <Parameter name="DBServer" value="Default" />
+    <Parameter name="DBName" value="Default" />
+    <Parameter name="DBUserId" value="Default" />
+    <Parameter name="DBUserPass" value="Default" />
+	<!--Zephyr-->
+	<Parameter name="PublishToZephyr" value="false" />
+	<Parameter name="ZephyrToken" value="0" />
+	<Parameter name="BuildId" value="0" />
+	<Parameter name="Branch" value="develop" />  
   </TestRunParameters>
 </RunSettings>
