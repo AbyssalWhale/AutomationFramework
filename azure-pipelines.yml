@@ -43,7 +43,7 @@ stages:
   displayName: 'Prepare Tests Solution'
   jobs:
     - job: Nugets
-      displayName: 'Nugets and Build'
+      displayName: 'Prepare'
       steps:
         - task: NuGetToolInstaller@1
           displayName: 'Install NuGet 5.8.0'
@@ -60,12 +60,9 @@ stages:
             msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
             platform: '$(buildPlatform)'
             configuration: '$(buildConfiguration)'
-    - job: Runsettings
-      displayName: 'Update .runsettings'
-      steps:
-          - task: PowerShell@2
-            displayName: 'Update tests .runsettings'
-            inputs:
+        - task: PowerShell@2
+          displayName: 'Update tests .runsettings'
+          inputs:
               targetType: 'inline'
               script: |
                 $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
