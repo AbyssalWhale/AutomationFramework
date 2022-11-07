@@ -43,7 +43,7 @@ stages:
   displayName: 'Prepare Tests Solution'
   jobs:
     - job: Nugets
-      displayName: 'Prepare Nugets and Build'
+      displayName: 'Nugets'
       steps:
         - task: NuGetToolInstaller@1
           displayName: 'Install NuGet 5.8.0'
@@ -54,7 +54,7 @@ stages:
           inputs:
             restoreSolution: '$(solution)'
     - job: Build
-      displayName: 'Prepare Nugets and Build'
+      displayName: 'Build'
       steps:
         - task: VSBuild@1
           displayName: 'Build Test Solution'
