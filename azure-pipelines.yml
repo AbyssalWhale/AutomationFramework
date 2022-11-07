@@ -17,11 +17,11 @@ parameters:
   - name: 'TestApiRegression'
     displayName: 'API: Regression Tests'
     type: boolean
-    default: false
+    default: true
   - name: 'TestUIRegression'
     displayName: 'UI Regression Tests'
     type: boolean
-    default: false
+    default: true
   - name: 'PublishToZephyr'
     displayName: 'Publish Test Run to Zephyr Scale'
     type: boolean
