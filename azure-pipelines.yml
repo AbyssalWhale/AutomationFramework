@@ -137,10 +137,9 @@ stages:
     - job: BuildAndRun
       steps:
       - task: NuGetToolInstaller@1
-
       - task: NuGetCommand@2
         inputs:
-        restoreSolution: '$(solution)'
+          restoreSolution: '$(solution)'
       - task: NuGetAuthenticate@0
       - task: CmdLine@2
         displayName: 'Restore Nugets'
@@ -149,8 +148,8 @@ stages:
       - task: UseDotNet@2
         displayName: 'Install SDK 2.x'
         inputs:
-        packageType: 'sdk'
-        version: '2.x' 
+          packageType: 'sdk'
+          version: '2.x' 
       - task: UseDotNet@2
         displayName: 'Install SDK 3.x'
         inputs:
