@@ -1,13 +1,9 @@
 ﻿using AutomationFramework.Managers;
-using Bogus;
-using Bogus.DataSets;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace AutomationFramework{
     public class APITestBase
