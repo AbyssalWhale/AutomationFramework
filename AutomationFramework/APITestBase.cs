@@ -1,5 +1,6 @@
 ﻿using AutomationFramework.Managers;
 using Bogus;
+using Bogus.DataSets;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
@@ -60,7 +61,12 @@ namespace AutomationFramework{
                 };
 
                 Directory.CreateDirectory(agentTempFolder);
-                File.WriteAllText(agentConfigPath, JsonConvert.SerializeObject(configToWrite));
+
+                using (StreamWriter writer = new StreamWriter(agentConfigPath))
+                {
+                    writer.Write(JsonConvert.SerializeObject(configToWrite));
+                    writer.Close();
+                }
             }
         }
     }
