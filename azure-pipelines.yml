@@ -93,8 +93,6 @@ steps:
     otherConsoleOptions: '/Logger:trx /Logger:junit'
     testRunTitle: 'API: Regression'
     runTestsInIsolation: true
-    rerunFailedTests: true
-    rerunMaxAttempts: 1
     resultsFolder: '$(Agent.TempDirectory)\TestResults\API'
   continueOnError: true
 
