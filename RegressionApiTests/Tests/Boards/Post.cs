@@ -11,6 +11,11 @@ namespace RegressionApiTests.Tests.Boards
     {
         private string boardIdToDelete;
 
+        [SetUp]
+        public void SetUp()
+        {
+        }
+
         [Test]
         public void BoardCanBeCreatedWithReqPropertiesOnly_TES_T3()
         {
@@ -29,8 +34,11 @@ namespace RegressionApiTests.Tests.Boards
         [TearDown]
         public void TearDown()
         {
-            var response = _boardWorkflow.RemoveBoardAsync(boardIdToDelete);
-            Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
+            if (!(boardIdToDelete is null))
+            {
+                var response = _boardWorkflow.RemoveBoardAsync(boardIdToDelete);
+                Assert.AreEqual(HttpStatusCode.OK, response.Result.StatusCode);
+            }
         }
     }
 }
