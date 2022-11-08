@@ -12,6 +12,8 @@ using System.Xml.Linq;
 namespace AutomationFramework{
     public class APITestBase
     {
+        private bool isZephyrTestCycleFilePrepared = false;
+
         protected RunSettingManager _runSettingsSettings;
         protected LogManager _logManager;
         protected ToolsManager _toolsManager;
@@ -29,7 +31,7 @@ namespace AutomationFramework{
 
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
 
-            if (_runSettingsSettings.PublishToZephyr)
+            if (_runSettingsSettings.PublishToZephyr && !isZephyrTestCycleFilePrepared)
             {
                 PrepareZephyrTestCycle();
             }
@@ -44,6 +46,7 @@ namespace AutomationFramework{
 
         private void PrepareZephyrTestCycle()
         {
+            isZephyrTestCycleFilePrepared = true;
             var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
             var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
 
@@ -66,6 +69,7 @@ namespace AutomationFramework{
                 {
                     writer.Write(JsonConvert.SerializeObject(configToWrite));
                     writer.Close();
+                    writer.Dispose();
                 }
             }
         }
