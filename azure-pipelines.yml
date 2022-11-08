@@ -45,82 +45,90 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
-- task: NuGetToolInstaller@1
-  displayName: 'Install NuGet 5.8.0'
-  inputs:
-    versionSpec: 5.8.0
+stages:
+- stage: RunTests
+  displayName: Run Regression Tests
+  jobs:
+  - job: BuildAndRun
 
-- task: NuGetCommand@2
-  displayName: 'Restore NuGets'
-  inputs:
-    restoreSolution: '$(solution)'
+    steps:
+    - task: NuGetToolInstaller@1
+      displayName: 'Install NuGet 5.8.0'
+      inputs:
+        versionSpec: 5.8.0
 
-- task: VSBuild@1
-  displayName: 'Build Solution'
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGets'
+      inputs:
+        restoreSolution: '$(solution)'
 
-- task: PowerShell@2
-  displayName: 'Update tests .runsettings'
-  inputs:
-    targetType: 'inline'
-    script: |
-      $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
-      $xml = New-Object XML
-      $xml.Load($filePathToTask)
-      $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
-      $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
-      $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
-      $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
-      $xml.Save($filePathToTask)
-      ${$filePathToTask}
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  displayName: 'Tests: Regression API'
-  condition: eq(${{ parameters.TestApiRegression }}, 'true')
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
-    uiTests: false
-    runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
-    otherConsoleOptions: '/Logger:trx /Logger:junit'
-    testRunTitle: 'API: Regression'
-    runTestsInIsolation: true
-    rerunFailedTests: true
-    rerunMaxAttempts: 1
-    resultsFolder: '$(Agent.TempDirectory)\TestResults\API'
-  continueOnError: true
+    - task: PowerShell@2
+      displayName: 'Update tests .runsettings'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+          $xml = New-Object XML
+          $xml.Load($filePathToTask)
+          $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
+          $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
+          $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
+          $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
+          $xml.Save($filePathToTask)
+          ${$filePathToTask}
 
-- task: VSTest@2
-  displayName: 'Tests: Regression UI'
-  condition: eq(${{ parameters.TestUIRegression }}, 'true')
-  inputs:
-    testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
-    uiTests: true
-    runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
-    otherConsoleOptions: '/Logger:trx /Logger:junit'
-    runTestsInIsolation: true
-    testRunTitle: 'UI: Regression E2E Tests'
-    resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
-  continueOnError: true
+    - task: VSTest@2
+      displayName: 'Tests: Regression API'
+      condition: eq(${{ parameters.TestApiRegression }}, 'true')
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+        testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
+        uiTests: false
+        runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+        otherConsoleOptions: '/Logger:trx /Logger:junit'
+        testRunTitle: 'API: Regression'
+        runTestsInIsolation: true
+        rerunFailedTests: true
+        rerunMaxAttempts: 1
+        resultsFolder: '$(Agent.TempDirectory)\TestResults\API'
+      continueOnError: true
 
-- task: PowerShell@2
-  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
-  displayName: 'Create ZIP for Jira Zephyr'
-  inputs:
-    targetType: 'inline'
-    script: 'powershell Compress-Archive $(Agent.TempDirectory)\TestResults\*\*.xml $(Agent.TempDirectory)\TestResults\JiraResults.zip'
+    - task: VSTest@2
+      displayName: 'Tests: Regression UI'
+      condition: eq(${{ parameters.TestUIRegression }}, 'true')
+      inputs:
+        testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
+        uiTests: true
+        runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+        otherConsoleOptions: '/Logger:trx /Logger:junit'
+        runTestsInIsolation: true
+        testRunTitle: 'UI: Regression E2E Tests'
+        resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
+      continueOnError: true
 
-- task: CmdLine@2
-  condition: eq(${{ parameters.PublishToZephyr }}, 'true')
-  displayName: 'Publish results to Jira Zephyr'
-  inputs:
-    script: 'curl -H "Authorization: $(ZephyrToken)" -F "file=@$(Agent.TempDirectory)\TestResults\JiraResults.zip;type=multipart/form-data" -F "testCycle=@$(Agent.TempDirectory)\TestResults\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
+    - task: PowerShell@2
+      condition: eq(${{ parameters.PublishToZephyr }}, 'true')
+      displayName: 'Create ZIP for Jira Zephyr'
+      inputs:
+        targetType: 'inline'
+        script: 'powershell Compress-Archive $(Agent.TempDirectory)\TestResults\*\*.xml $(Agent.TempDirectory)\TestResults\JiraResults.zip'
+
+    - task: CmdLine@2
+      condition: eq(${{ parameters.PublishToZephyr }}, 'true')
+      displayName: 'Publish results to Jira Zephyr'
+      inputs:
+        script: 'curl -H "Authorization: $(ZephyrToken)" -F "file=@$(Agent.TempDirectory)\TestResults\JiraResults.zip;type=multipart/form-data" -F "testCycle=@$(Agent.TempDirectory)\TestResults\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
   
 - ${{ if eq(parameters.NuKeeper, 'true') }}:
+  - stage: Nukeeper
+    displayName: Run Nugets Update
   - template: /ymlext/nukeeper.yml
