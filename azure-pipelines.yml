@@ -76,6 +76,8 @@ steps:
       $xml.SelectSingleNode("//Parameter[@name='BuildId']").value="$(Build.BuildNumber)"
       $xml.SelectSingleNode("//Parameter[@name='Branch']").value="${{ parameters.InstanceBranch }}"
       $xml.SelectSingleNode("//Parameter[@name='ZephyrToken']").value="$(ZephyrToken)"
+      $xml.SelectSingleNode("//Parameter[@name='ApiKey']").value="$(TrelloApiKey)"
+      $xml.SelectSingleNode("//Parameter[@name='ApiToken']").value="$(TrelloApiToken)"
       $xml.Save($filePathToTask)
       ${$filePathToTask}
 
