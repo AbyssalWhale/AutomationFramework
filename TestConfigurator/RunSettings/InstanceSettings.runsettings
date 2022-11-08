@@ -13,8 +13,8 @@
     <Parameter name="TestsReportDirectory" value="../../../TestsData/TestsReports" />
     <Parameter name="TestsAssetDirectory" value="../../../TestsData/TestsAssets" />
     <!--API-->
-    <Parameter name="ApiKey" value="default" />
-    <Parameter name="ApiToken" value="default" />
+    <Parameter name="ApiKey" value="caa74d61a0599b24da6eab8f96524343" />
+    <Parameter name="ApiToken" value="1e96f1a913c85887a39d395ec4417b6030f08a6b10a8bf90818534a79f27eb60" />
     <!--DB-->
     <Parameter name="DBServer" value="default" />
     <Parameter name="DBName" value="default" />

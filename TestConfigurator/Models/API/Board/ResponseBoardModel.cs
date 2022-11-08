@@ -1,41 +1,100 @@
 ﻿using AutomationFramework.Models;
-using RegressionApiTests.Models.Board.submodels;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
+using TestConfigurator.Models.API.Board.Submodels;
 
 namespace RegressionApiTests.Models.Board
 {
     public class ResponseBoardModel : IRestObject
     {
-        public string name { get; set; }
-        public string desc { get; set; }
-        public object descData { get; set; }
-        public bool closed { get; set; }
-        public object idOrganization { get; set; }
-        public object idEnterprise { get; set; }
-        public object limits { get; set; }
-        public object pinned { get; set; }
-        public string shortLink { get; set; }
-        public List<object> powerUps { get; set; }
-        public DateTime dateLastActivity { get; set; }
-        public List<object> idTags { get; set; }
-        public object datePluginDisable { get; set; }
-        public object creationMethod { get; set; }
-        public object ixUpdate { get; set; }
-        public bool enterpriseOwned { get; set; }
-        public object idBoardSource { get; set; }
-        public string idMemberCreator { get; set; }
-        public string id { get; set; }
-        public bool starred { get; set; }
-        public string url { get; set; }
-        public BoardPrefs prefs { get; set; }
-        public bool subscribed { get; set; }
-        public BoardLabelNames labelNames { get; set; }
-        public DateTime dateLastView { get; set; }
-        public string shortUrl { get; set; }
-        public object templateGallery { get; set; }
-        public List<object> premiumFeatures { get; set; }
-        public List<BoardMembership> memberships { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("desc")]
+        public string Desc { get; set; }
+
+        [JsonProperty("descData")]
+        public object DescData { get; set; }
+
+        [JsonProperty("closed")]
+        public bool Closed { get; set; }
+
+        [JsonProperty("dateClosed")]
+        public object DateClosed { get; set; }
+
+        [JsonProperty("idOrganization")]
+        public string IdOrganization { get; set; }
+
+        [JsonProperty("idEnterprise")]
+        public object IdEnterprise { get; set; }
+
+        [JsonProperty("limits")]
+        public Limits Limits { get; set; }
+
+        [JsonProperty("pinned")]
+        public bool Pinned { get; set; }
+
+        [JsonProperty("starred")]
+        public bool Starred { get; set; }
+
+        [JsonProperty("url")]
+        public string Url { get; set; }
+
+        [JsonProperty("prefs")]
+        public Prefs Prefs { get; set; }
+
+        [JsonProperty("shortLink")]
+        public string ShortLink { get; set; }
+
+        [JsonProperty("subscribed")]
+        public bool Subscribed { get; set; }
+
+        [JsonProperty("labelNames")]
+        public LabelNames LabelNames { get; set; }
+
+        [JsonProperty("powerUps")]
+        public List<object> PowerUps { get; set; }
+
+        [JsonProperty("dateLastActivity")]
+        public object DateLastActivity { get; set; }
+
+        [JsonProperty("dateLastView")]
+        public object DateLastView { get; set; }
+
+        [JsonProperty("shortUrl")]
+        public string ShortUrl { get; set; }
+
+        [JsonProperty("idTags")]
+        public List<object> IdTags { get; set; }
+
+        [JsonProperty("datePluginDisable")]
+        public object DatePluginDisable { get; set; }
+
+        [JsonProperty("creationMethod")]
+        public string CreationMethod { get; set; }
+
+        [JsonProperty("ixUpdate")]
+        public string IxUpdate { get; set; }
+
+        [JsonProperty("templateGallery")]
+        public object TemplateGallery { get; set; }
+
+        [JsonProperty("enterpriseOwned")]
+        public bool EnterpriseOwned { get; set; }
+
+        [JsonProperty("idBoardSource")]
+        public object IdBoardSource { get; set; }
+
+        [JsonProperty("premiumFeatures")]
+        public List<string> PremiumFeatures { get; set; }
+
+        [JsonProperty("idMemberCreator")]
+        public string IdMemberCreator { get; set; }
+
+        [JsonProperty("memberships")]
+        public List<Membership> Memberships { get; set; }
     }
 }
