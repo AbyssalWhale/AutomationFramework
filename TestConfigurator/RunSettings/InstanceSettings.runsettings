@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <TestRunParameters>
-    <Parameter name="InstanceUrl" value="https://53pto.com/" />
+    <Parameter name="InstanceUrl" value="https://www.google.com/" />
     <Parameter name="ApiInstanceUrl" value="https://api.trello.com/1/" />
     <!--Browser should be: chrome, firefox-->
     <Parameter name="Browser" value="chrome" />
-    <Parameter name="Headless" value="true" />
+    <Parameter name="Headless" value="false" />
     <Parameter name="StepRecordingEnabled" value="true" />
     <Parameter name="Username" value="User" />
     <Parameter name="Password" value="7zCMUuK8trCSLQf" />

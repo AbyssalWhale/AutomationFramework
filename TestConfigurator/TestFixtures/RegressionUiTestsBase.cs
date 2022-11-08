@@ -17,6 +17,7 @@ namespace TestConfigurator.TestFixtures
         public override void SetUp()
         {
             base.SetUp();
+            _webDriverManager.GoToUrl(_runSettingsSettings.InstanceUrl);
         }
 
         [TearDown]
