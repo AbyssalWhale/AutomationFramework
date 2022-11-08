@@ -16,10 +16,10 @@
     <Parameter name="ApiKey" value="default" />
     <Parameter name="ApiToken" value="default" />
     <!--DB-->
-    <Parameter name="DBServer" value="Default" />
-    <Parameter name="DBName" value="Default" />
-    <Parameter name="DBUserId" value="Default" />
-    <Parameter name="DBUserPass" value="Default" />
+    <Parameter name="DBServer" value="default" />
+    <Parameter name="DBName" value="default" />
+    <Parameter name="DBUserId" value="default" />
+    <Parameter name="DBUserPass" value="default" />
 	<!--Zephyr-->
 	<Parameter name="PublishToZephyr" value="false" />
 	<Parameter name="ZephyrToken" value="0" />
