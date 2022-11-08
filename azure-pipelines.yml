@@ -128,8 +128,6 @@ stages:
       inputs:
         script: 'curl -H "Authorization: $(ZephyrToken)" -F "file=@$(Agent.TempDirectory)\TestResults\JiraResults.zip;type=multipart/form-data" -F "testCycle=@$(Agent.TempDirectory)\TestResults\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
   
+
 - ${{ if eq(parameters.NuKeeper, 'true') }}:
-#- stage: Nukeeper
-#  displayName: Run Nugets Update
-#  condition: eq(${{ parameters.NuKeeper }}, 'true')
   - template: /ymlext/nukeeper.yml
