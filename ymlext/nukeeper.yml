@@ -1,5 +1,4 @@
-- stage: Nukeeper
-  displayName: Run Nugets Update
+
   jobs:
         - job: BuildAndRun
           steps:
