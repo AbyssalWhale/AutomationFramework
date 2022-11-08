@@ -128,8 +128,34 @@ stages:
       inputs:
         script: 'curl -H "Authorization: $(ZephyrToken)" -F "file=@$(Agent.TempDirectory)\TestResults\JiraResults.zip;type=multipart/form-data" -F "testCycle=@$(Agent.TempDirectory)\TestResults\jiraTestCycle.json;type=application/json" https://api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey="TES"'
   
+
 - ${{ if eq(parameters.NuKeeper, 'true') }}:
-#- stage: Nukeeper
-#  displayName: Run Nugets Update
-#  condition: eq(${{ parameters.NuKeeper }}, 'true')
-- template: /ymlext/nukeeper.yml
+  #- template: /ymlext/nukeeper.yml
+  - stage: Nukeeper
+    displayName: Run Nugets Update
+    jobs:
+    - job: BuildAndRun
+      steps:
+      - task: NuGetToolInstaller@1
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(solution)'
+      - task: NuGetAuthenticate@0
+      - task: CmdLine@2
+        displayName: 'Restore Nugets'
+        inputs:
+          script: 'dotnet restore $(Build.Repository.LocalPath)/RegressionApiTests/RegressionApiTests.csproj -p:RestoreUseSkipNonexistentTargets=false -nowarn:msb3202,nu1503'
+      - task: UseDotNet@2
+        displayName: 'Install SDK 2.x'
+        inputs:
+          packageType: 'sdk'
+          version: '2.x' 
+      - task: UseDotNet@2
+        displayName: 'Install SDK 3.x'
+        inputs:
+          packageType: 'sdk'
+          version: '3.x'
+      - task: NuKeeper@0
+        inputs:
+          arguments: '--change Minor --verbosity Detailed'
+          version: '0.*'
