@@ -8,8 +8,6 @@ using System.Linq;
 namespace AutomationFramework{
     public class APITestBase
     {
-        private bool isZephyrTestCycleFilePrepared = false;
-
         protected RunSettingManager _runSettingsSettings;
         protected LogManager _logManager;
         protected ToolsManager _toolsManager;
@@ -27,10 +25,7 @@ namespace AutomationFramework{
 
             _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
 
-            if (_runSettingsSettings.PublishToZephyr && !isZephyrTestCycleFilePrepared)
-            {
-                PrepareZephyrTestCycle();
-            }
+            if (_runSettingsSettings.PublishToZephyr) PrepareZephyrTestCycle(); 
 
             _logManager.LogGlobalTestExecutionAction("One Time Set Up was successfully executed for tests;");
         }
@@ -42,32 +37,35 @@ namespace AutomationFramework{
 
         private void PrepareZephyrTestCycle()
         {
-            isZephyrTestCycleFilePrepared = true;
-            var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
-            var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
-
-            if (!File.Exists(agentConfigPath))
+            lock (this)
             {
-                var zephyrTestCycles = _toolsManager._api.GetZephyrFolders();
-                var runTestCycle = zephyrTestCycles.Values.FirstOrDefault(c => c.Name.ToLower().Equals(_runSettingsSettings.Branch));
+                var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
+                var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
 
-                var configToWrite = new
+                if (!File.Exists(agentConfigPath))
                 {
-                    name = $"{DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")} Build ID: {_runSettingsSettings.BuildId}",
-                    description = "Desc",
-                    jiraProjectVersion = 0,
-                    folderId = runTestCycle.Id
-                };
+                    var zephyrTestCycles = _toolsManager._api.GetZephyrFolders();
+                    var runTestCycle = zephyrTestCycles.Values.FirstOrDefault(c => c.Name.ToLower().Equals(_runSettingsSettings.Branch));
 
-                Directory.CreateDirectory(agentTempFolder);
+                    var configToWrite = new
+                    {
+                        name = $"{DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")} Build ID: {_runSettingsSettings.BuildId}",
+                        description = "Desc",
+                        jiraProjectVersion = 0,
+                        folderId = runTestCycle.Id
+                    };
 
-                using (StreamWriter writer = new StreamWriter(agentConfigPath))
-                {
-                    writer.Write(JsonConvert.SerializeObject(configToWrite));
-                    writer.Close();
-                    writer.Dispose();
+                    Directory.CreateDirectory(agentTempFolder);
+
+                    using (StreamWriter writer = new StreamWriter(agentConfigPath))
+                    {
+                        writer.Write(JsonConvert.SerializeObject(configToWrite));
+                        writer.Close();
+                        writer.Dispose();
+                    }
                 }
             }
+
         }
     }
 }
