@@ -37,23 +37,23 @@ namespace TestConfigurator.Workflows.API
                 );
         }
 
-        public async Task<IRestResponse<ResponseBoardModel>> CreateBoard(PostBoardModel modelForPost)
+        public async Task<RestResponse<ResponseBoardModel>> CreateBoard(PostBoardModel modelForPost)
         {
-            var result = await _toolsManager._api.RestResponseAsync<ResponseBoardModel>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.PostBoard), Method.POST, restObject: modelForPost);
+            var result = await _toolsManager._api.RestResponseAsync<ResponseBoardModel>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.PostBoard), Method.Post, restObject: modelForPost);
 
             return result;
         }
 
-        public async Task<IRestResponse<object>> RemoveBoardAsync(string id)
+        public async Task<RestResponse<object>> RemoveBoardAsync(string id)
         {
-            var result = await _toolsManager._api.RestResponseAsync<object>($"{_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.RemoveBoard)}{id}", Method.DELETE);
+            var result = await _toolsManager._api.RestResponseAsync<object>($"{_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.RemoveBoard)}{id}", Method.Post);
             return result;
         }
 
         public void RemoveAllBaordsAsync()
         {
-            var allBoardsGetResponse = _toolsManager._api.RestResponseAsync<List<ResponseBoardModel>>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.MyAllBoards), Method.GET);
-            Parallel.ForEach(allBoardsGetResponse.Result.Data, board => { RemoveBoardAsync(board.id); });
+            var allBoardsGetResponse = _toolsManager._api.RestResponseAsync<List<ResponseBoardModel>>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.MyAllBoards), Method.Get);
+            Parallel.ForEach(allBoardsGetResponse.Result.Data, async board => { await RemoveBoardAsync(board.id); });
         }
     }
 }

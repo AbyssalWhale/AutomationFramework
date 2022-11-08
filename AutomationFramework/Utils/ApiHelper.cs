@@ -10,7 +10,7 @@ namespace AutomationFramework.Utils
 {
     public class ApiHelper
     {
-        internal IRestClient _client;
+        internal RestClient _client;
         private RunSettingManager _runSettingsManger;
         private LogManager _logManager { get { return LogManager.GetLogManager(_runSettingsManger); } }
         private StringHelper _stringHelper;
@@ -21,7 +21,7 @@ namespace AutomationFramework.Utils
             _client = new RestClient(runSettingsManger.ApiInstanceUrl);
         }
 
-        public async Task<IRestResponse<T>> RestResponseAsync<T>(
+        public async Task<RestResponse<T>> RestResponseAsync<T>(
             string endPoint, Method method,
             ConcurrentDictionary<string, string> headers = null,
             ConcurrentDictionary<string, string> parameters = null,
@@ -36,7 +36,7 @@ namespace AutomationFramework.Utils
             return result;
         }
 
-        public IRestResponse<T> RestResponse<T>(
+        public RestResponse<T> RestResponse<T>(
             string endPoint, Method method,
             ConcurrentDictionary<string, string> headers = null,
             ConcurrentDictionary<string, string> parameters = null,
@@ -76,7 +76,7 @@ namespace AutomationFramework.Utils
                 Parallel.ForEach(_stringHelper.GetAllClassPropertiesWithValuesAsStrings(restObject), property => { request.AddParameter(property.Key, property.Value); });
             }
 
-            //_logManager.LogTestAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint};");
+            _logManager.LogTestAction($"{method} call will be made for the following url: {_runSettingsManger.ApiInstanceUrl}{endPoint};");
 
             return request;
         }
@@ -84,7 +84,7 @@ namespace AutomationFramework.Utils
         public TestCyclesResponse GetZephyrFolders()
         {
             var localCliend = new RestClient("https://api.zephyrscale.smartbear.com");
-            var newRequest = new RestRequest("/v2/folders", Method.GET);
+            var newRequest = new RestRequest("/v2/folders", Method.Get);
             newRequest.AddHeader("Authorization", $"{_runSettingsManger.ZephyrToken}");
 
             var response = localCliend.Execute<TestCyclesResponse>(newRequest);

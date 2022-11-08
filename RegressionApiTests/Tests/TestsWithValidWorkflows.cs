@@ -18,7 +18,7 @@ namespace RegressionApiTests.Tests
             var actualBoardResponse = _boardWorkflow.CreateBoard(boardModelToPost);
             Assert.AreEqual(HttpStatusCode.OK, actualBoardResponse.Result.StatusCode, $"It's expected response code is: {HttpStatusCode.OK}");
 
-            var allboardsGetResponse = _toolsManager._api.RestResponseAsync<List<ResponseBoardModel>>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.MyAllBoards), Method.GET);
+            var allboardsGetResponse = _toolsManager._api.RestResponseAsync<List<ResponseBoardModel>>(_toolsManager._enum.GetEnumStringValue(typeof(TrelloEndPoints), TrelloEndPoints.MyAllBoards), Method.Get);
             Assert.AreEqual(HttpStatusCode.OK, allboardsGetResponse.Result.StatusCode, $"It's expected response code is: {HttpStatusCode.OK}");
             Assert.NotZero(allboardsGetResponse.Result.Data.Count, "There is more than 1 board while it was returned 0");
 
