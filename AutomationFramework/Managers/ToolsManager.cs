@@ -6,7 +6,6 @@ namespace AutomationFramework.Managers
 {
     public class ToolsManager
     {
-        private static ToolsManager _toolsManager;
         public DataBaseHelper _dataBase { get; private set; }
         public EnumHelper _enum { get; private set; }
         public StringHelper _string { get; private set; }
@@ -14,7 +13,7 @@ namespace AutomationFramework.Managers
         public Faker _getFakeData { get; private set; }
         public Random _getRandom { get; private set; }
 
-        protected ToolsManager(RunSettingManager runSettingManager)
+        public ToolsManager(RunSettingManager runSettingManager)
         {
             _dataBase = new DataBaseHelper(runSettingManager);
             _enum = new EnumHelper();
@@ -22,16 +21,6 @@ namespace AutomationFramework.Managers
             _api = new ApiHelper(runSettingManager, _string);
             _getFakeData = new Faker();
             _getRandom = new Random();
-        }
-
-        internal static ToolsManager GetToolsManager(RunSettingManager runSettingManager)
-        {
-            if (_toolsManager == null)
-            {
-                _toolsManager = new ToolsManager(runSettingManager);
-            }
-
-            return _toolsManager;
         }
     }
 }

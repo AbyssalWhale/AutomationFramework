@@ -11,11 +11,6 @@ namespace RegressionApiTests.Tests.Boards
     {
         private string boardIdToDelete;
 
-        [SetUp]
-        public void SetUp()
-        {
-        }
-
         [Test]
         public void BoardCanBeCreatedWithReqPropertiesOnly_TES_T3()
         {

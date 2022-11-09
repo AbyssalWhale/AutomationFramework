@@ -23,7 +23,7 @@ namespace AutomationFramework{
 
             _logManager.CreateGlobalLog();
 
-            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
+            _toolsManager = new ToolsManager(_runSettingsSettings);
 
             if (_runSettingsSettings.PublishToZephyr) PrepareZephyrTestCycle(); 
 
@@ -37,11 +37,11 @@ namespace AutomationFramework{
 
         private void PrepareZephyrTestCycle()
         {
-            lock (this)
-            {
-                var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
-                var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
+            var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
+            var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
 
+            try
+            {
                 if (!File.Exists(agentConfigPath))
                 {
                     var zephyrTestCycles = _toolsManager._api.GetZephyrFolders();
@@ -61,11 +61,13 @@ namespace AutomationFramework{
                     {
                         writer.Write(JsonConvert.SerializeObject(configToWrite));
                         writer.Close();
-                        writer.Dispose();
                     }
                 }
             }
+            catch (Exception)
+            {
 
+            }
         }
     }
 }

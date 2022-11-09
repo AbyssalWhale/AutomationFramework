@@ -31,7 +31,7 @@ namespace AutomationFramework
             _logManager = LogManager.GetLogManager(_runSettingsSettings);
             _logManager.CreateTestFolderAndLog(TestContext.CurrentContext);
 
-            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
+            _toolsManager = new ToolsManager(_runSettingsSettings);
             _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings);
         }
 

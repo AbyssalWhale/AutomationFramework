@@ -25,7 +25,7 @@ namespace AutomationFramework
 
             _logManager.CreateGlobalLog();
 
-            _toolsManager = ToolsManager.GetToolsManager(_runSettingsSettings);
+            _toolsManager = new ToolsManager(_runSettingsSettings);
 
             _webDriverManager = WebDriverManager.GetWebDriverManager(_runSettingsSettings);
 
