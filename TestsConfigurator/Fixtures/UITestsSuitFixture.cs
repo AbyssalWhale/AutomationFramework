@@ -5,8 +5,7 @@ using TestsConfigurator.Models.POM;
 
 namespace TestsConfigurator
 {
-    [Category("UI")]
-    [TestFixture]
+    [TestFixture, Category("UI")]
     public class UITestsSuitFixture : TestsSuitsFixture
     {
         protected Home HomePage => HomePages[TestContext.CurrentContext.Test.Name];
