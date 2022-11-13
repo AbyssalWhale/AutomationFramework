@@ -1,0 +1,5 @@
+{"Timestamp":"2022-11-13T20:33:52.3603440+01:00","Level":"Information","MessageTemplate":"Folder and Log for the 'Test1_4' test were created;"}
+{"Timestamp":"2022-11-13T20:33:53.8588041+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.WebDriver is executing method 'URL: https://www.google.com/' "}
+{"Timestamp":"2022-11-13T20:33:54.5662988+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.WebDriver is executing method 'MSeconds to wait: 10000' "}
+{"Timestamp":"2022-11-13T20:33:54.5664363+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.WebDriver is executing method 'Script: return document.readyState' "}
+{"Timestamp":"2022-11-13T20:34:04.5834437+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.WebDriver is executing method 'Quit' "}

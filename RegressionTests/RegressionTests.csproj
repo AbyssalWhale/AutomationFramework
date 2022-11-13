@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AutomationModels\TestsConfigurator.csproj" />
+    <ProjectReference Include="..\TestsConfigurator\TestsConfigurator.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,3 @@
+{"Timestamp":"2022-11-13T20:33:46.3140752+01:00","Level":"Information","MessageTemplate":"Folder and Log for the 'NewBoardCanBeCreated' test were created;"}
+{"Timestamp":"2022-11-13T20:33:46.3989684+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.ApiM+<ExecuteAsync>d__4`1 is executing method 'ExecuteAsync' End point: boards/?name=uzkelmupti Method: Post"}
+{"Timestamp":"2022-11-13T20:33:46.7314054+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.ApiM+<ExecuteAsync>d__4`1 is executing method 'ExecuteAsync' End point: boards/?name=uzkelmupti Method: Post Response code: Unauthorized"}
