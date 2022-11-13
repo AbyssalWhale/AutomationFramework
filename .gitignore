@@ -88,3 +88,5 @@ orleans.codegen.cs
 # TestFolders
 TestsData/
 TestResult/
+/AutomationCore/TestsResults/11_10_2022_02_30_05/TestsReports
+/RegressionTests/TestsResults/11_13_2022_06_54_34/TestsReports

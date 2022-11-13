@@ -7,7 +7,7 @@ namespace AutomationFramework
     public class UIConsecutiveTestBase
     {
         protected RunSettingManager _runSettingsSettings;
-        protected LogManager _logManager;
+        protected AutomationFramework.Managers.LogManager _logManager;
         protected ToolsManager _toolsManager;
         protected WebDriverManager _webDriverManager;
 

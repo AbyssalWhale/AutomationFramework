@@ -1,10 +1,10 @@
-﻿using NUnit.Framework;
+﻿using AutomationFramework.Managers;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using Serilog;
 using Serilog.Core;
 using Serilog.Formatting.Json;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
