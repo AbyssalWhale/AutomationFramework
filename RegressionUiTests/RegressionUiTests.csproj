@@ -16,8 +16,4 @@
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TestConfigurator\TestConfigurator.csproj" />
-  </ItemGroup>
-
 </Project>

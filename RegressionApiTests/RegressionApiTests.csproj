@@ -14,8 +14,4 @@
     <PackageReference Include="NunitXml.TestLogger" Version="3.0.127" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TestConfigurator\TestConfigurator.csproj" />
-  </ItemGroup>
-
 </Project>

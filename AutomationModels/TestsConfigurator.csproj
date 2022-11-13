@@ -14,4 +14,10 @@
     <ProjectReference Include="..\AutomationCore\AutomationCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="RunSettings\InstanceSettings.runsettings">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

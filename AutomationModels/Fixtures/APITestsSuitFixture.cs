@@ -4,8 +4,8 @@ using TestsConfigurator.Models.Controllers;
 
 namespace TestsConfigurator.Fixtures
 {
-    [TestFixture]
     [Category("API")]
+    [TestFixture]
     public class APITestsSuitFixture : TestsSuitsFixture
     {
         [SetUp]
