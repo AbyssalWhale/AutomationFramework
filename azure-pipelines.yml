@@ -106,6 +106,7 @@ steps:
     runSettingsFile: '$(Build.Repository.LocalPath)/TestsConfigurator/RunSettings/InstanceSettings.runsettings'
     otherConsoleOptions: '/Logger:trx /Logger:junit'
     runTestsInIsolation: true
+    runInParallel: true
     testRunTitle: 'UI: Regression E2E Tests'
     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
     testFiltercriteria: 'UI'
