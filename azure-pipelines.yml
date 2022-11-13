@@ -94,7 +94,6 @@ steps:
     testRunTitle: 'API: Regression'
     runTestsInIsolation: true
     resultsFolder: '$(Agent.TempDirectory)\TestResults\API'
-    testFiltercriteria: 'API'
   continueOnError: true
 
 - task: VSTest@2
@@ -109,7 +108,6 @@ steps:
     runInParallel: true
     testRunTitle: 'UI: Regression E2E Tests'
     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
-    testFiltercriteria: 'UI'
   continueOnError: true
 
 # - task: VSTest@2
