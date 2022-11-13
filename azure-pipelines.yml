@@ -69,7 +69,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $filePathToTask = "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+      $filePathToTask = "$(Build.Repository.LocalPath)/TestsConfigurator/RunSettings/InstanceSettings.runsettings"
       $xml = New-Object XML
       $xml.Load($filePathToTask)
       $xml.SelectSingleNode("//Parameter[@name='PublishToZephyr']").value="${{ parameters.PublishToZephyr }}"
@@ -80,34 +80,66 @@ steps:
       $xml.SelectSingleNode("//Parameter[@name='ApiToken']").value="$(TrelloApiToken)"
       $xml.Save($filePathToTask)
       ${$filePathToTask}
-
+    
 - task: VSTest@2
   displayName: 'Tests: Regression API'
   condition: eq(${{ parameters.TestApiRegression }}, 'true')
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
+    testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionTests/bin/Release/netcoreapp3.1/RegressionTests.dll"
     uiTests: false
-    runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+    runSettingsFile: "$(Build.Repository.LocalPath)/TestsConfigurator/RunSettings/InstanceSettings.runsettings"
     otherConsoleOptions: '/Logger:trx /Logger:junit'
     testRunTitle: 'API: Regression'
     runTestsInIsolation: true
     resultsFolder: '$(Agent.TempDirectory)\TestResults\API'
+    testFiltercriteria: 'API'
   continueOnError: true
 
 - task: VSTest@2
   displayName: 'Tests: Regression UI'
   condition: eq(${{ parameters.TestUIRegression }}, 'true')
   inputs:
-    testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
+    testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionTests/bin/Release/netcoreapp3.1/RegressionTests.dll'
     uiTests: true
-    runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+    runSettingsFile: '$(Build.Repository.LocalPath)/TestsConfigurator/RunSettings/InstanceSettings.runsettings'
     otherConsoleOptions: '/Logger:trx /Logger:junit'
     runTestsInIsolation: true
     testRunTitle: 'UI: Regression E2E Tests'
     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
+    testFiltercriteria: 'UI'
   continueOnError: true
+
+# - task: VSTest@2
+#   displayName: 'Tests: Regression API'
+#   condition: eq(${{ parameters.TestApiRegression }}, 'true')
+#   inputs:
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+#     testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionApiTests/bin/Release/netcoreapp3.1/RegressionApiTests.dll"
+#     uiTests: false
+#     runSettingsFile: "$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings"
+#     otherConsoleOptions: '/Logger:trx /Logger:junit'
+#     testRunTitle: 'API: Regression'
+#     runTestsInIsolation: true
+#     resultsFolder: '$(Agent.TempDirectory)\TestResults\API'
+#   continueOnError: true
+
+# - task: VSTest@2
+#   displayName: 'Tests: Regression UI'
+#   condition: eq(${{ parameters.TestUIRegression }}, 'true')
+#   inputs:
+#     testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionUiTests/bin/Release/netcoreapp3.1/RegressionUiTests.dll'
+#     uiTests: true
+#     runSettingsFile: '$(Build.Repository.LocalPath)/TestConfigurator/RunSettings/InstanceSettings.runsettings'
+#     otherConsoleOptions: '/Logger:trx /Logger:junit'
+#     runTestsInIsolation: true
+#     testRunTitle: 'UI: Regression E2E Tests'
+#     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
+#   continueOnError: true
+
+      #testFiltercriteria: 'UI'
 
 - task: PowerShell@2
   condition: eq(${{ parameters.PublishToZephyr }}, 'true')
