@@ -87,7 +87,7 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionTests/bin/Release/netcoreapp3.1/RegressionTests.dll"
+    testAssemblyVer2: "$(Build.Repository.LocalPath)/RegressionTests/bin/Release/net6.0/RegressionTests.dll"
     uiTests: false
     runSettingsFile: "$(Build.Repository.LocalPath)/TestsConfigurator/RunSettings/InstanceSettings.runsettings"
     otherConsoleOptions: '/Logger:trx /Logger:junit'
@@ -100,7 +100,7 @@ steps:
   displayName: 'Tests: Regression UI'
   condition: eq(${{ parameters.TestUIRegression }}, 'true')
   inputs:
-    testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionTests/bin/Release/netcoreapp3.1/RegressionTests.dll'
+    testAssemblyVer2: '$(Build.Repository.LocalPath)/RegressionTests/bin/Release/net6.0/RegressionTests.dll'
     uiTests: true
     runSettingsFile: '$(Build.Repository.LocalPath)/TestsConfigurator/RunSettings/InstanceSettings.runsettings'
     otherConsoleOptions: '/Logger:trx /Logger:junit'
@@ -109,6 +109,10 @@ steps:
     testRunTitle: 'UI: Regression E2E Tests'
     resultsFolder: '$(Agent.TempDirectory)\TestResults\UI'
   continueOnError: true
+
+- task: CmdLine@2
+  inputs:
+    script: 'dotnet test $(Build.Repository.LocalPath)\RegressionTests\bin\Debug\net6.0\RegressionTests.dll --logger trx --logger junit --results-directory $(Agent.TempDirectory)\TestResults\UI --settings $(Build.Repository.LocalPath)/TestsConfigurator/RunSettings/InstanceSettings.runsettings --filter TestCategory=UI'
 
 # - task: VSTest@2
 #   displayName: 'Tests: Regression API'
