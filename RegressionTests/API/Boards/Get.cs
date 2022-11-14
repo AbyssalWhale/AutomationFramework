@@ -10,7 +10,7 @@ namespace API.Boards
     public class Get : APITestsSuitFixture
     {
         [Test]
-        public void AllBoardsCanBeRetrieved()
+        public void AllBoardsCanBeRetrieved_TES_T2()
         {
             var response = Controllers.Board.Get();
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), ApiAEMessages.NotExepctedResponseCode(response));
