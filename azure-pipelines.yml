@@ -113,7 +113,7 @@ steps:
 - task: CmdLine@2
   displayName: 'Print out results'
   inputs:
-    script: 'dir $(Agent.TempDirectory)\TestResults'
+    script: 'dir $(Agent.TempDirectory)'
 
 - task: PowerShell@2
   condition: eq(${{ parameters.PublishToZephyr }}, 'true')
