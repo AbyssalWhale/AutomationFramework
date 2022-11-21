@@ -80,6 +80,7 @@ steps:
       $xml.SelectSingleNode("//Parameter[@name='ApiToken']").value="$(TrelloApiToken)"
       $xml.Save($filePathToTask)
       ${$filePathToTask}
+  continueOnError: false
     
 - task: VSTest@2
   displayName: 'Tests: Regression API'
