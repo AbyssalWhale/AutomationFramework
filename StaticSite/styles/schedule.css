@@ -1,0 +1,71 @@
+/*Start dropping out*/
+/*Hide checkboxed and rest content*/
+.hide {
+    display: none; 
+}
+.hide + label ~ div{
+    display: none;
+}
+/* label style */
+.hide + label {
+    padding: 0;
+    cursor: pointer;
+    display: inline-block; 
+}
+/* switch label view once active */
+.hide:checked + label {
+    border-bottom: 0;
+}
+/* when check box is active display content  */
+.hide:checked + label + div {
+    display: block; 
+    padding: 10px; 
+}
+/*End dropping out*/
+
+/*Start General*/
+.headContainer{
+    background-image: url(../assets/schedule/jumboTron.jpg);
+}
+.mainJumbotron > img{
+    margin-top: 150px;
+}
+#endMainJumbotrondivider{
+    margin-top: 215px;
+}
+/*End General*/
+
+/*Start Body*/
+.contentRow > div{
+    text-align: center;
+}
+.goupName{
+    font-size: 25px;
+}
+.enrollmentRulesContainer{
+    margin-bottom: 50px;
+}
+.contentRow{
+    margin: 0 170px;
+}
+table.table-hover > thead > tr > th, 
+table.table-hover > tbody > tr > td 
+{
+    border:1px solid black;
+}
+/*End General*/
+
+@media screen and (max-width: 680px){
+    .mainJumbotron > img{
+        margin-top: 0px;
+    }
+    .contentRow{
+        margin: 0;
+        font-size: 13px;
+        
+    }
+    .contentRow > div > div{
+        margin-right: 30px;
+        text-align: left;
+    }
+}

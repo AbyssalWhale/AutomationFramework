@@ -10,6 +10,7 @@ namespace UI
         [Test]
         public void Test2_1_TES_T1()
         {
+            Assert.IsTrue(HomePage.IsLoaded(), "");
             Thread.Sleep(10000);
         }
     }

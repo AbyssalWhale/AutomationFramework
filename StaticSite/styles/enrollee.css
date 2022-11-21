@@ -1,0 +1,125 @@
+/*Header*/
+.pageTitle{
+    display: block;
+    margin: auto;
+    margin-bottom: 70px;
+}
+.enrollmentRulesContainer{
+    margin-bottom: 27px;
+}
+.contentRow{
+    margin-bottom: 30px;
+    margin-left: 170px;
+    margin-right: 170px;
+}
+/*Enrollee Docs Start*/
+
+/*General*/
+.blockColumn{
+    display: block;
+    margin: auto;
+    text-align: left;
+}
+.blockColumn:hover{
+    border: 1px solid #b392f0;
+}
+/*Down docs styles*/
+.downloadEnrollDocs{
+text-align: center;
+}
+.blockColumnHeader{
+    font-size: 25px;
+}
+.enrolleeDocsList{
+    text-align: left;
+    list-style: none;
+}
+.downloadDocLink, .downloadDocLink:hover{
+    color: white;
+}
+.enroleeDownDocsItem:hover{
+    background-color: #CCE5FF;
+}
+/*Enrollee Docs End*/
+
+/*Admission Rules Start*/ 
+.mainStatementsList{
+    color: black;
+}
+.admissionRulesNestedColumn{
+    background-color: #AEABDA;
+    border-radius: 10px;
+    text-align: center;
+}
+.admissionRulesNestedColumnHeader{
+    color: #434356;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+tbody{
+    text-align: left;
+}
+.tableSeparator{
+    color: black;
+    background-color: black;
+}
+/*Profession Requirements Start*/
+.professionRequirements{
+    margin-bottom: 20px;
+    
+}
+/*Profession Requirements End*/
+table.table-hover > thead > tr > th, 
+table.table-hover > tbody > tr > td 
+{
+    border:1px solid black;
+}
+/*Profession Requirements End*/
+
+/*Start Apply button*/
+.openApplication{
+    display: block;
+    margin: auto;
+}
+.openApplication a{
+    text-decoration: none;
+    color: inherit;
+}
+/*End Apply button*/
+
+/*Start dropping out*/
+/*Hide checkboxed and rest content*/
+.hide {
+    display: none; 
+}
+.hide + label ~ div{
+    display: none;
+}
+/* label style */
+.hide + label {
+    padding: 0;
+    cursor: pointer;
+    display: inline-block; 
+}
+/* switch label view once active */
+.hide:checked + label {
+    border-bottom: 0;
+}
+/* when check box is active display content  */
+.hide:checked + label + div {
+    display: block; 
+    padding: 10px; 
+}
+/*End dropping out*/
+@media screen and (max-width: 680px){
+    
+    .contentRow{
+    margin-bottom: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+    }
+    .admissionRulesNestedColumn{
+        display: block;
+        margin: auto;
+    }
+}

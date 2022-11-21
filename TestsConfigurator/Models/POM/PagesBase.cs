@@ -4,11 +4,15 @@ namespace TestsConfigurator.Models.POM
 {
     public abstract class PagesBase
     {
-        protected ManagersContainer ManagersContainer;
+        private ManagersContainer ManagersContainer;
+
+        protected WebDriver webDriver => ManagersContainer.WebDriver;
 
         public PagesBase(ManagersContainer managersContainer)
         {
             ManagersContainer = managersContainer;
         }
+
+        public abstract bool IsLoaded();
     }
 }

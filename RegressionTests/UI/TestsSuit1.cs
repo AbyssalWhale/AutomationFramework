@@ -11,7 +11,7 @@ namespace UI
         public void Test1_TES_T4()
         {
             Logger.LogTestAction($"Loggin Step from test {nameof(Test1_TES_T4)}");
-            Thread.Sleep(1000);
+            Assert.IsTrue(HomePage.IsLoaded(), "");
         }
     }
 }
