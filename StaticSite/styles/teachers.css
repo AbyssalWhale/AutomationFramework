@@ -1,0 +1,53 @@
+/*Start Jumboptron*/
+.headContainer{
+    background-image: url(../assets/teachers/jumboTron.jpg);
+}
+.mainJumbotron > img{
+    margin-top: 150px;
+}
+#endMainJumbotrondivider{
+    margin-top: 215px;
+}
+.historyJumbotron{
+    background-color: none;
+    background: none;
+}
+
+/*start teachers*/
+.teachersContainter{
+    text-align: center;
+    margin-top: 4%;
+    margin-bottom: 6%;
+}
+.teachersContainter, .teachersDetailsContainer{
+    max-width: 1400px;
+}
+.col-lg-12 > .display-3{
+    margin-bottom: 60px;
+}
+.firstTeacherObj{
+    margin-right: 50px;
+}
+.lastTeacherObj{
+    margin-left: 50px;
+}
+.teacherRow div h2{
+    margin-top: 20px;
+    font-size: 30px;
+}
+/*end teachers*/
+
+@media screen and (max-width: 680px){
+    .mainJumbotron > img{
+        margin-top: 30px;
+    }
+    .firstTeacherObj, .lastTeacherObj, .teacherRow div  h2{
+        margin: 0;
+    }
+    .col-lg-12 > .display-3{
+        font-size: 55px;
+    }
+    p.firstTeacherObj, p.lastTeacherObj{
+        margin-bottom: 5%;
+    }
+}

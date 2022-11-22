@@ -1,0 +1,34 @@
+.headContainer{
+    background-image: url(../assets/mainJumboTron.jpg);
+}
+.jumbotronEndElement{
+    margin-top: 50px;
+}
+.historyJumbotron{
+    background-color: none;
+    background: none;
+}
+.signatureJumbotron{
+    text-align: center;
+    font-size: 100%;
+    margin-top: 20px;
+    margin-bottom: -50px;
+}
+.logoJumbotron{
+    display: block;
+    margin: auto;
+    margin-bottom: 50px;
+}
+.googleMap{
+    margin-top: 25px;
+}
+.story{
+    font-style: italic;
+    font-size: 1.1em;
+}
+.storyHeader{
+    text-align: center;
+}
+.logoJumbotron{
+    margin-bottom: 10px;
+}

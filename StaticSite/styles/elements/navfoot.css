@@ -1,0 +1,71 @@
+
+
+/*Temp*/
+#navbar {
+  background-color: #333;
+  position: fixed;
+  top: -50px;
+  width: 100%;
+  display: block;
+  transition: top 0.5s;
+  z-index: 1;    
+}
+#navbar a {
+  float: left;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  margin-right: 40px
+}
+a svg{
+    color: gray;
+}
+a svg:hover{
+    fill: white;
+}
+
+.dropDownMenuNav{
+    background-color: #333;
+}
+.dropDownMenuNav a:hover{
+    background-color: #333;
+    color: white;
+}
+#navbar{
+    text-align: right;
+}
+.dropDownMenuNav a{
+    color: gray;
+}
+.dropDownMenuNav a:hover{
+    color: #f2f2f2;
+}
+.footerButton{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+@media screen and (max-width: 680px){
+    .hidenHomeButton{
+        display: block;
+    }
+    .hidenHomeMobilButton{
+        display: none;
+    }
+    .navigationLink{
+        float: inherit;
+    }
+    #navList a{
+        float: inherit;
+    }
+    .navItemWithDropDown{
+        margin-left: 15px;
+    }
+    .dropDownMenuNav{
+        border: 1px solid white;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-right: 15px;
+        padding-right: 30px;
+    }
+}

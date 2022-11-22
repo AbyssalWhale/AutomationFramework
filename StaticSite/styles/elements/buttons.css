@@ -1,0 +1,16 @@
+.defaultButton{
+    display: block;
+    margin: auto;
+    text-align: center;
+    background: #484E56;
+    color: white;
+    border: none;
+}
+.defaultButton:hover{
+    background: black;
+    color: #b392f0;
+}
+.defaultButton a{
+    text-decoration: none;
+    color: inherit;
+}

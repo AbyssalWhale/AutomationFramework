@@ -1,0 +1,51 @@
+.headContainer{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;    
+}
+.mainJumbotron{
+    text-align: center;
+    font-weight: normal;
+    background: none;
+    background-size: cover;
+    border-radius: 0px;
+    color: white;
+    text-shadow: -1px 2px 9px rgba(0,0,0,0.5);
+    margin-bottom: 80px;
+}
+h1.display-3{
+    margin-top: 30px;
+}
+.jumbotronEndElement{
+    margin-bottom: 280px;
+}
+.mainJumbotron p{
+    font-size: 25px;
+}
+#topHeadContainerDivider, #endMainJumbotrondivider{
+    background-color: white;
+    width: 85%;
+    height: 1px;
+}
+#topHeadContainerDivider{
+    margin: 35px auto 140px auto;
+}
+.author{
+    display: none;
+}
+@media screen and (max-width: 680px){
+    #topHeadContainerDivider{
+        margin-bottom: 150px;
+    }
+    .mainJumbotron > h1{
+        margin: 25px 0 175px 0;
+        font-size: 25px;
+    }
+    .mainJumbotron > .lead{
+        display: none;
+    }
+    #endMainJumbotrondivider{
+        margin-bottom: 45px;
+    }
+}
