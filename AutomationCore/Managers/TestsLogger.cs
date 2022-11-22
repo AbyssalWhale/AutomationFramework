@@ -6,20 +6,20 @@ using Serilog.Formatting.Json;
 
 namespace AutomationCore.Managers
 {
-    /// <summary>Class <c>LogManager</c> allows to log test actions 
+    /// <summary>Class <c>TestsLogger</c> allows to log test actions 
     /// </summary>
-    public class Logger
+    public class TestsLogger
     {
         private const string TestLogFileSuffixAndExtension = "_Log.json";
         private const string TestScreenshootFormat = ".png";
 
-        private Serilog.Core.Logger _logger;
+        private Logger _logger;
 
         private string _screenshootsPath;
         private int _testsCountersForScreshoots;
         private RunSettings _settingsManager;
 
-        public Logger()
+        public TestsLogger()
         {
             _settingsManager = RunSettings.GetRunSettings;
             _screenshootsPath = string.Empty;
@@ -32,14 +32,12 @@ namespace AutomationCore.Managers
         ///<summary>
         ///Create a log file for loggin of steps of a current test execution. Folder where the file is saved can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        private Serilog.Core.Logger CreateTestFolderAndLog()
+        private Logger CreateTestFolderAndLog()
         {
             string localLogFileName = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}";
             _screenshootsPath = $"{_settingsManager.TestsReportDirectory}/{ TestContext.CurrentContext.Test.Name}";
-
             Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}");
-            //todo: Move to WebDriver
-            //Directory.CreateDirectory($"{_settingsManager.TestsAssetDirectory}/{TestContext.CurrentContext.Test.Name}");
+
             var result = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{localLogFileName}").CreateLogger();
             TestContext.AddTestAttachment(localLogFileName);
 

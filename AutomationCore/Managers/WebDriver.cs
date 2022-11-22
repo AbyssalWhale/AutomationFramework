@@ -11,7 +11,7 @@ namespace AutomationCore.Managers
 {
     public class WebDriver
     {
-        private Logger _logger;
+        private TestsLogger _logger;
         private RunSettings _runSettings;
         internal IWebDriver _seleniumDriver;
 
@@ -21,7 +21,7 @@ namespace AutomationCore.Managers
             { Browsers.firefox, new List<string>() { "Firefox", "geckodriver" } }
         };
 
-        public WebDriver(Logger logger)
+        public WebDriver(TestsLogger logger)
         {
             _logger = logger;
             _runSettings = RunSettings.GetRunSettings;

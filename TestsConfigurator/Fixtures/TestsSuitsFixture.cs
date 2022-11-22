@@ -20,7 +20,7 @@ namespace TestsConfigurator
 
         public RunSettings RunSettings => RunSettings.GetRunSettings;
 
-        public Logger Logger => TestsManagers[TestContext.CurrentContext.Test.Name].LogManager;
+        public TestsLogger Logger => TestsManagers[TestContext.CurrentContext.Test.Name].LogManager;
 
         public ControllersContainer Controllers => TestsControllers[TestContext.CurrentContext.Test.Name];
 
@@ -45,7 +45,7 @@ namespace TestsConfigurator
             {
                 if (!File.Exists(agentConfigPath))
                 {
-                    var api = new ApiM(new Logger());
+                    var api = new ApiM(new TestsLogger());
                     var zephyrTestCycles = api.GetZephyrFolders<TestCyclesResponse>();
                     var runTestCycle = zephyrTestCycles.Values.FirstOrDefault(c => c.Name.ToLower().Equals(RunSettings.GetRunSettings.Branch));
 
