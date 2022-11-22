@@ -11,7 +11,7 @@ namespace AutomationCore.Managers
     public class Logger
     {
         private const string TestLogFileSuffixAndExtension = "_Log.json";
-        private const string TestScreenshootFormat = ".jpg";
+        private const string TestScreenshootFormat = ".png";
 
         private Serilog.Core.Logger _logger;
 
