@@ -89,7 +89,7 @@ namespace AutomationCore.Managers
             var path = $"{_screenshootsPath}/{_testsCountersForScreshoots}{TestScreenshootFormat}";
             var screenShoot = ((ITakesScreenshot)driver).GetScreenshot();
             screenShoot.SaveAsFile(path);
-            TestContext.AddTestAttachment(path, $"Screenshoot {_testsCountersForScreshoots}{TestScreenshootFormat}");
+            TestContext.AddTestAttachment(path);
             _testsCountersForScreshoots++;
         }
 
