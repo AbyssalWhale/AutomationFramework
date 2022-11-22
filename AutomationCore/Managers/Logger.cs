@@ -11,15 +11,18 @@ namespace AutomationCore.Managers
     public class Logger
     {
         private const string TestLogFileSuffixAndExtension = "_Log.json";
+        private const string TestScreenshootFormat = ".jpg";
 
         private Serilog.Core.Logger _logger;
 
+        private string _screenshootsPath;
         private int _testsCountersForScreshoots;
         private RunSettings _settingsManager;
 
         public Logger()
         {
             _settingsManager = RunSettings.GetRunSettings;
+            _screenshootsPath = string.Empty;
             _testsCountersForScreshoots = 0;
             _logger = CreateTestFolderAndLog();
 
@@ -32,6 +35,7 @@ namespace AutomationCore.Managers
         private Serilog.Core.Logger CreateTestFolderAndLog()
         {
             string localLogFileName = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}";
+            _screenshootsPath = $"{_settingsManager.TestsReportDirectory}/{ TestContext.CurrentContext.Test.Name}";
 
             Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}");
             //todo: Move to WebDriver
@@ -45,7 +49,7 @@ namespace AutomationCore.Managers
         ///<summary>
         ///Allows to log action and write it into test local log file. Test log files can be found in path: .runSettings.TestReportDirectory
         ///</summary>
-        public void LogTestAction(string message, bool makeScreenshoot = false, IWebElement? element = null)
+        public void LogTestAction(string message,bool makeScreenshoot = false, WebDriver? driver = null, IWebElement? element = null)
         {
             Assert.IsNotNull(message, $"Empty message can not be written into the log");
 
@@ -53,7 +57,12 @@ namespace AutomationCore.Managers
 
             if (makeScreenshoot)
             {
-                //if (element == null) MakeLogScreenshoot(); else MakeLogScreenshoot(element);
+                if (driver is null)
+                {
+                    throw new Exception("Screenshoot can not be made with null WebDriver");
+                }
+
+                if (element == null) MakeLogScreenshoot(driver._seleniumDriver); else MakeLogScreenshoot(driver._seleniumDriver, element);
             }
         }
 
@@ -72,29 +81,27 @@ namespace AutomationCore.Managers
             }
         }
 
-        /////<summary>
-        /////Allows to make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
-        /////</summary>
-        //public void MakeLogScreenshoot()
-        //{
-        //    var path = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{_testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]}.jpg";
-        //    var screenShoot = ((ITakesScreenshot)_driver).GetScreenshot();
-        //    screenShoot.SaveAsFile(path);
-        //    TestContext.AddTestAttachment(path, $"Screenshoot {_testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]}");
-
-        //    _testsCountersForScreshoots[TestContext.CurrentContext.Test.Name]++;
-        //}
+        ///<summary>
+        ///Allows to make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
+        ///</summary>
+        public void MakeLogScreenshoot(IWebDriver driver)
+        {
+            var path = $"{_screenshootsPath}/{_testsCountersForScreshoots}{TestScreenshootFormat}";
+            var screenShoot = ((ITakesScreenshot)driver).GetScreenshot();
+            screenShoot.SaveAsFile(path);
+            TestContext.AddTestAttachment(path, $"Screenshoot {_testsCountersForScreshoots}{TestScreenshootFormat}");
+            _testsCountersForScreshoots++;
+        }
 
         /////<summary>
         /////Allows to highlight WebElement, make and save screenshoot in a test report directory. Pass IWebElement to make screenshoot with highlighted element. 
         /////</summary>
-        //public void MakeLogScreenshoot(IWebElement element)
-        //{
-        //    IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
-        //    WebDriverManager.GetWebDriverManager(_settingsManager).MoveToElement(element);
-        //    js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");            
-        //    MakeLogScreenshoot();
-        //    js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
-        //}
+        public void MakeLogScreenshoot(IWebDriver driver, IWebElement element)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");
+            MakeLogScreenshoot(driver);
+            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
+        }
     }
 }

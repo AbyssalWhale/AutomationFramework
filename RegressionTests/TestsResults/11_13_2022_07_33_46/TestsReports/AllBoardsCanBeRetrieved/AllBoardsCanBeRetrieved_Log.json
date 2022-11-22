@@ -1,3 +1,0 @@
-{"Timestamp":"2022-11-13T20:33:46.3141146+01:00","Level":"Information","MessageTemplate":"Folder and Log for the 'AllBoardsCanBeRetrieved' test were created;"}
-{"Timestamp":"2022-11-13T20:33:46.3989684+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.ApiM+<ExecuteAsync>d__4`1 is executing method 'ExecuteAsync' End point: members/me/boards Method: Get"}
-{"Timestamp":"2022-11-13T20:33:46.7295827+01:00","Level":"Information","MessageTemplate":"AutomationCore.Managers.ApiM+<ExecuteAsync>d__4`1 is executing method 'ExecuteAsync' End point: members/me/boards Method: Get Response code: Unauthorized"}
