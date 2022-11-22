@@ -198,7 +198,7 @@ namespace AutomationCore.Managers
         public IWebElement FindElement(By elementLocator, IWebElement parent = null, int mSecondsToWait = 10000)
         {
             var message = string.Empty;
-            _logger.LogTestAction(LogMessages.MethodExecution($"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -241,7 +241,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void SendKeys(By elementLocator, string textToSend, IWebElement parent = null, int secondsToWait = 60)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"Locator: {elementLocator.Criteria}"));
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
             var element = FindElement(elementLocator, parent, secondsToWait);
             element.Clear();
             element.SendKeys(textToSend);
@@ -252,7 +252,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void ClickOnElement(By elementLocator, IWebElement parent = null, int mSecondsToWait = 10000)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
             IWebElement element = FindElement(elementLocator, parent, mSecondsToWait);
             var message = string.Empty;
 
@@ -293,7 +293,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public bool IsElementExistInDOM(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"Locator: {elementLocator.Criteria}"));
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
             var result = false;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -334,9 +334,9 @@ namespace AutomationCore.Managers
         ///<summary>
         ///Scrool the browser until element is visible
         ///</summary>
-        public void MoveToElement(By locator)
+        public void ScrollToElement(By locator)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"Locator: {locator.Criteria}"));
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {locator.Criteria}"));
             if (IsElementExistInDOM(locator))
             {
                 IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
@@ -345,7 +345,7 @@ namespace AutomationCore.Managers
             else
             {
                 var msg = $"Element doesn't exist in DOM. Locator: {locator}";
-                _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
+                _logger.LogError(LogMessages.MethodExecution(additionalData: $"Method throws exception: {msg}"));
                 throw new Exception(msg);
             }
         }
@@ -355,7 +355,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void HoverElement(By locator)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"Locator: {locator.Criteria}"));
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {locator.Criteria}"));
             if (IsElementExistInDOM(locator))
             {
                 var actions = new Actions(_driver);
@@ -364,7 +364,7 @@ namespace AutomationCore.Managers
             else
             {
                 var msg = $"Element doesn't exist in DOM. Locator: {locator}";
-                _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
+                _logger.LogError(LogMessages.MethodExecution(additionalData: $"Method throws exception: {msg}"));
                 throw new Exception(msg);
             }
 
@@ -375,7 +375,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public bool SwitchToIFrame(By frameLocator)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"Locator: {frameLocator.Criteria}"));
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {frameLocator.Criteria}"));
             var result = false;
 
             if (IsElementExistInDOM(frameLocator))

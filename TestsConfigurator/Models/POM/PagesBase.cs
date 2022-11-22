@@ -4,7 +4,9 @@ namespace TestsConfigurator.Models.POM
 {
     public abstract class PagesBase
     {
-        private ManagersContainer ManagersContainer;
+        public string Title => webDriver.GetPageTitle();
+
+        protected ManagersContainer ManagersContainer;
 
         protected WebDriver webDriver => ManagersContainer.WebDriver;
 
