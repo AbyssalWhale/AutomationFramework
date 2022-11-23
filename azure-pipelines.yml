@@ -93,6 +93,23 @@ steps:
   displayName: 'Print out after publish artifacts'
   inputs:
     script: 'dir $(System.ArtifactsDirectory)'
+- task: CmdLine@2
+  displayName: 'Print out after publish artifacts folder A'
+  inputs:
+    script: 'dir $(System.ArtifactsDirectory)\a'
+- task: CmdLine@2
+  displayName: 'Print out after publish artifacts folder B'
+  inputs:
+    script: 'dir $(System.ArtifactsDirectory)\b'
+
+- task: CmdLine@2
+  displayName: 'Print out after publish artifacts folder s'
+  inputs:
+    script: 'dir $(System.ArtifactsDirectory)\s'
+- task: CmdLine@2
+  displayName: 'Print out after publish artifacts folder Nuget'
+  inputs:
+    script: 'dir $(System.ArtifactsDirectory)\Nuget'
 #end
 
 # - task: VSTest@2
