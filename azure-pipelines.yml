@@ -93,23 +93,27 @@ steps:
   displayName: 'Print out after publish artifacts'
   inputs:
     script: 'dir $(System.ArtifactsDirectory)'
+  continueOnError: true
 - task: CmdLine@2
   displayName: 'Print out after publish artifacts folder A'
   inputs:
     script: 'dir $(System.ArtifactsDirectory)\a'
+  continueOnError: true
 - task: CmdLine@2
   displayName: 'Print out after publish artifacts folder B'
   inputs:
     script: 'dir $(System.ArtifactsDirectory)\b'
-
+  continueOnError: true
 - task: CmdLine@2
   displayName: 'Print out after publish artifacts folder s'
   inputs:
     script: 'dir $(System.ArtifactsDirectory)\s'
+  continueOnError: true
 - task: CmdLine@2
   displayName: 'Print out after publish artifacts folder Nuget'
   inputs:
     script: 'dir $(System.ArtifactsDirectory)\Nuget'
+  continueOnError: true
 #end
 
 # - task: VSTest@2
