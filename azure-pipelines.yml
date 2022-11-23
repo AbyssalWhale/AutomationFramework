@@ -83,23 +83,16 @@ steps:
 #   continueOnError: false
 
 #New
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Pipeline.Workspace)'
+    artifact: 'qa-automation'
+    publishLocation: 'pipeline'
+
 - task: CmdLine@2
-  displayName: 'Print out before publish artifacts'
+  displayName: 'Print out after publish artifacts'
   inputs:
     script: 'dir $(Pipeline.Workspace)'
-# - task: PublishPipelineArtifact@1
-#   inputs:
-#     targetPath: '$(Pipeline.Workspace)'
-#     artifact: 'qa-automation'
-#     publishLocation: 'pipeline'
-- task: UniversalPackages@0
-  displayName: Universal Publish
-  inputs:
-    command: publish
-    publishDirectory: '$(Build.ArtifactStagingDirectory)'
-    vstsFeedPublish: 'TestPipelinesProject/qa-automation'
-    vstsFeedPackagePublish: 'automationTestsArtifact'
-    packagePublishDescription: 'Some Description'
 #end
 
 # - task: VSTest@2
