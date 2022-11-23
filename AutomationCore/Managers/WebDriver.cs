@@ -3,9 +3,10 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium;
 using AutomationCore.Enums;
 using System.Diagnostics;
-using NUnit.Framework;
 using OpenQA.Selenium.Interactions;
 using AutomationCore.Utils;
+using AutomationCore.AssertAndErrorMsgs.UI;
+using System.Collections.ObjectModel;
 
 namespace AutomationCore.Managers
 {
@@ -26,6 +27,7 @@ namespace AutomationCore.Managers
             _logger = logger;
             _runSettings = RunSettings.GetRunSettings;
             _seleniumDriver = InitNewCopyOfWebDriver();
+            _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
         }
 
         private IWebDriver InitNewCopyOfWebDriver()
@@ -42,7 +44,9 @@ namespace AutomationCore.Managers
             }
             else
             {
-                throw new Exception($"Unknown browser is tried to be initialized: {browser}");
+                var msg = $"Unknown browser is tried to be initialized: {browser}";
+                _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
+                throw UIAMessages.GetException(msg);
             }
         }
 
@@ -82,7 +86,7 @@ namespace AutomationCore.Managers
         }
 
         ///<summary>
-        ///Allows to previous page from current page
+        ///Navigates back to a previous page and wait until page is fully loaded
         ///</summary>
         public void NavigateBack()
         {
@@ -110,7 +114,7 @@ namespace AutomationCore.Managers
                 {
                     var msg = $"Unable to load page in {millisecondsToWait} MSeconds";
                     _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
-                    throw new Exception(msg);
+                    throw UIAMessages.GetException(msg);
                 }
 
                 pageState = (string)ExecuteJSScript(JSCommands.PageState);
@@ -132,14 +136,14 @@ namespace AutomationCore.Managers
         ///<summary>
         ///Allows to execute JS for elements
         ///</summary>
-        public object ExecuteJSScript(string script, IWebElement[] elements)
+        public object ExecuteJSScript(string script, List<IWebElement> elements)
         {
             _logger.LogTestAction(LogMessages.MethodExecution($"for element script: {script}"));
             return ((IJavaScriptExecutor)_seleniumDriver).ExecuteScript(script, elements);
         }
 
         ///<summary>
-        ///Allows to quit browser and kill all processors
+        ///Allows to quit browser
         ///</summary>
         public void Quit()
         {
@@ -195,11 +199,12 @@ namespace AutomationCore.Managers
         ///<summary>
         ///Wait and search element for set time. Default is 60 seconds
         ///</summary>
-        public IWebElement FindElement(By elementLocator, IWebElement parent = null, int mSecondsToWait = 10000)
+        public IWebElement FindElement(By elementLocator, int mSecondsToWait = 5000, int newImplicitWait = 2)
         {
             var message = string.Empty;
             _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
 
+            _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(newImplicitWait);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -209,26 +214,15 @@ namespace AutomationCore.Managers
                 {
                     var msg = $"It is impossible to find element by locator [{elementLocator}]. Latest exception message: {message}";
                     _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
-                    throw new Exception(msg);
+                    throw UIAMessages.GetException(msg);
                 }
                     
                 try
                 {
-                    var element = parent == null ? _seleniumDriver.FindElement(elementLocator) : parent.FindElement(elementLocator);
+                    var element = _seleniumDriver.FindElement(elementLocator);
                     _logger.MakeLogScreenshoot(_seleniumDriver, element);
+                    _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
                     return element;
-                }
-                catch (NoSuchElementException e)
-                {
-                    message = e.Message;
-                }
-                catch (StaleElementReferenceException e)
-                {
-                    message = e.Message;
-                }
-                catch (AssertionException e)
-                {
-                    message = e.Message;
                 }
                 catch (Exception e)
                 {
@@ -238,23 +232,58 @@ namespace AutomationCore.Managers
         }
 
         ///<summary>
-        ///Send text into elements
+        ///Wait and search for element. Default is 60 seconds
         ///</summary>
-        public void SendKeys(By elementLocator, string textToSend, IWebElement parent = null, int secondsToWait = 60)
+        public ReadOnlyCollection<IWebElement> FindElements(By elementLocator, int mSecondsToWait = 5000, int newImplicitWait = 2)
+        {
+            var message = string.Empty;
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
+
+            _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(newImplicitWait);
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            while (true)
+            {
+                if (stopwatch.ElapsedMilliseconds > mSecondsToWait)
+                {
+                    var msg = $"It is impossible to find element by locator [{elementLocator}]. Latest exception message: {message}";
+                    _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
+                    throw UIAMessages.GetException(msg);
+                }
+
+                try
+                {
+                    var element = _seleniumDriver.FindElements(elementLocator);
+                    _logger.MakeLogScreenshoot(_seleniumDriver);
+                    _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
+                    return element;
+                }
+                catch (Exception e)
+                {
+                    message = e.Message;
+                }
+            }
+        }
+
+        ///<summary>
+        ///Search and send text into element
+        ///</summary>
+        public void SendKeys(By elementLocator, string textToSend, int mSecondsToWait = 5000)
         {
             _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
-            var element = FindElement(elementLocator, parent, secondsToWait);
+            var element = FindElement(elementLocator, mSecondsToWait);
             element.Clear();
             element.SendKeys(textToSend);
         }
 
         ///<summary>
-        ///Click on element
+        ///Search and click on element
         ///</summary>
-        public void ClickOnElement(By elementLocator, IWebElement parent = null, int mSecondsToWait = 10000)
+        public void ClickOnElement(By elementLocator, int mSecondsToWait = 5000)
         {
             _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
-            IWebElement element = FindElement(elementLocator, parent, mSecondsToWait);
+            IWebElement element = FindElement(elementLocator, mSecondsToWait);
             var message = string.Empty;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -266,7 +295,7 @@ namespace AutomationCore.Managers
                 {
                     var msg = $"It is impossible to click element by locator [{elementLocator}]. Message: {message}";
                     _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
-                    throw new Exception(msg);
+                    throw UIAMessages.GetException(msg);
                 }
 
                 try
@@ -284,7 +313,7 @@ namespace AutomationCore.Managers
                 }
                 catch (StaleElementReferenceException)
                 {
-                    element = FindElement(elementLocator, parent, mSecondsToWait);
+                    element = FindElement(elementLocator, mSecondsToWait);
                 }
             }
         }
@@ -292,7 +321,7 @@ namespace AutomationCore.Managers
         ///<summary>
         ///Returns TRUE if element exists in DOM otherwise FALSE.
         ///</summary>
-        public bool IsElementExistInDOM(By elementLocator, IWebElement parent = null, int secondsToWait = 60)
+        public bool IsElementExistInDOM(By elementLocator, int mSecondsToWait = 5000)
         {
             _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
             var result = false;
@@ -302,38 +331,26 @@ namespace AutomationCore.Managers
 
             while (true)
             {
-                if (stopwatch.ElapsedMilliseconds > secondsToWait * 1000)
+                if (stopwatch.ElapsedMilliseconds > mSecondsToWait)
                 {
                     return result;
                 }
 
                 try
                 {
-                    var element = parent == null ? _seleniumDriver.FindElement(elementLocator) : parent.FindElement(elementLocator);
+                    var element = _seleniumDriver.FindElement(elementLocator);
                     result = true;
                     return result;
                 }
-                catch (NoSuchElementException)
-                {
-                    continue;
-                }
-                catch (StaleElementReferenceException)
-                {
-
-                }
-                catch (AssertionException)
-                {
-
-                }
                 catch (Exception)
                 {
-
+                    continue;
                 }
             }
         }
 
         ///<summary>
-        ///Scrool the browser until element is visible
+        ///Scrool the browser to elements coordinats
         ///</summary>
         public IWebElement ScrollToElement(By locator)
         {
@@ -348,9 +365,9 @@ namespace AutomationCore.Managers
             }
             else
             {
-                var msg = $"Element doesn't exist in DOM. Locator: {locator}";
+                var msg = $"Can not scroll to element. It doesn't exist in DOM. Locator: {locator}";
                 _logger.LogError(LogMessages.MethodExecution(additionalData: $"Method throws exception: {msg}"));
-                throw new Exception(msg);
+                throw UIAMessages.GetException(msg);
             }
         }
 
@@ -381,7 +398,7 @@ namespace AutomationCore.Managers
             {
                 var msg = $"Element doesn't exist in DOM. Locator: {locator}";
                 _logger.LogError(LogMessages.MethodExecution(additionalData: $"Method throws exception: {msg}"));
-                throw new Exception(msg);
+                throw UIAMessages.GetException(msg);
             }
 
         }

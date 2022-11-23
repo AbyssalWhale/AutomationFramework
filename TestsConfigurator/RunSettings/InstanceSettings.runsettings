@@ -6,7 +6,7 @@
     <!--Browser should be: chrome, firefox-->
     <Parameter name="Browser" value="chrome" />
     <Parameter name="Headless" value="false" />
-    <Parameter name="StepRecordingEnabled" value="true" />
+    <Parameter name="ImplicitWait" value="2" />
     <Parameter name="Username" value="User" />
     <Parameter name="Password" value="7zCMUuK8trCSLQf" />
     <Parameter name="Email" value="ogtestacc@gmail.com" />

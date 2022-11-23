@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using System;
+﻿using AutomationCore.AssertAndErrorMsgs.UI;
+using NUnit.Framework;
 using System.Collections.Concurrent;
 using System.Configuration;
 
@@ -20,7 +20,7 @@ namespace AutomationCore.Managers
         public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
         public bool Headless { get; set; }
-        public string StepRecordingEnabled { get; set; }
+        public int ImplicitWait { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
@@ -60,7 +60,8 @@ namespace AutomationCore.Managers
             Browser = TryToParseTestContext(nameof(Browser));
             bool.TryParse(TryToParseTestContext(nameof(Headless)), out bool headless);
             Headless = headless;
-            StepRecordingEnabled = TryToParseTestContext(nameof(StepRecordingEnabled));
+            int.TryParse(TryToParseTestContext(nameof(ImplicitWait)), out int implicitWait);
+            ImplicitWait = implicitWait;
             Username = TryToParseTestContext(nameof(Username));
             Password = TryToParseTestContext(nameof(Password));
             Email = TryToParseTestContext(nameof(Email));
@@ -82,7 +83,7 @@ namespace AutomationCore.Managers
             var value = TestContext.Parameters[settingName];
 
             if (value is null) value = ConfigurationManager.AppSettings[settingName];
-            if (value is null) Assert.Warn($"'{settingName}' setting is not found"); 
+            if (value is null) throw UIAMessages.GetException($"'{settingName}' setting is not found"); 
 
             return value;
         }
