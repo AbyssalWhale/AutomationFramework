@@ -27,12 +27,7 @@ namespace TestsConfigurator.Models.POM
 
         public void Open()
         {
-            var path = OSHelper.TryGetSolutionDirectoryInfo().FullName + "/StaticSite/index.html";
-            if (!File.Exists(path))
-            {
-                throw new Exception("\nUnable to find static web site for UI tests");
-            }
-            webDriver.GoToUrl(path);
+            webDriver.GoToUrl(ManagersContainer.RunSettings.InstanceUrl);
         }
 
         public override bool IsLoaded()

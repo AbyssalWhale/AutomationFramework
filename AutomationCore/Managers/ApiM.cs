@@ -9,10 +9,10 @@ namespace AutomationCore.Managers
     public class ApiM
     {
         private RestClient _client;
-        private Logger _logger;
+        private TestsLogger _logger;
         private RunSettings _runSettings;
 
-        public ApiM(Logger logger)
+        public ApiM(TestsLogger logger)
         {
             _logger = logger;
             _runSettings = RunSettings.GetRunSettings;
