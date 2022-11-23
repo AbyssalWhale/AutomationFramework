@@ -8,7 +8,7 @@ namespace AutomationCore.Managers
 
         public TestsLogger LogManager { get; }
 
-        public WebDriver WebDriver { get; }
+        public WebDriver? WebDriver { get; }
 
         public ApiM API { get; }
 
