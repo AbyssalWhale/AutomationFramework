@@ -85,14 +85,14 @@ steps:
 #New
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Pipeline.Workspace)'
+    targetPath: '$(System.ArtifactsDirectory)'
     artifact: 'qa-automation'
     publishLocation: 'pipeline'
 
 - task: CmdLine@2
   displayName: 'Print out after publish artifacts'
   inputs:
-    script: 'dir $(Pipeline.Workspace)'
+    script: 'dir $(System.ArtifactsDirectory)'
 #end
 
 # - task: VSTest@2
