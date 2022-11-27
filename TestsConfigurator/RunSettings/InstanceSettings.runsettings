@@ -22,6 +22,6 @@
 	<Parameter name="PublishToZephyr" value="true" />
 	<Parameter name="ZephyrToken" value="default" />
 	<Parameter name="BuildId" value="0" />
-	<Parameter name="Branch" value="develop" />  
+	<Parameter name="Branch" value="develop  " />  
   </TestRunParameters>
 </RunSettings>
