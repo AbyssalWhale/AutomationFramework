@@ -10,7 +10,7 @@ parameters:
   - name: 'NuKeeper'
     displayName: '-Run NuKeeper-'
     type: boolean
-    default: true
+    default: false
     values:
       - true
       - false
