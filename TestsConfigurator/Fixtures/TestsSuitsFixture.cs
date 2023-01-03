@@ -38,8 +38,8 @@ namespace TestsConfigurator
 
         private void PrepareZephyrTestCycle()
         {
-            var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
-            var agentConfigPath = $"{agentTempFolder}jiraTestCycle.json";
+            //var agentTempFolder = @"D:\\a\\_temp\\TestResults\\";
+            var agentConfigPath = $"{RunSettings.AgentTestsResultsFolder}jiraTestCycle.json";
 
             try
             {
@@ -57,7 +57,7 @@ namespace TestsConfigurator
                         folderId = runTestCycle.Id
                     };
 
-                    Directory.CreateDirectory(agentTempFolder);
+                    Directory.CreateDirectory(RunSettings.AgentTestsResultsFolder);
 
                     using (StreamWriter writer = new StreamWriter(agentConfigPath))
                     {
