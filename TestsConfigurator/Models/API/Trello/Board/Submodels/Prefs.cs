@@ -6,19 +6,19 @@ namespace TestsConfigurator.Models.API.Trello.Board.Submodels
     public class Prefs
     {
         [JsonProperty("permissionLevel")]
-        public string PermissionLevel { get; set; }
+        public string? PermissionLevel { get; set; }
 
         [JsonProperty("hideVotes")]
         public bool HideVotes { get; set; }
 
         [JsonProperty("voting")]
-        public string Voting { get; set; }
+        public string? Voting { get; set; }
 
         [JsonProperty("comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         [JsonProperty("invitations")]
-        public string Invitations { get; set; }
+        public string? Invitations { get; set; }
 
         [JsonProperty("selfJoin")]
         public bool SelfJoin { get; set; }
@@ -36,16 +36,16 @@ namespace TestsConfigurator.Models.API.Trello.Board.Submodels
         public bool CalendarFeedEnabled { get; set; }
 
         [JsonProperty("hiddenPluginBoardButtons")]
-        public List<object> HiddenPluginBoardButtons { get; set; }
+        public List<object>? HiddenPluginBoardButtons { get; set; }
 
         [JsonProperty("switcherViews")]
-        public List<SwitcherView> SwitcherViews { get; set; }
+        public List<SwitcherView>? SwitcherViews { get; set; }
 
         [JsonProperty("background")]
-        public string Background { get; set; }
+        public string? Background { get; set; }
 
         [JsonProperty("backgroundColor")]
-        public string BackgroundColor { get; set; }
+        public string? BackgroundColor { get; set; }
 
         [JsonProperty("backgroundImage")]
         public object BackgroundImage { get; set; }

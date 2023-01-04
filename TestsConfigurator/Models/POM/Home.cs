@@ -16,9 +16,9 @@ namespace TestsConfigurator.Models.POM
         private By ContainerSection_Seamtress => By.XPath(Container_Professions.Criteria + "//h5[text()='Швачка, Кравець']/ancestor::div[contains(@class, 'col')]");
         private By ContainerSection_Seller => By.XPath(Container_Professions.Criteria + "//h5[text()='Продавець']/ancestor::div[contains(@class, 'col')]");
 
-        public bool Is_Cook_ContainerSection_Displayed => webDriver.FindElement(ContainerSection_Cook).Displayed;
-        public bool Is_Seamtress_ContainerSection_Displayed => webDriver.FindElement(ContainerSection_Seamtress).Displayed;
-        public bool Is_Seller_ContainerSection_Displayed => webDriver.FindElement(ContainerSection_Seller).Displayed;
+        public bool Is_Cook_ContainerSection_Displayed => WebDriver.FindElement(ContainerSection_Cook).Displayed;
+        public bool Is_Seamtress_ContainerSection_Displayed => WebDriver.FindElement(ContainerSection_Seamtress).Displayed;
+        public bool Is_Seller_ContainerSection_Displayed => WebDriver.FindElement(ContainerSection_Seller).Displayed;
 
         public Home(ManagersContainer managersContainer) : base(managersContainer)
         {
@@ -27,25 +27,25 @@ namespace TestsConfigurator.Models.POM
 
         public void Open()
         {
-            webDriver.GoToUrl(ManagersContainer.RunSettings.InstanceUrl);
+            WebDriver.GoToUrl(ManagersContainer.RunSettings.InstanceUrl);
         }
 
         public override bool IsLoaded()
         {
-            return webDriver.FindElement(Header_Logo).Displayed &
-                webDriver.FindElement(Header_Title).Displayed &
-                webDriver.FindElement(Header_Signature).Displayed;
+            return WebDriver.FindElement(Header_Logo).Displayed &
+                WebDriver.FindElement(Header_Title).Displayed &
+                WebDriver.FindElement(Header_Signature).Displayed;
         }
 
         public Home ScrollTo_Professions_Container()
         {
-            webDriver.ScrollToElement(Button_AllProfessions);
+            WebDriver.ScrollToElement(Button_AllProfessions);
             return this;
         }
 
         public ProfessionsPage Click_AllProfessions_Button()
         {
-            webDriver.ClickOnElement(Button_AllProfessions);
+            WebDriver.ClickOnElement(Button_AllProfessions);
             return new ProfessionsPage(ManagersContainer);
         }
     }

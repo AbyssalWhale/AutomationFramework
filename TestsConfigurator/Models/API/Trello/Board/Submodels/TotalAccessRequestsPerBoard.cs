@@ -5,7 +5,7 @@ namespace TestsConfigurator.Models.API.Trello.Board.Submodels
     public class TotalAccessRequestsPerBoard
     {
         [JsonProperty("status")]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         [JsonProperty("disableAt")]
         public int DisableAt { get; set; }

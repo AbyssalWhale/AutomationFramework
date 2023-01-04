@@ -13,7 +13,7 @@ namespace TestsConfigurator.Models.POM
 
         public override bool IsLoaded()
         {
-            return webDriver.IsPageLoaded() && webDriver.FindElement(Header_Title).Displayed;
+            return WebDriver.IsPageLoaded() && WebDriver.FindElement(Header_Title).Displayed;
         }
     }
 }

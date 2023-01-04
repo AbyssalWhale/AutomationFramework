@@ -10,8 +10,6 @@ namespace TestsConfigurator
     {
         protected Home HomePage => HomePages[TestContext.CurrentContext.Test.Name];
 
-        protected WebDriver Driver => TestsManagers[TestContext.CurrentContext.Test.Name].WebDriver;
-
         [SetUp]
         public void SetUp()
         {
@@ -24,7 +22,7 @@ namespace TestsConfigurator
         [TearDown]
         public void TearDown()
         {
-            Driver.Quit();
+            HomePage.WebDriver.Quit();
         }
     }
 }
