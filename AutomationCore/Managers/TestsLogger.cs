@@ -87,12 +87,18 @@ namespace AutomationCore.Managers
     
         private void LogScreenShoot(WebDriver? driver = null, IWebElement? element = null)
         {
+            if (driver is null)
+            {
+                throw UIAMessages.GetException($"WebDriver can not be null for invoking the 'LogScreenShoot' method. \n Test name: {TestContext.CurrentContext.Test.Name}");
+            }
+
             if (element == null)
             {
                 MakeLogScreenshoot(driver._seleniumDriver);
+            } else
+            {
+                MakeLogScreenshoot(driver._seleniumDriver, element);
             }
-
-            MakeLogScreenshoot(driver._seleniumDriver, element);
         }
     }
 }

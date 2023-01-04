@@ -6,7 +6,7 @@ namespace AutomationCore.Utils
 {
     public static class UString
     {
-        public static string GetClassNameAndCurrentLine(string message = null, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string filePath = "")
+        public static string GetClassNameAndCurrentLine(string? message = null, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string filePath = "")
         {
             string className = filePath.Remove(0, filePath.LastIndexOf(@"\") + 1);
 
@@ -26,7 +26,9 @@ namespace AutomationCore.Utils
             Parallel.ForEach(allProperties, property => {
                 if (property.GetValue(objectForApiCall, null) != null | returnProperties)
                 {
-                    result.TryAdd(property.Name, property.GetValue(objectForApiCall, null).ToString().ToLower());
+                    var value = property.GetValue(objectForApiCall, null) as string;
+                    value = value is null ? string.Empty : value.ToString().ToLower();
+                    result.TryAdd(property.Name, value);
                 }
             });
 

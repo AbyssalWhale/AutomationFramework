@@ -84,6 +84,7 @@ namespace AutomationCore.Managers
 
             _logger.LogTestAction(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {zephyrUrl}{requestUrl} Method: {Method.Get} Response Code: {response.StatusCode}"));
 
+
             return response.Data;
         }
     }
