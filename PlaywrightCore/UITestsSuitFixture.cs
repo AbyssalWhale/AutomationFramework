@@ -1,5 +1,6 @@
 using Microsoft.Playwright;
 using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 
 namespace PlaywrightCore
 {
@@ -34,6 +35,9 @@ namespace PlaywrightCore
             {
                 testsPages.TryAdd(TestContext.CurrentContext.Test.Name, page);
             }
+
+            await Page.GotoAsync("https://playwright.dev/dotnet");
+            await Assertions.Expect(Page).ToHaveTitleAsync(new Regex("Playwright"));
         }
     }
 }
