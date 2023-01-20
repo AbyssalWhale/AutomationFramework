@@ -3,6 +3,7 @@ Solution consists of 3 projects. All of them use .NET 6.0 framework.
 - AutomationCore - main project with managers, utils etc that are required by objects from the 'TestsConfigurator' project;
 - TestsConfigurator - project with models (POMs, APIs etc), fixtures, and reusettings. It has reference to the 'AutomationCore' project only;
 - RegressionTests - project with UI and API regression tests. It has reference to the 'TestsConfigurator' project only;
+- Playwright things are coming in...;
 
 Tools under the hood:
 - .net;
@@ -13,6 +14,7 @@ Tools under the hood:
 - Serilog;
 - RestSharp;
 - JUnitTestLogger;
+- playwright.
 
 # Solution' projects overview:
 - AutomationCore:
