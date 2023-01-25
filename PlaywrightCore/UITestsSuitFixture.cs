@@ -1,10 +1,7 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using AutomationCore.Enums;
 using AutomationCore.Managers;
-using AutomationCore.Utils;
 using Microsoft.Playwright;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
@@ -45,7 +42,6 @@ namespace PlaywrightCore
 
         private async Task<IBrowser> InitBrowser()
         {
-            IBrowser browserResult;
             var browser = RunSettings.Browser.ToLower();
 
             if (browser.Equals(Browsers.chrome.ToString()))
