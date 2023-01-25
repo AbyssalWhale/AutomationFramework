@@ -1,4 +1,4 @@
-using AutomationCore.AssertAndErrorMsgs.UI;
+﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using AutomationCore.Enums;
 using AutomationCore.Managers;
 using AutomationCore.Utils;
@@ -40,7 +40,7 @@ namespace PlaywrightCore
             }
 
             await Page.GotoAsync(RunSettings.InstanceUrl);
-            await Assertions.Expect(Page).ToHaveTitleAsync(new Regex("?????? ????????"));
+            await Assertions.Expect(Page).ToHaveTitleAsync(new Regex("Головна сторінка"));
         }
 
         private async Task<IBrowser> InitBrowser()

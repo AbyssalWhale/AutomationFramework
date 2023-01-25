@@ -1,4 +1,4 @@
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 using PlaywrightCore;
 using System.Text.RegularExpressions;
 
@@ -9,19 +9,19 @@ namespace RegressionTestsPW
         [Test]
         public async Task Test1()
         {
-            //var getStartedButton = Page.GetByRole(AriaRole.Link, new() { Name = "Get started" });
-            //await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "/dotnet/docs/intro");
-            //await getStartedButton.ClickAsync();
-            //await Assertions.Expect(Page).ToHaveURLAsync(new Regex(".*intro"));
+            var getStartedButton = Page.GetByRole(AriaRole.Link, new() { Name = "Більше о нас" });
+            await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "pages/aboutus.html");
+            await getStartedButton.ClickAsync();
+            await Assertions.Expect(Page).ToHaveURLAsync(new Regex(".*aboutus"));
         }
 
         [Test]
         public async Task Test2()
         {
-            //var getStartedButton = Page.GetByRole(AriaRole.Link, new() { Name = "Get started" });
-            //await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "/dotnet/docs/intro");
-            //await getStartedButton.ClickAsync();
-            //await Assertions.Expect(Page).ToHaveURLAsync(new Regex(".*intro"));
+            var getStartedButton = Page.GetByRole(AriaRole.Link, new() { Name = "Більше о нас" });
+            await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "pages/aboutus.html");
+            await getStartedButton.ClickAsync();
+            await Assertions.Expect(Page).ToHaveURLAsync(new Regex(".*aboutus"));
         }
     }
 }
