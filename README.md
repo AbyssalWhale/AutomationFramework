@@ -14,7 +14,7 @@ Tools under the hood:
 - Serilog;
 - RestSharp;
 - JUnitTestLogger;
-- playwright.
+- playwright - is in progress.
 
 # Solution' projects overview:
 - AutomationCore:
@@ -26,8 +26,14 @@ Tools under the hood:
   - Fixtures - has all fixtures for all tests. Notice that any fixture should be inherited from the 'TestsSuitsFixture' class;
   - Models - contains all POMs and API models including API routes; 
   - RunSettings - run settings for specific branch/instance;
+  - Projects - has reference to the 'AutomationCore' project;
 - RegressionTests: 
   - API - all API regression tests. Tests sorting: Endpoint name -> request type;
   - UI -  all UI regression tests. Tests sorting: Page name.
   - TestsResults - contains tests attachment for each run. Notice: folder is added to .gitignore. 
+  - Projects - has reference to the 'TestsConfigurator' project;
+- PlaywrightCore:
+  - in progress
+- RegressionTestsPW:
+  - in progress
 
