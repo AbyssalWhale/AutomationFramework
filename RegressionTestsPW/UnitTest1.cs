@@ -7,7 +7,7 @@ namespace RegressionTestsPW
     public class Tests : UITestsSuitFixture
     {
         [Test]
-        public async Task Test1()
+        public async Task TheUser_CanNavigateTo_AboutUs_Page()
         {
             var getStartedButton = Page.GetByRole(AriaRole.Link, new() { Name = "Більше о нас" });
             await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "pages/aboutus.html");
@@ -16,12 +16,12 @@ namespace RegressionTestsPW
         }
 
         [Test]
-        public async Task Test2()
+        public async Task TheUser_CanNavigateTo_Teachers_Page()
         {
-            var getStartedButton = Page.GetByRole(AriaRole.Link, new() { Name = "Більше о нас" });
-            await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "pages/aboutus.html");
+            var getStartedButton = Page.GetByRole(AriaRole.Link, new() { Name = "Усі викладачі" });
+            await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "pages/teachers.html");
             await getStartedButton.ClickAsync();
-            await Assertions.Expect(Page).ToHaveURLAsync(new Regex(".*aboutus"));
+            await Assertions.Expect(Page).ToHaveURLAsync(new Regex(".*teachers"));
         }
     }
 }
