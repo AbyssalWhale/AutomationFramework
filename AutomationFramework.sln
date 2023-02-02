@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegressionTests", "Regressi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsConfigurator", "TestsConfigurator\TestsConfigurator.csproj", "{11ECB831-8F90-470D-90D1-0506ED642A90}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlaywrightCore", "PlaywrightCore\PlaywrightCore.csproj", "{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationCore_PW", "PlaywrightCore\AutomationCore_PW.csproj", "{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionTestsPW", "RegressionTestsPW\RegressionTestsPW.csproj", "{D06BD64C-10DF-4541-82EE-DA896D28C8A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegressionTests_PW", "RegressionTestsPW\RegressionTests_PW.csproj", "{D06BD64C-10DF-4541-82EE-DA896D28C8A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
