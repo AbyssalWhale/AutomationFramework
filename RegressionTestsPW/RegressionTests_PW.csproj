@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PlaywrightCore\PlaywrightCore.csproj" />
+    <ProjectReference Include="..\TestsConfigurator_PW\TestsConfigurator_PW.csproj" />
   </ItemGroup>
 
 </Project>

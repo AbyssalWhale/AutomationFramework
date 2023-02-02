@@ -2,10 +2,11 @@
 using AutomationCore.Enums;
 using AutomationCore.Managers;
 using Microsoft.Playwright;
+using NUnit.Framework;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
-namespace PlaywrightCore
+namespace TestsConfigurator_PW
 {
     [Parallelizable(ParallelScope.All)]
     [TestFixture]

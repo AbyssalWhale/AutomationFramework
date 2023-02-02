@@ -1,6 +1,6 @@
 ﻿using Microsoft.Playwright;
-using PlaywrightCore;
 using System.Text.RegularExpressions;
+using TestsConfigurator_PW;
 
 namespace RegressionTestsPW
 {
