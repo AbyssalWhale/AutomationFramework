@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutomationCore\AutomationCore.csproj" />
-    <ProjectReference Include="..\PlaywrightCore\PlaywrightCore.csproj" />
+    <ProjectReference Include="..\PlaywrightCore\AutomationCore_PW.csproj" />
   </ItemGroup>
 
   <ItemGroup>
