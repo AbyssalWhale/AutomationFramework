@@ -5,25 +5,27 @@ using Microsoft.Playwright;
 using NUnit.Framework;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using TestsConfigurator_PW.Models.POM;
 
-namespace TestsConfigurator_PW
+namespace TestsConfigurator_PW.Fixtures
 {
     [Parallelizable(ParallelScope.All)]
     [TestFixture]
     public class UITestsSuitFixture
     {
+        private ConcurrentDictionary<string, HomePage>? homePages;
+
         protected RunSettings RunSettings;
-        protected IPage Page => testsPages[TestContext.CurrentContext.Test.Name];
         protected IPlaywright Playwright;
         protected IBrowser Browser;
-        private ConcurrentDictionary<string, IPage> testsPages;
-
+        protected HomePage? HomePage => homePages[TestContext.CurrentContext.Test.Name];
+        
 
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
             RunSettings = RunSettings.GetRunSettings;
-            testsPages = new ConcurrentDictionary<string, IPage>();
+            homePages = new ConcurrentDictionary<string, HomePage>();
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         }
 
@@ -31,14 +33,14 @@ namespace TestsConfigurator_PW
         public async Task Setup()
         {
             Browser = await InitBrowser();
-            var page = await Browser.NewPageAsync();
+
+            var newHomePage = new HomePage(await Browser.NewPageAsync());
             lock (this)
             {
-                testsPages.TryAdd(TestContext.CurrentContext.Test.Name, page);
+                homePages.TryAdd(TestContext.CurrentContext.Test.Name, newHomePage);
             }
 
-            await Page.GotoAsync(RunSettings.InstanceUrl);
-            await Assertions.Expect(Page).ToHaveTitleAsync(new Regex("Головна сторінка"));
+            await HomePage.Navigate();
         }
 
         private async Task<IBrowser> InitBrowser()
@@ -62,7 +64,7 @@ namespace TestsConfigurator_PW
             else
             {
                 var msg = $"Unknown browser is tried to be initialized: {browser}";
-                throw UIAMessages.GetException(msg);
+                throw AutomationCore.AssertAndErrorMsgs.AEMessagesBase.GetException(msg);
             }
         }
     }

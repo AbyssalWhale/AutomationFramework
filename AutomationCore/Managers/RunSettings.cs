@@ -13,7 +13,7 @@ namespace AutomationCore.Managers
         public string AgentTestsResultsFolder { get; set; }
         public string BuildId { get; set; }
         public string Branch { get; set; }
-        public string InstanceUrl { get; set; }
+        public static string? InstanceUrl { get; set; }
         public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
         public bool Headless { get; set; }
