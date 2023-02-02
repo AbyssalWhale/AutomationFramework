@@ -1,6 +1,8 @@
-﻿using AutomationCore.Managers;
+﻿using AutomationCore.AssertAndErrorMsgs.UI;
+using AutomationCore.Managers;
 using AutomationCore.Utils;
 using OpenQA.Selenium;
+using System.Security.Policy;
 
 namespace TestsConfigurator.Models.POM
 {
@@ -27,7 +29,13 @@ namespace TestsConfigurator.Models.POM
 
         public void Open()
         {
-            WebDriver.GoToUrl(ManagersContainer.RunSettings.InstanceUrl);
+            var url = RunSettings.InstanceUrl;
+            if (url is null)
+            {
+                throw UIAMessages.GetException("Settings url is empty. Can not procceed.");
+            }
+
+            WebDriver.GoToUrl(url);
         }
 
         public override bool IsLoaded()

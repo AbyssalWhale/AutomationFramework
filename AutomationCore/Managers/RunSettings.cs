@@ -13,7 +13,7 @@ namespace AutomationCore.Managers
         public string AgentTestsResultsFolder { get; set; }
         public string BuildId { get; set; }
         public string Branch { get; set; }
-        public static string? InstanceUrl { get; set; }
+        public static string? InstanceUrl => TryToParseTestContext(nameof(InstanceUrl));
         public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
         public bool Headless { get; set; }
@@ -47,7 +47,6 @@ namespace AutomationCore.Managers
             AgentTestsResultsFolder = TryToParseTestContext(nameof(AgentTestsResultsFolder));
             BuildId = TryToParseTestContext(nameof(BuildId));
             Branch = TryToParseTestContext(nameof(Branch));
-            InstanceUrl = TryToParseTestContext(nameof(InstanceUrl));
             ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));
             Browser = TryToParseTestContext(nameof(Browser));
             bool.TryParse(TryToParseTestContext(nameof(Headless)), out bool headless);
@@ -64,7 +63,7 @@ namespace AutomationCore.Managers
             DBUserPass = TryToParseTestContext(nameof(DBUserPass));
         }
 
-        private string TryToParseTestContext(string settingName)
+        private static string TryToParseTestContext(string settingName)
         {
             var value = TestContext.Parameters[settingName];
 
