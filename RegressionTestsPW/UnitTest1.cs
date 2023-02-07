@@ -13,6 +13,8 @@ namespace RegressionTestsPW
             //await Assertions.Expect(getStartedButton).ToHaveAttributeAsync("href", "pages/aboutus.html");
             //await getStartedButton.ClickAsync();
             //await Assertions.Expect(Page).ToHaveURLAsync(new Regex(".*aboutus"));
+            await HomePage.Click_AboutUs_Button()
+                .Result.IsAtPage();
         }
 
         [Test]

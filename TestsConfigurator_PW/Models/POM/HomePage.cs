@@ -6,6 +6,10 @@ namespace TestsConfigurator_PW.Models.POM
 {
     public class HomePage : PageBase
     {
+        private ILocator Button_AboutUs => Page.GetByRole(AriaRole.Link, new() { Name = "Більше о нас" });
+
+        public override string Title => "Головна сторінка";
+
         public HomePage(IPage page) : base(page)
         {
         }
@@ -16,10 +20,18 @@ namespace TestsConfigurator_PW.Models.POM
             if (url is not null)
             {
                 await Page.GotoAsync(url);
-                await Assertions.Expect(Page).ToHaveTitleAsync(new Regex("Головна сторінка"));
+                await IsAtPage();
+
+
             }
 
             return this;
+        }
+
+        public async Task<AboutUsPage> Click_AboutUs_Button()
+        {
+            await Button_AboutUs.ClickAsync();
+            return new AboutUsPage(Page);
         }
     }
 }
