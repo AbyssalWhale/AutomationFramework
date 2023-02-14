@@ -42,5 +42,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
   
+- task: PowerShell@2
+  displayName: 'Install Playwright'
+  inputs:
+    targetType: 'inline'
+    script: 'pwsh $(Build.Repository.LocalPath)/PlaywrightCore/bin/Release/net7.0/playwright.ps1 install'
+  
 - ${{ if eq(parameters.NuKeeper, 'true') }}:
   - template: /ymlext/nukeeper.yml
