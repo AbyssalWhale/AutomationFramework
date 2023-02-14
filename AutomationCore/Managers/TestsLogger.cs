@@ -62,7 +62,7 @@ namespace AutomationCore.Managers
         {
             if (driver is null)
             {
-                throw UIAMessages.GetException("Screenshoot can not be made with null IWebDriver"); ;
+                throw UIAMessages.GetException("Screenshoot can not be made with null IWebDriver");
             }
 
             var path = $"{_screenshootsPath}/{_testsCountersForScreshoots}{TestScreenshootFormat}";

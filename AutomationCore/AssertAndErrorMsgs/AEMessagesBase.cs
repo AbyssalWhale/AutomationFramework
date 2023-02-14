@@ -10,5 +10,11 @@
 
             return ex;
         }
+
+        public static Exception GetExceptionForNullObject(string objectName, string method)
+        {
+            var msg = $"{objectName} is null. Can not go on with execution of method: {method}";
+            return GetException(msg);
+        }
     }
 }

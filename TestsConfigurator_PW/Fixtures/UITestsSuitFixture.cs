@@ -1,10 +1,8 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
-using AutomationCore.Enums;
 using AutomationCore.Managers;
-using Microsoft.Playwright;
+using AutomationCore_PW.Managers;
 using NUnit.Framework;
 using System.Collections.Concurrent;
-using System.Text.RegularExpressions;
 using TestsConfigurator_PW.Models.POM;
 
 namespace TestsConfigurator_PW.Fixtures
@@ -13,11 +11,10 @@ namespace TestsConfigurator_PW.Fixtures
     [TestFixture]
     public class UITestsSuitFixture
     {
+        private PlaywrightManager? pwManager;
         private ConcurrentDictionary<string, HomePage>? homePages;
 
-        protected RunSettings RunSettings;
-        protected IPlaywright Playwright;
-        protected IBrowser Browser;
+        protected RunSettings? RunSettings;
         protected HomePage? HomePage => homePages[TestContext.CurrentContext.Test.Name];
         
 
@@ -25,47 +22,36 @@ namespace TestsConfigurator_PW.Fixtures
         public async Task OneTimeSetup()
         {
             RunSettings = RunSettings.GetRunSettings;
+            pwManager = new PlaywrightManager(RunSettings);
             homePages = new ConcurrentDictionary<string, HomePage>();
-            Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         }
 
         [SetUp]
         public async Task Setup()
         {
-            Browser = await InitBrowser();
+            if (pwManager is null)
+            {
+                throw UIAMessages.GetExceptionForNullObject(nameof(pwManager), nameof(Setup));
+            }
 
-            var newHomePage = new HomePage(await Browser.NewPageAsync());
+            var newHomePage = new HomePage(await pwManager.GetTestBrowser().Result.NewPageAsync());
+
             lock (this)
             {
+                if (homePages is null)
+                {
+                    throw UIAMessages.GetExceptionForNullObject(nameof(homePages), nameof(Setup));
+                }
+
                 homePages.TryAdd(TestContext.CurrentContext.Test.Name, newHomePage);
             }
 
+            if (HomePage is null)
+            {
+                throw UIAMessages.GetExceptionForNullObject(nameof(HomePage), nameof(Setup));
+            }
+
             await HomePage.Navigate();
-        }
-
-        private async Task<IBrowser> InitBrowser()
-        {
-            var browser = RunSettings.Browser.ToLower();
-
-            if (browser.Equals(Browsers.chrome.ToString()))
-            {
-                return await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
-                {
-                    Headless = false,
-                });
-            }
-            else if (browser.Equals(Browsers.firefox.ToString()))
-            {
-                return await Playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions()
-                {
-                    Headless = false,
-                });
-            }
-            else
-            {
-                var msg = $"Unknown browser is tried to be initialized: {browser}";
-                throw AutomationCore.AssertAndErrorMsgs.AEMessagesBase.GetException(msg);
-            }
         }
     }
 }
