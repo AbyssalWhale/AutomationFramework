@@ -52,7 +52,7 @@ steps:
   - template: /ymlext/nukeeper.yml
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Build'
+  displayName: 'Publish Build Artifact'
   inputs:
     PathtoPublish: '$(System.DefaultWorkingDirectory)'
     ArtifactName: 'automation-tests'
