@@ -50,3 +50,10 @@ steps:
   
 - ${{ if eq(parameters.NuKeeper, 'true') }}:
   - template: /ymlext/nukeeper.yml
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'automation-tests'
+    publishLocation: 'Container'
