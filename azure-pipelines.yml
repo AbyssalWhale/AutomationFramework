@@ -54,6 +54,6 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(System.DefaultWorkingDirectory)'
     ArtifactName: 'automation-tests'
     publishLocation: 'Container'
