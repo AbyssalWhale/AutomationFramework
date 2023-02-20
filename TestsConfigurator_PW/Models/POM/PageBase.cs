@@ -15,6 +15,7 @@ namespace TestsConfigurator_PW.Models.POM
 
         public virtual async Task IsAtPage()
         {
+            Thread.Sleep(3000);
             await Assertions.Expect(Page).ToHaveTitleAsync(new Regex(Title));
         }
     }

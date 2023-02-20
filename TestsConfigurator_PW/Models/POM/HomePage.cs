@@ -13,6 +13,7 @@ namespace TestsConfigurator_PW.Models.POM
 
         public HomePage(IPage page) : base(page)
         {
+
         }
 
         public async Task<HomePage> Navigate()

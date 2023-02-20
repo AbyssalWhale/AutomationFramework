@@ -19,6 +19,7 @@ namespace AutomationCore.Managers
         public bool Headless { get; set; }
         public int ImplicitWait { get; set; }
         public string RunId { get; set; }
+        public string TestReportDirectory => TestsReportDirectory + TestContext.CurrentContext.Test.Name;
         public string TestsReportDirectory { get; set; }
         public string ApiKey { get; set; }
         public string ApiToken { get; set; }
@@ -54,7 +55,7 @@ namespace AutomationCore.Managers
             int.TryParse(TryToParseTestContext(nameof(ImplicitWait)), out int implicitWait);
             ImplicitWait = implicitWait;
             RunId = DateTime.UtcNow.ToString("MM-dd-yyyy, hh-mm-ss").Replace("-", "_").Replace(",", "").Replace(" ", "_");
-            TestsReportDirectory = $"../../../TestsResults/{RunId}/TestsReports";
+            TestsReportDirectory = $"../../../TestsResults/{RunId}/";
             ApiKey = TryToParseTestContext(nameof(ApiKey));
             ApiToken = TryToParseTestContext(nameof(ApiToken));
             DBServer = TryToParseTestContext(nameof(DBServer));
