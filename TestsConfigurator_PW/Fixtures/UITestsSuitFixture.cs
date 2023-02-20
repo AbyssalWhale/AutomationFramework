@@ -1,7 +1,9 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using AutomationCore.Managers;
 using AutomationCore_PW.Managers;
+using Microsoft.Playwright;
 using NUnit.Framework;
+using OpenQA.Selenium.DevTools.V107.Page;
 using System.Collections.Concurrent;
 using TestsConfigurator_PW.Models.POM;
 
@@ -29,12 +31,13 @@ namespace TestsConfigurator_PW.Fixtures
         [SetUp]
         public async Task Setup()
         {
+            Directory.CreateDirectory(RunSettings.TestsReportDirectory);
+
             if (pwManager is null)
             {
                 throw UIAMessages.GetExceptionForNullObject(nameof(pwManager), nameof(Setup));
             }
-
-            var newHomePage = new HomePage(await pwManager.GetTestBrowser().Result.NewPageAsync());
+            var newHomePage = new HomePage(await pwManager.GetTestContextPW().Result.NewPageAsync());
 
             lock (this)
             {
@@ -52,6 +55,12 @@ namespace TestsConfigurator_PW.Fixtures
             }
 
             await HomePage.Navigate();
+        }
+
+        [TearDown] 
+        public async Task TearDown()
+        {
+            pwManager.ReleaseTestExecution();
         }
     }
 }

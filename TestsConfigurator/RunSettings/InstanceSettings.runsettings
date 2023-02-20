@@ -6,7 +6,7 @@
     <Parameter name="ApiInstanceUrl" value="https://api.trello.com/1/" />
     <!--Browser should be: chrome, firefox-->
     <Parameter name="Browser" value="chrome" />
-    <Parameter name="Headless" value="false" />
+    <Parameter name="Headless" value="true" />
     <Parameter name="ImplicitWait" value="2" />
     <!--API-->
     <Parameter name="ApiKey" value="default" />
