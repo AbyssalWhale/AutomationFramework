@@ -1,9 +1,7 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using AutomationCore.Managers;
 using AutomationCore_PW.Managers;
-using Microsoft.Playwright;
 using NUnit.Framework;
-using OpenQA.Selenium.DevTools.V107.Page;
 using System.Collections.Concurrent;
 using TestsConfigurator_PW.Models.POM;
 
