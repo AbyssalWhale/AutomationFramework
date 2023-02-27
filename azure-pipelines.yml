@@ -41,15 +41,6 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-  
-- task: PowerShell@2
-  displayName: 'Install Playwright'
-  inputs:
-    targetType: 'inline'
-    script: 'pwsh $(Build.Repository.LocalPath)/PlaywrightCore/bin/Release/net7.0/playwright.ps1 install'
-  
-- ${{ if eq(parameters.NuKeeper, 'true') }}:
-  - template: /ymlext/nukeeper.yml
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifact'
@@ -57,4 +48,7 @@ steps:
     PathtoPublish: '$(System.DefaultWorkingDirectory)'
     ArtifactName: 'automation-tests'
     publishLocation: 'Container'
+
+- ${{ if eq(parameters.NuKeeper, 'true') }}:
+  - template: /ymlext/nukeeper.yml
     
