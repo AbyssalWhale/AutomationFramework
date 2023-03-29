@@ -23,7 +23,7 @@ namespace TestsConfigurator_PW.Fixtures
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
-            RunSettings = RunSettings.GetRunSettings;
+            RunSettings = RunSettings.Instance;
             pwManager = new PlaywrightManager(RunSettings);
             homePages = new ConcurrentDictionary<string, HomePage>();
         }

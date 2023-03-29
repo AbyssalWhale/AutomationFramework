@@ -12,7 +12,7 @@ namespace AutomationCore.Managers
 {
     public class WebDriver
     {
-        private TestsLogger _logger;
+        private TestsLoggerManager _logger;
         private RunSettings _runSettings;
         internal IWebDriver _seleniumDriver;
 
@@ -22,10 +22,10 @@ namespace AutomationCore.Managers
             { Browsers.firefox, new List<string>() { "Firefox", "geckodriver" } }
         };
 
-        public WebDriver(TestsLogger logger)
+        public WebDriver(TestsLoggerManager logger)
         {
             _logger = logger;
-            _runSettings = RunSettings.GetRunSettings;
+            _runSettings = RunSettings.Instance;
             _seleniumDriver = InitNewCopyOfWebDriver();
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
         }

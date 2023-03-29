@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TestsConfigurator.Models.API.Jira.Zephyr
+namespace AutomationCore.Managers.Models.Jira.ZephyrScale.Cycles
 {
     public class TestCycle
     {

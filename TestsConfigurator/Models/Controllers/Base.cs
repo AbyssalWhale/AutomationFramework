@@ -4,9 +4,9 @@ namespace TestsConfigurator.Models.Controllers
 {
     public abstract class Base
     {
-        protected ApiM _apiManager;
+        protected RestApiManager _apiManager;
         
-        public Base(ApiM apiManager)
+        public Base(RestApiManager apiManager)
         {
             _apiManager = apiManager;
         }

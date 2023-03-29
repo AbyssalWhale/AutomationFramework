@@ -7,7 +7,7 @@ using Serilog.Formatting.Json;
 
 namespace AutomationCore.Managers
 {
-    public class TestsLogger
+    public class TestsLoggerManager
     {
         private const string TestLogFileSuffixAndExtension = "_Log.json";
         private const string TestScreenshootFormat = ".png";
@@ -17,9 +17,9 @@ namespace AutomationCore.Managers
         private RunSettings _settingsManager;
         private Logger _logger;
 
-        public TestsLogger()
+        public TestsLoggerManager()
         {
-            _settingsManager = RunSettings.GetRunSettings;
+            _settingsManager = RunSettings.Instance;
             _screenshootsPath = string.Empty;
             _testsCountersForScreshoots = 0;
             _logger = CreateTestFolderAndLog();
