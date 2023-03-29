@@ -16,11 +16,11 @@ namespace TestsConfigurator
 
         public ZephyrScaleManager ZephyrScale => ZephyrScaleManager.Instance;
 
-        public ApiM API => TestsManagers[TestContext.CurrentContext.Test.Name].API;
+        public RestApiManager API => TestsManagers[TestContext.CurrentContext.Test.Name].API;
 
         public RunSettings RunSettings => RunSettings.Instance;
 
-        public TestsLogger Logger => TestsManagers[TestContext.CurrentContext.Test.Name].LogManager;
+        public TestsLoggerManager Logger => TestsManagers[TestContext.CurrentContext.Test.Name].LogManager;
 
         public ControllersContainer Controllers => TestsControllers[TestContext.CurrentContext.Test.Name];
 

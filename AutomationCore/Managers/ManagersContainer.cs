@@ -6,20 +6,20 @@ namespace AutomationCore.Managers
     {
         public RunSettings RunSettings { get; }
 
-        public TestsLogger LogManager { get; }
+        public TestsLoggerManager LogManager { get; }
 
         public WebDriver? WebDriver { get; }
 
-        public ApiM API { get; }
+        public RestApiManager API { get; }
 
         public Faker FakeDataGenerator { get; }
 
         public ManagersContainer(bool initWebDriver = true)
         {
             RunSettings = RunSettings.Instance;
-            LogManager = new TestsLogger();
+            LogManager = new TestsLoggerManager();
             if (initWebDriver) WebDriver = new WebDriver(LogManager);
-            API = new ApiM(LogManager);
+            API = new RestApiManager(LogManager);
             FakeDataGenerator = new Faker();
         }
     }

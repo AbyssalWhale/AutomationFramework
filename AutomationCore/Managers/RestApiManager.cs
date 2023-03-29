@@ -6,13 +6,13 @@ using System.Net;
 
 namespace AutomationCore.Managers
 {
-    public class ApiM
+    public class RestApiManager
     {
         private RestClient _client;
-        private TestsLogger _logger;
+        private TestsLoggerManager _logger;
         private RunSettings _runSettings;
 
-        public ApiM(TestsLogger logger)
+        public RestApiManager(TestsLoggerManager logger)
         {
             _logger = logger;
             _runSettings = RunSettings.Instance;

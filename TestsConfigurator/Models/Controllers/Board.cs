@@ -6,7 +6,7 @@ namespace TestsConfigurator.Models.Controllers
 {
     public class Board : Base
     {
-        public Board(ApiM apiManager) : base(apiManager)
+        public Board(RestApiManager apiManager) : base(apiManager)
         {
             
         }
