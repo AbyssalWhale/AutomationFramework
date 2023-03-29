@@ -15,7 +15,7 @@ namespace AutomationCore.Managers
         public ApiM(TestsLogger logger)
         {
             _logger = logger;
-            _runSettings = RunSettings.GetRunSettings;
+            _runSettings = RunSettings.Instance;
             _client = new RestClient(_runSettings.ApiInstanceUrl);
         }
 

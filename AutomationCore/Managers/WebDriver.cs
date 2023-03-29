@@ -25,7 +25,7 @@ namespace AutomationCore.Managers
         public WebDriver(TestsLogger logger)
         {
             _logger = logger;
-            _runSettings = RunSettings.GetRunSettings;
+            _runSettings = RunSettings.Instance;
             _seleniumDriver = InitNewCopyOfWebDriver();
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
         }

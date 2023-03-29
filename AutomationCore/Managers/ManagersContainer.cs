@@ -16,7 +16,7 @@ namespace AutomationCore.Managers
 
         public ManagersContainer(bool initWebDriver = true)
         {
-            RunSettings = RunSettings.GetRunSettings;
+            RunSettings = RunSettings.Instance;
             LogManager = new TestsLogger();
             if (initWebDriver) WebDriver = new WebDriver(LogManager);
             API = new ApiM(LogManager);

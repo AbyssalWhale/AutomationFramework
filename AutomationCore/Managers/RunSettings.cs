@@ -28,7 +28,7 @@ namespace AutomationCore.Managers
         public string DBUserId { get; set; }
         public string DBUserPass { get; set; }
 
-        public static RunSettings GetRunSettings
+        public static RunSettings Instance
         {
             get
             {

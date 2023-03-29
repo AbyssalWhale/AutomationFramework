@@ -19,7 +19,7 @@ namespace AutomationCore.Managers
 
         public TestsLogger()
         {
-            _settingsManager = RunSettings.GetRunSettings;
+            _settingsManager = RunSettings.Instance;
             _screenshootsPath = string.Empty;
             _testsCountersForScreshoots = 0;
             _logger = CreateTestFolderAndLog();
