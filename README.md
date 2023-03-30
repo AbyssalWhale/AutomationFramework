@@ -3,7 +3,6 @@ Solution consists of 3 projects. All of them use .NET 6.0 framework.
 - AutomationCore - main project with managers, utils etc that are required by objects from the 'TestsConfigurator' project;
 - TestsConfigurator - project with models (POMs, APIs etc), fixtures, and reusettings. It has reference to the 'AutomationCore' project only;
 - RegressionTests - project with UI and API regression tests. It has reference to the 'TestsConfigurator' project only;
-- Playwright things are coming in...;
 
 Tools under the hood:
 - .net;
@@ -14,7 +13,6 @@ Tools under the hood:
 - Serilog;
 - RestSharp;
 - JUnitTestLogger;
-- playwright.
 
 # Solution' projects overview:
 - AutomationCore:
@@ -32,13 +30,4 @@ Tools under the hood:
   - UI -  all UI regression tests. Tests sorting: Page name.
   - TestsResults - contains tests attachment for each run. Notice: folder is added to .gitignore. 
   - Projects - has reference to the 'TestsConfigurator' project;
-- AutomationCore_PW:
-  - Managers - tool's wrappers that are used by POMs and APIs during test execution;
-  - Projects - has reference to the 'AutomationCore' project to reuse existed models;
-- TestsConfigurator_PW:
-  - Fixtures - has all fixtures for all tests. Notice that any fixture should be inherited from the 'UITestsSuitFixture' class;
-  - Models - contains all POMs and API models including API routes; 
-- RegressionTests_PW:
-  - UI -  all UI regression tests. Tests sorting: Page name.
-  - TestsResults - contains tests attachment for each run. Notice: folder is added to .gitignore. 
 
