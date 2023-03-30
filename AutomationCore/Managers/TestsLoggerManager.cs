@@ -11,29 +11,36 @@ namespace AutomationCore.Managers
     {
         private const string TestLogFileSuffixAndExtension = "_Log.json";
         private const string TestScreenshootFormat = ".png";
+        public readonly string LoggerFullPath;
 
         private string _screenshootsPath;
         private int _testsCountersForScreshoots;
         private RunSettings _settingsManager;
         private Logger _logger;
 
-        public TestsLoggerManager()
+        public TestsLoggerManager(string? managerName = null)
         {
             _settingsManager = RunSettings.Instance;
-            _screenshootsPath = string.Empty;
+            _screenshootsPath = managerName is null ?
+                $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}" :
+                $"{_settingsManager.TestsReportDirectory}/{managerName}";
             _testsCountersForScreshoots = 0;
-            _logger = CreateTestFolderAndLog();
-            LogTestAction($"Folder and Log for the '{TestContext.CurrentContext.Test.Name}' test were created;");
+            _logger = CreateTestFolderAndLog(out LoggerFullPath, managerName);
         }
 
-        private Logger CreateTestFolderAndLog()
+        private Logger CreateTestFolderAndLog(out string loggerFullPath, string? managerName = null)
         {
-            string localLogFileName = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}";
-            _screenshootsPath = $"{_settingsManager.TestsReportDirectory}/{ TestContext.CurrentContext.Test.Name}";
-            Directory.CreateDirectory($"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}");
+            string directory = managerName is null ?
+                $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}" :
+                _settingsManager.TestsReportDirectory;
+            loggerFullPath = managerName is null ? 
+                $"{directory}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}" :
+                $"{directory}/{managerName}{TestLogFileSuffixAndExtension}";
 
-            var result = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{localLogFileName}").CreateLogger();
-            TestContext.AddTestAttachment(localLogFileName);
+            Directory.CreateDirectory(directory);
+            var result = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{loggerFullPath}").CreateLogger();
+            result.Information($"Logger for '{managerName ?? TestContext.CurrentContext.Test.Name}' has been created. Path: {loggerFullPath}");
+            TestContext.AddTestAttachment(loggerFullPath);
 
             return result;
         }
