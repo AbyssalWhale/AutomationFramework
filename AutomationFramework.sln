@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsConfigurator", "TestsC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationCore_PW", "PlaywrightCore\AutomationCore_PW.csproj", "{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsConfigurator_PW", "TestsConfigurator_PW\TestsConfigurator_PW.csproj", "{50BA5AA8-A177-4ADB-8B67-0A05DE912EF5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,10 +41,6 @@ Global
 		{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50BA5AA8-A177-4ADB-8B67-0A05DE912EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50BA5AA8-A177-4ADB-8B67-0A05DE912EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50BA5AA8-A177-4ADB-8B67-0A05DE912EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50BA5AA8-A177-4ADB-8B67-0A05DE912EF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
