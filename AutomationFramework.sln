@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegressionTests", "Regressi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsConfigurator", "TestsConfigurator\TestsConfigurator.csproj", "{11ECB831-8F90-470D-90D1-0506ED642A90}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationCore_PW", "PlaywrightCore\AutomationCore_PW.csproj", "{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +35,6 @@ Global
 		{11ECB831-8F90-470D-90D1-0506ED642A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11ECB831-8F90-470D-90D1-0506ED642A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11ECB831-8F90-470D-90D1-0506ED642A90}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7FFE99E-3670-47E0-9EC6-EAD020C870D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
