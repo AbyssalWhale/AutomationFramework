@@ -35,5 +35,11 @@ namespace TestsConfigurator
 
             if (RunSettings.Instance.PublishToZephyr) ZephyrScale.CreateTestCycleConfigFile();
         }
+
+        [SetUp]
+        public void GlobalSetUp()
+        {
+            TestContext.AddTestAttachment(ZephyrScale.TestsLoggerManager.LoggerFullPath);
+        }
     }
 }

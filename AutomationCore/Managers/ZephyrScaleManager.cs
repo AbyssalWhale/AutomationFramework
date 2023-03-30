@@ -5,7 +5,7 @@ namespace AutomationCore.Managers
 {
     public class ZephyrScaleManager
     {
-        private readonly TestsLoggerManager _testsLoggerManager;
+        public readonly TestsLoggerManager TestsLoggerManager;
         private readonly RestApiManager _restApiManager;
         private RunSettings RunSettings => RunSettings.Instance;
 
@@ -15,8 +15,8 @@ namespace AutomationCore.Managers
 
         private ZephyrScaleManager()
         {
-            _testsLoggerManager = new TestsLoggerManager();
-            _restApiManager = new RestApiManager(_testsLoggerManager);
+            TestsLoggerManager = new TestsLoggerManager(nameof(ZephyrScaleManager));
+            _restApiManager = new RestApiManager(TestsLoggerManager);
         }
 
         public void CreateTestCycleConfigFile()
@@ -45,7 +45,7 @@ namespace AutomationCore.Managers
             }
             catch (Exception ex)
             {
-                _testsLoggerManager.LogError($"'{nameof(CreateTestCycleConfigFile)}' throws exception: {ex.Message}");
+                TestsLoggerManager.LogError($"'{nameof(CreateTestCycleConfigFile)}' throws exception: {ex.Message}");
             }
         }
 
