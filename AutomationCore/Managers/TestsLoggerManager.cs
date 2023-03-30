@@ -18,18 +18,12 @@ namespace AutomationCore.Managers
         private RunSettings _settingsManager;
         private Logger _logger;
 
-        public TestsLoggerManager()
+        public TestsLoggerManager(string? managerName = null)
         {
             _settingsManager = RunSettings.Instance;
-            _screenshootsPath = $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}";
-            _testsCountersForScreshoots = 0;
-            _logger = CreateTestFolderAndLog(out LoggerFullPath);
-        }
-
-        public TestsLoggerManager(string managerName)
-        {
-            _settingsManager = RunSettings.Instance;
-            _screenshootsPath = $"{_settingsManager.TestsReportDirectory}/{managerName}";
+            _screenshootsPath = managerName is null ?
+                $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}" :
+                $"{_settingsManager.TestsReportDirectory}/{managerName}";
             _testsCountersForScreshoots = 0;
             _logger = CreateTestFolderAndLog(out LoggerFullPath, managerName);
         }
@@ -42,6 +36,7 @@ namespace AutomationCore.Managers
             loggerFullPath = managerName is null ? 
                 $"{directory}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}" :
                 $"{directory}/{managerName}{TestLogFileSuffixAndExtension}";
+
             Directory.CreateDirectory(directory);
             var result = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{loggerFullPath}").CreateLogger();
             result.Information($"Logger for '{managerName ?? TestContext.CurrentContext.Test.Name}' has been created. Path: {loggerFullPath}");
