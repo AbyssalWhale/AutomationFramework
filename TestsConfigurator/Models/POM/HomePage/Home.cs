@@ -1,11 +1,20 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using AutomationCore.Managers;
 using OpenQA.Selenium;
+using TestsConfigurator.Models.POM.HomePage.Components;
 
-namespace TestsConfigurator.Models.POM
+namespace TestsConfigurator.Models.POM.HomePage
 {
     public class Home : PagesBase
     {
+        //
+
+        private By Icon_Logo => By.XPath("//img[@src='/assets/logo-ff4914e6.webp']");
+
+        public PlatformsDropDownComponent Platforms => new PlatformsDropDownComponent(WebDriver);
+        public GenresListComponent Genres => new GenresListComponent(WebDriver);
+
+        //
         private By Header_Parent => By.XPath("//div[@class='jumbotron mainJumbotron']");
         private By Header_Logo => By.XPath(Header_Parent.Criteria + "/img");
         private By Header_Title => By.XPath(Header_Parent.Criteria + "/h1");
@@ -30,7 +39,7 @@ namespace TestsConfigurator.Models.POM
             var url = RunSettings.InstanceUrl;
             if (url is null)
             {
-                throw UIAMessages.GetException("Settings url is empty. Can not procceed.");
+                throw AutomationCore.AssertAndErrorMsgs.AEMessagesBase.GetException("Settings url is empty. Can not procceed.");
             }
 
             WebDriver.GoToUrl(url);
@@ -38,9 +47,9 @@ namespace TestsConfigurator.Models.POM
 
         public override bool IsLoaded()
         {
-            return WebDriver.FindElement(Header_Logo).Displayed &
-                WebDriver.FindElement(Header_Title).Displayed &
-                WebDriver.FindElement(Header_Signature).Displayed;
+            return WebDriver.FindElement(Icon_Logo).Displayed &
+                Platforms.IsLoaded() &
+                Genres.IsLoaded();
         }
 
         public Home ScrollTo_Professions_Container()
