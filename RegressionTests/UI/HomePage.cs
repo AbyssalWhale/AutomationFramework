@@ -9,12 +9,17 @@ namespace UI
     public class HomePage : UITestsSuitFixture
     {
         [Test]
-        public void GamesCanBiFilteredByPlatform_TES_T4([Values("PlayStation")] string platform)
+        public void GamesCanBiFilteredByPlatform_TES_T4()
         {
+            var platform = "PlayStation";
             //Arrange
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
 
-            ////Act
+            //Act
+            HomePage.Platforms
+                .Click_Platform_DropDown()
+                .Click_Platform_Option(platform);
+
             //HomePage.ScrollTo_Professions_Container();
 
             ////Assert
