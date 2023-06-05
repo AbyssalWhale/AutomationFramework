@@ -1,8 +1,6 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using AutomationCore.Managers;
-using AutomationCore.Utils;
 using OpenQA.Selenium;
-using System.Security.Policy;
 
 namespace TestsConfigurator.Models.POM
 {

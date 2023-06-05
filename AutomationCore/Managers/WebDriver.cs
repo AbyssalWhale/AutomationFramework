@@ -28,6 +28,7 @@ namespace AutomationCore.Managers
             _runSettings = RunSettings.Instance;
             _seleniumDriver = InitNewCopyOfWebDriver();
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
+            _seleniumDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
         }
 
         private IWebDriver InitNewCopyOfWebDriver()
