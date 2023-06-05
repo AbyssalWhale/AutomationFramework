@@ -16,15 +16,13 @@ namespace UI
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
 
             //Act
-            HomePage.Platforms
+            HomePage.GamesGrid.Platforms
                 .Click_Platform_DropDown()
                 .Click_Platform_Option(platform);
+            HomePage.GamesGrid.IsLoaded();
 
-            //HomePage.ScrollTo_Professions_Container();
 
-            ////Assert
-            //Assert.IsTrue(HomePage.Is_Cook_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Cook_ContainerSection_Displayed), HomePage.Title));
-            //Assert.IsTrue(HomePage.Is_Seamtress_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Seamtress_ContainerSection_Displayed), HomePage.Title));
+            //Assert
             //Assert.IsTrue(HomePage.Is_Seller_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Seller_ContainerSection_Displayed), HomePage.Title));
         }
     }

@@ -10,13 +10,13 @@ namespace TestsConfigurator.Models.POM.HomePage.Components
 
         protected override string Title => "Platforms";
 
-        private By AllElements_Root => By.XPath($"{Option_Title.Criteria}//ancestor::div[@class='css-1g3r3q7']");
+        private By AllElements_Root => By.XPath($"{Button_Main.Criteria}//ancestor::div[@class='css-1g3r3q7']");
 
-        private By Option_Title => By.XPath($"//span[text()='{Title}']");
+        private By Button_Main => By.XPath($"//button[@id='menu-button-:r1:']");
 
         private By Option_Platform(string name) => By.XPath($"{AllElements_Root.Criteria}//button[text()='{name}']");
 
-        public override bool IsLoaded() => WebDriver.FindElement(Option_Title).Displayed;
+        public override bool IsLoaded() => WebDriver.FindElement(Button_Main).Displayed;
 
         public PlatformsDropDownComponent Click_Platform_DropDown()
         {

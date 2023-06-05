@@ -89,7 +89,7 @@ namespace AutomationCore.Managers
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");
             MakeLogScreenshoot(driver);
-            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
+            //js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
         }
     
         private void LogScreenShoot(WebDriver? driver = null, IWebElement? element = null)

@@ -9,8 +9,8 @@ namespace TestsConfigurator.Models.POM.HomePage
     {
         private By Icon_Logo => By.XPath("//img[@src='/assets/logo-ff4914e6.webp']");
 
-        public PlatformsDropDownComponent Platforms => new PlatformsDropDownComponent(WebDriver);
         public GenresListComponent Genres => new GenresListComponent(WebDriver);
+        public GamesGridComponent GamesGrid => new GamesGridComponent(WebDriver);
 
         public Home(ManagersContainer managersContainer) : base(managersContainer)
         {
@@ -31,8 +31,8 @@ namespace TestsConfigurator.Models.POM.HomePage
         public override bool IsLoaded()
         {
             return WebDriver.FindElement(Icon_Logo).Displayed &
-                Platforms.IsLoaded() &
-                Genres.IsLoaded();
+                Genres.IsLoaded() &
+                GamesGrid.IsLoaded();
         }
     }
 }

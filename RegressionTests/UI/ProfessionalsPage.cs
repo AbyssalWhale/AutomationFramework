@@ -17,6 +17,7 @@ namespace UI
         [Test]
         public void TheUserCanNavigateToProfessionalsPage_TES_T1()
         {
+
         }
     }
 }

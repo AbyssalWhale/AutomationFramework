@@ -7,6 +7,9 @@ using OpenQA.Selenium.Interactions;
 using AutomationCore.Utils;
 using AutomationCore.AssertAndErrorMsgs.UI;
 using System.Collections.ObjectModel;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
+using System;
 
 namespace AutomationCore.Managers
 {
@@ -74,6 +77,35 @@ namespace AutomationCore.Managers
             fireFoxOptions.SetPreference("browser.download.dir", "provide folder");
 
             return fireFoxOptions;
+        }
+
+        public WebDriver WaitFor_ElementBe_Visible(Func<IWebDriver, IWebElement> func, int secondsToWait)
+        {
+            var wait = new WebDriverWait(_seleniumDriver, TimeSpan.FromSeconds(secondsToWait));
+            try
+            {
+                wait.Until(func);
+                //wait.Until(ExpectedConditions.ElementIsVisible(locator));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(LogMessages.MethodExecution($"{WaitFor_ElementBe_Visible} has exception: {ex.Message}"));
+            }
+            return this;
+        }
+
+        public WebDriver WaitFor(Func<IWebDriver, IWebElement> condition, int secondsToWait = 5)
+        {
+            var wait = new WebDriverWait(_seleniumDriver, TimeSpan.FromSeconds(secondsToWait));
+            try
+            {
+                wait.Until(condition);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(LogMessages.MethodExecution($"{WaitFor_ElementBe_Visible} has exception: {ex.Message}"));
+            }
+            return this;
         }
 
         ///<summary>
