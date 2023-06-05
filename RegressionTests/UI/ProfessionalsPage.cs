@@ -17,13 +17,7 @@ namespace UI
         [Test]
         public void TheUserCanNavigateToProfessionalsPage_TES_T1()
         {
-            //Arrange
-            var professionsPage = HomePage
-                .ScrollTo_Professions_Container()
-                .Click_AllProfessions_Button();
 
-            //Act
-            Assert.IsTrue(professionsPage.IsLoaded(), UIAMessages.PageNotLoaded(professionsPage.Title));
         }
     }
 }

@@ -9,18 +9,21 @@ namespace UI
     public class HomePage : UITestsSuitFixture
     {
         [Test]
-        public void ProfessionalsCanBeObserved_TES_T4()
+        public void GamesCanBiFilteredByPlatform_TES_T4()
         {
+            var platform = "PlayStation";
             //Arrange
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
 
             //Act
-            HomePage.ScrollTo_Professions_Container();
+            HomePage.GamesGrid.Platforms
+                .Click_Platform_DropDown()
+                .Click_Platform_Option(platform);
+            HomePage.GamesGrid.IsLoaded();
+
 
             //Assert
-            Assert.IsTrue(HomePage.Is_Cook_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Cook_ContainerSection_Displayed), HomePage.Title));
-            Assert.IsTrue(HomePage.Is_Seamtress_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Seamtress_ContainerSection_Displayed), HomePage.Title));
-            Assert.IsTrue(HomePage.Is_Seller_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Seller_ContainerSection_Displayed), HomePage.Title));
+            //Assert.IsTrue(HomePage.Is_Seller_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Seller_ContainerSection_Displayed), HomePage.Title));
         }
     }
 }

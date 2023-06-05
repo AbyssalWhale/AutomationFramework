@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutomationCore\AutomationCore.csproj" />
-    <ProjectReference Include="..\PlaywrightCore\AutomationCore_PW.csproj" />
   </ItemGroup>
 
   <ItemGroup>
