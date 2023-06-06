@@ -15,6 +15,7 @@ namespace UI
             var platform = "PlayStation";
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
             var platform_API = Controllers.Platforms.Get_VideoGamesPlatform(platform, strictEqual: false).Result;
+            //todo: add Get details of the platform. - https://api.rawg.io/docs/#operation/platforms_lists_parents_list
 
             //Act
             HomePage.GamesGrid.Platforms
