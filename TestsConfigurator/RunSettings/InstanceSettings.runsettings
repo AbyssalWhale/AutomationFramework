@@ -9,7 +9,7 @@
     <Parameter name="Headless" value="true" />
     <Parameter name="ImplicitWait" value="2" />
     <!--API-->
-    <Parameter name="ApiKey" value="358f8b7b728544ccaa65398ebeebecdf" />
+    <Parameter name="ApiKey" value="default" />
     <Parameter name="ApiToken" value="default" />
     <!--DB-->
     <Parameter name="DBServer" value="default" />
