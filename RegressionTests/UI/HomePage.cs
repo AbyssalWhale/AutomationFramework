@@ -11,9 +11,10 @@ namespace UI
         [Test]
         public void GamesCanBiFilteredByPlatform_TES_T4()
         {
-            var platform = "PlayStation";
             //Arrange
+            var platform = "PlayStation";
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
+            var gamePlatforms_API = Controllers.Platforms.Get_VideoGamesPlatform(platform, strictEqual: false).Result;
 
             //Act
             HomePage.GamesGrid.Platforms

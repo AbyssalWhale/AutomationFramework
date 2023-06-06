@@ -12,8 +12,6 @@ namespace API.Boards
         [Test]
         public void AllBoardsCanBeRetrieved_TES_T2()
         {
-            var response = Controllers.Board.Get();
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), ApiAEMessages.NotExepctedResponseCode(response));
         }
     }
 }

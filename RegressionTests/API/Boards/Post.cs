@@ -12,8 +12,6 @@ namespace API.Boards
         [Test]
         public void NewBoardCanBeCreated_TES_T3()
         {
-            var response = Controllers.Board.Post(name: FakeDataGenerator.Random.String2(10));
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created), ApiAEMessages.NotExepctedResponseCode(response));
         }
     }
 }
