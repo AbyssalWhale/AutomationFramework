@@ -30,9 +30,7 @@ namespace TestsConfigurator.Models.POM.HomePage
 
         public override bool IsLoaded()
         {
-            return WebDriver.FindElement(Icon_Logo).Displayed &
-                Genres.IsLoaded() &
-                GamesGrid.IsLoaded();
+            return WebDriver.FindElement(Icon_Logo).Displayed & GamesGrid.IsLoaded();
         }
     }
 }

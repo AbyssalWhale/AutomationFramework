@@ -2,11 +2,12 @@
 
 namespace TestsConfigurator.Models.Controllers
 {
-    public abstract class Base
+    public abstract class ControllersBase
     {
         protected RestApiManager _apiManager;
+        protected abstract string _routeMainUrl { get; }
         
-        public Base(RestApiManager apiManager)
+        public ControllersBase(RestApiManager apiManager)
         {
             _apiManager = apiManager;
         }

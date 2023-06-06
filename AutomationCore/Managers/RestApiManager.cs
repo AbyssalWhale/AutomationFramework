@@ -17,6 +17,7 @@ namespace AutomationCore.Managers
             _logger = logger;
             _runSettings = RunSettings.Instance;
             _client = new RestClient(_runSettings.ApiInstanceUrl);
+            _client.AddDefaultParameter("key", _runSettings.ApiKey);
         }
 
         public async Task<RestResponse<T>> ExecuteAsync<T>(

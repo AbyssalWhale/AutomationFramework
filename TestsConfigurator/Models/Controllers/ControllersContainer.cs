@@ -6,11 +6,11 @@ namespace TestsConfigurator.Models.Controllers
     {
         private RestApiManager _apiManager;
 
-        public Board Board => new Board(_apiManager);
-
         public ControllersContainer(RestApiManager apiManager)
         {
             _apiManager = apiManager;
         }
+
+        public PlatformsController Platforms => new PlatformsController(_apiManager);
     }
 }

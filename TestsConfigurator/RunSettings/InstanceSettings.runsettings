@@ -3,7 +3,7 @@
   <TestRunParameters>
 	<Parameter name="Branch" value="develop " />
 	<Parameter name="InstanceUrl" value="http://awoha.xyz/" />
-    <Parameter name="ApiInstanceUrl" value="https://api.trello.com/1/" />
+    <Parameter name="ApiInstanceUrl" value="https://api.rawg.io/api/" />
     <!--Browser should be: chrome, firefox-->
     <Parameter name="Browser" value="chrome" />
     <Parameter name="Headless" value="true" />
