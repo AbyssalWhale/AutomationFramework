@@ -24,14 +24,14 @@ namespace UI
             HomePage.GamesGrid.IsLoaded();
             var card_Titles_UI = HomePage.GamesGrid.Get_Cards_Titles();
 
-            //Assert.Multiple(() =>
-            //{
-            //    foreach (var game_UI in card_Titles_UI)
-            //    {
-            //        var isFound = platform_API.Any(p => p.games.Any(g => g.name.ToLower().Equals(game_UI.ToLower())));
-            //        Assert.IsTrue(isFound, $"Expected that UI game is found in API platform data after filtering UI by that platform. \n Game: {game_UI}");
-            //    }
-            //});
+            Assert.Multiple(() =>
+            {
+                foreach (var game_UI in card_Titles_UI)
+                {
+                    var isFound = platform_API.Any(p => p.games.Any(g => g.name.ToLower().Equals(game_UI.ToLower())));
+                    Assert.IsTrue(isFound, $"Expected that UI game is found in API platform data after filtering UI by that platform. \n Game: {game_UI}");
+                }
+            });
 
             //Assert
             //Assert.IsTrue(HomePage.Is_Seller_ContainerSection_Displayed, UIAMessages.ElementIsNotDisplayed(nameof(HomePage.Is_Seller_ContainerSection_Displayed), HomePage.Title));

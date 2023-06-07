@@ -1,10 +1,10 @@
 ﻿namespace TestsConfigurator.Models.API.Platforms
 {
-    public class GamePlatforms
+    public class GamePlatformsParents
     {
         public int count { get; set; }
-        public string? next { get; set; }
+        public object? next { get; set; }
         public object? previous { get; set; }
-        public List<Platform>? results { get; set; }
+        public List<GamePlatforms>? results { get; set; }
     }
 }

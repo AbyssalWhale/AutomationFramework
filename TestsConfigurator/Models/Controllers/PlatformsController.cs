@@ -38,5 +38,10 @@ namespace TestsConfigurator.Models.Controllers
 
             return result;
         }
+
+        public async Task<RestResponse<GamePlatforms>> Get_ParentPlatforms()
+        {
+            return await _apiManager.ExecuteAsync<GamePlatforms>(endPoint:  $"{_routeMainUrl}/lists/parents", method: Method.Get);
+        }
     }
 }
