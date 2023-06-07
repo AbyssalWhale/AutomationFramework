@@ -1,6 +1,6 @@
 ﻿using AutomationCore.Managers;
 using NUnit.Framework;
-using TestsConfigurator.Models.Controllers;
+using TestsConfigurator.Controllers;
 using TestsConfigurator.Models.POM.HomePage;
 
 namespace TestsConfigurator

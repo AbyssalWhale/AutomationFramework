@@ -1,8 +1,9 @@
 ﻿using AutomationCore.Managers;
+using Bogus.DataSets;
 using RestSharp;
 using TestsConfigurator.Models.API.Platforms;
 
-namespace TestsConfigurator.Models.Controllers
+namespace TestsConfigurator.Controllers
 {
     public class PlatformsController : ControllersBase
     {
@@ -39,9 +40,29 @@ namespace TestsConfigurator.Models.Controllers
             return result;
         }
 
-        public async Task<RestResponse<GamePlatforms>> Get_ParentPlatforms()
+        public async Task<RestResponse<GamePlatformsParents>> Get_ParentPlatforms()
         {
-            return await _apiManager.ExecuteAsync<GamePlatforms>(endPoint:  $"{_routeMainUrl}/lists/parents", method: Method.Get);
+            return await _apiManager.ExecuteAsync<GamePlatformsParents>(endPoint: $"{_routeMainUrl}/lists/parents", method: Method.Get);
+        }
+
+        public async Task<ParentPlatform> Get_ParentPlatform(string name)
+        {
+            var allPlatforms = await Get_ParentPlatforms();
+            if (allPlatforms.Data is null)
+            {
+                throw new Exception($"Data is null from {nameof(Get_ParentPlatform)}");
+            }
+
+
+            var result = allPlatforms.Data.results.Where(r => r.slug.Equals(name.ToLower())).FirstOrDefault();
+
+            if (result is null)
+            {
+                var message = $"Unable to find parent platform {name} via api. Route: {allPlatforms.ResponseUri}";
+                throw new Exception(message);
+            }
+
+            return result;
         }
     }
 }
