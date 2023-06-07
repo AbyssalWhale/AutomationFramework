@@ -2,7 +2,7 @@
 using Bogus;
 using NUnit.Framework;
 using System.Collections.Concurrent;
-using TestsConfigurator.Models.Controllers;
+using TestsConfigurator.Controllers;
 using TestsConfigurator.Models.POM.HomePage;
 
 namespace TestsConfigurator

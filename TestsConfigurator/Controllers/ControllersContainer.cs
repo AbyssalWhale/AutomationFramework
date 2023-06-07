@@ -1,6 +1,6 @@
 ﻿using AutomationCore.Managers;
 
-namespace TestsConfigurator.Models.Controllers
+namespace TestsConfigurator.Controllers
 {
     public class ControllersContainer
     {
@@ -12,5 +12,6 @@ namespace TestsConfigurator.Models.Controllers
         }
 
         public PlatformsController Platforms => new PlatformsController(_apiManager);
+        public GamesController Games => new GamesController(_apiManager);
     }
 }

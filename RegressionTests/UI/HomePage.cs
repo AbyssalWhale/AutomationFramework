@@ -14,7 +14,8 @@ namespace UI
             //Arrange
             var platform = "PlayStation";
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
-            var platform_API = Controllers.Platforms.Get_VideoGamesPlatform(platform, strictEqual: false).Result;
+            var platform_API = Controllers.Platforms.Get_ParentPlatform(platform).Result;
+            var platform_Games = Controllers.Games.Get_Games(platform_API).Result;
             //todo: add Get details of the platform. - https://api.rawg.io/docs/#operation/platforms_lists_parents_list
 
             //Act
@@ -23,6 +24,9 @@ namespace UI
                 .Click_Platform_Option(platform);
             HomePage.GamesGrid.IsLoaded();
             var card_Titles_UI = HomePage.GamesGrid.Get_Cards_Titles();
+
+            //Assert
+
 
             //Assert.Multiple(() =>
             //{
