@@ -62,16 +62,16 @@ namespace AutomationCore.Managers
             //System.Environment.SetEnvironmentVariable("webdriver.chrome.whitelistedIps", "");
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
-            options.AddArgument("--whitelisted-ips='*'");
-            options.AddArgument("--allowed-ips='*'");
-            options.AddArgument("--allowed-origins='*'");
-            options.AddAdditionalChromeOption("allowed-ips", "*");
-            options.AddAdditionalChromeOption("allowed-origins", "*");
+            //options.AddArgument("--whitelisted-ips='*'");
+            //options.AddArgument("--allowed-ips='*'");
+            //options.AddArgument("--allowed-origins='*'");
+            //options.AddAdditionalChromeOption("allowed-ips", "*");
+            //options.AddAdditionalChromeOption("allowed-origins", "*");
 
             if (_runSettings.Headless)
             {
                 options.AddArgument("--headless=new");
-                options.AddArgument("--headless");
+                //options.AddArgument("--headless");
             };
 
             return options;
