@@ -49,11 +49,9 @@ jobs:
       with:
         repository: AbyssalWhale/AutomationFramework
         path: ${{ inputs.check-out-path }}
-    - name: 🔧 "Print out Workspace"
+    - name: 🔧 Print out Workspace
       run: |
-        echo "Check out path: ${{ toJSON(inputs.check-out-path) }}"
-        echo "-Check out content-"
-        ls ${{ inputs.check-out-path }}
+        dir ${{ inputs.check-out-path }}
     - name: 🔧 Setup .NET Core SDK
       uses: actions/setup-dotnet@v3.1.0
     - name: 🔧 Setup NuGet.exe for use with actions
