@@ -70,7 +70,7 @@ jobs:
         dotnet test ${{ inputs.check-out-path }}/RegressionTests/bin/Release/net7.0/RegressionTests.dll --results-directory ${{ env.tests_result_dir }}/ --logger "trx;logfilename=testResults.trx" --settings "${{ env.runsettings_config_path }}" -- whitelisted-ips
     - name: 🧪 Publish Tests Results
       if: always()
-      uses: EnricoMi/publish-unit-test-result-action@v2.7.0
+      uses: EnricoMi/publish-unit-test-result-action/composite@v2
       with:
         check_name: 🧪 .Net Selenium Tests Results 
         files: |
