@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <TestRunParameters>
-	<Parameter name="Branch" value="develop " />
-	<Parameter name="InstanceUrl" value="http://awoha.xyz/" />
-    <Parameter name="ApiInstanceUrl" value="https://api.rawg.io/api/" />
+    <Parameter name="Branch" value="develop" />
+    <Parameter name="InstanceUrl" value="default" />
+    <Parameter name="ApiInstanceUrl" value="default" />
     <!--Browser should be: chrome, firefox-->
     <Parameter name="Browser" value="chrome" />
     <Parameter name="Headless" value="false" />
@@ -16,12 +16,14 @@
     <Parameter name="DBName" value="default" />
     <Parameter name="DBUserId" value="default" />
     <Parameter name="DBUserPass" value="default" />
-	<!--Zephyr-->
-	<Parameter name="PublishToZephyr" value="true" />
-	<Parameter name="ZephyrToken" value="default" />
-	<!--Agent-->
-	<Parameter name="BuildId" value="0" />
-	<Parameter name="AgentTestsResultsFolder" value="default" />  
-	
+    <!--Zephyr-->
+    <Parameter name="PublishToZephyr" value="true" />
+    <Parameter name="ZephyrProjectKey" value="default" />
+    <Parameter name="ZephyrCycleName" value="default" />
+    <Parameter name="ZephyrCycleComment" value="default" />
+    <Parameter name="ZephyrToken" value="token" />
+    <!--Agent-->
+    <Parameter name="BuildId" value="0" />
+    <Parameter name="AgentTestsResultsFolder" value="default" />
   </TestRunParameters>
 </RunSettings>
