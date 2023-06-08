@@ -47,7 +47,7 @@ jobs:
     - name: 🔻Checkout
       uses: actions/checkout@v2
       with:
-        repository: AbyssalWhale/AutomationTests
+        repository: AbyssalWhale/AutomationFramework
         path: ${{ inputs.check-out-path }}
     - name: 🔧 "Print out Workspace"
       run: |
