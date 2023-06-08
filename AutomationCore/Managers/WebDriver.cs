@@ -56,10 +56,10 @@ namespace AutomationCore.Managers
 
         private ChromeOptions SetChrome()
         {
-            System.Environment.SetEnvironmentVariable("webdriver.chrome.whitelistedIps", "");
+            //System.Environment.SetEnvironmentVariable("webdriver.chrome.whitelistedIps", "");
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
-            options.AddArgument("--whitelisted-ips=");
+            options.AddArgument("--whitelisted-ips");
             
             if (_runSettings.Headless)
             {
