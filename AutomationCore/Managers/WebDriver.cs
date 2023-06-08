@@ -40,7 +40,10 @@ namespace AutomationCore.Managers
 
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                return new ChromeDriver(SetChrome());
+                ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+                service.WhitelistedIPAddresses = " ";
+                var result = new ChromeDriver(options: SetChrome());
+                return result;
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
             {
