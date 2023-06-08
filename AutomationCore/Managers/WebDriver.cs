@@ -58,7 +58,11 @@ namespace AutomationCore.Managers
         {
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
-            if (_runSettings.Headless) options.AddArguments("--headless=new");
+            if (_runSettings.Headless)
+            {
+                options.AddArgument("--headless=new");
+                options.AddArgument("--headless");
+            };
 
             return options;
         }
