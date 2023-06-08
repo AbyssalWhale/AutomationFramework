@@ -65,6 +65,8 @@ namespace AutomationCore.Managers
             options.AddArgument("--whitelisted-ips='*'");
             options.AddArgument("--allowed-ips='*'");
             options.AddArgument("--allowed-origins='*'");
+            options.AddAdditionalChromeOption("allowed-ips", "*");
+            options.AddAdditionalChromeOption("allowed-origins", "*");
 
             if (_runSettings.Headless)
             {
