@@ -58,6 +58,7 @@ namespace AutomationCore.Managers
         {
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
+            options.AddArgument("--whitelisted-ips=''");
             if (_runSettings.Headless)
             {
                 options.AddArgument("--headless=new");
