@@ -9,7 +9,7 @@ param(
 [Parameter(Mandatory=$false, ValueFromPipeline=$true)][string] $zephyr_ProjectKey,
 [Parameter(Mandatory=$false, ValueFromPipeline=$true)][string] $zephyr_CycleName,
 [Parameter(Mandatory=$false, ValueFromPipeline=$true)][string] $zephyr_CycleComment,
-[Parameter(Mandatory=$false, ValueFromPipeline=$true)][string] $zephyr_Token
+[Parameter(Mandatory=$false, ValueFromPipeline=$true)][string] $zephyr_Token,
 [Parameter(Mandatory=$false, ValueFromPipeline=$true)][string] $agent_TestsResultsFolder
 )
 
