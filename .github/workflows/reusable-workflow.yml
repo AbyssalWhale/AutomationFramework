@@ -37,7 +37,7 @@ jobs:
     env:
       tests_result_dir: ${{ inputs.check-out-path }}/testResults
       runsettings_config_path: ${{ inputs.check-out-path }}/TestsConfigurator/RunSettings/InstanceSettings.runsettings
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
         contents: read
         issues: read
@@ -49,11 +49,9 @@ jobs:
       with:
         repository: AbyssalWhale/AutomationFramework
         path: ${{ inputs.check-out-path }}
-    - name: 🔧 "Print out Workspace"
+    - name: 🔧 Print out Workspace
       run: |
-        echo "Check out path: ${{ toJSON(inputs.check-out-path) }}"
-        echo "-Check out content-"
-        ls ${{ inputs.check-out-path }}
+        dir ${{ inputs.check-out-path }}
     - name: 🔧 Setup .NET Core SDK
       uses: actions/setup-dotnet@v3.1.0
     - name: 🔧 Setup NuGet.exe for use with actions
@@ -72,7 +70,7 @@ jobs:
         dotnet test ${{ inputs.check-out-path }}/RegressionTests/bin/Release/net7.0/RegressionTests.dll --results-directory ${{ env.tests_result_dir }}/ --logger "trx;logfilename=testResults.trx" --settings "${{ env.runsettings_config_path }}" -- whitelisted-ips
     - name: 🧪 Publish Tests Results
       if: always()
-      uses: EnricoMi/publish-unit-test-result-action@v2.7.0
+      uses: EnricoMi/publish-unit-test-result-action/composite@v2
       with:
         check_name: 🧪 .Net Selenium Tests Results 
         files: |
