@@ -66,6 +66,9 @@ jobs:
       shell: pwsh
       run: |
         ${{inputs.check-out-path}}\.pshell\updateRSettings.ps1 ${{env.runsettings_config_path}} ${{inputs.branch}} ${{secrets.instance-ui-url}} ${{secrets.instance-backend-url}} ${{secrets.instance-backend-api-key}} ${{secrets.instance-backend-api-key}} ${{inputs.zephyr-is-publishresults}} ${{secrets.zephyr-projectKey}} ${{inputs.zephyr-cycle-name}} ${{inputs.zephyr-CycleComment}} ${{inputs.zephyr-token}} ${{ env.tests_result_dir }}
+    - name: 🔧 Update .runsettings
+      run: |
+        sudo apt-get --only-upgrade install google-chrome-stable
     - name: 🕵️‍♀️ Run Tests
       shell: pwsh
       run: |
