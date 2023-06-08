@@ -1,0 +1,28 @@
+name: Run Selenium Regresion Tests
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  
+jobs:
+  run-tests:
+    name: 🕸️ .Net Selenium Tests
+    uses: ./.github/workflows/reusable-workflow.yml
+    with:
+        check-out-path: ./dotnet-selenium
+        branch: develop
+        zephyr-is-publishresults: false
+        zephyr-cycle-name: default
+        zephyr-cycle-comment: default
+    secrets:
+        instance-ui-url: ${{secrets.INSTANCE_URL}}
+        instance-backend-url: ${{secrets.INSTANCE_BACKEND_URL}}
+        instance-backend-api-key: ${{secrets.RAWG_KEY}}
+        instance-backend-api-token: ${{secrets.INSTANCE_BACKEND_API_TOKEN}}
+        zephyr-token: ${{secrets.ZEPHYR_TOKEN}}
+        zephyr-projectKey: ${{secrets.ZEPHYR_PROJECT_KEY}}
+    permissions:
+        contents: read
+        issues: read
+        checks: write
+        pull-requests: write
