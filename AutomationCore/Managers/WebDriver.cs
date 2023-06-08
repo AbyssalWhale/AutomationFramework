@@ -40,7 +40,7 @@ namespace AutomationCore.Managers
 
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                return new ChromeDriver(SetChrome());
+                return new FirefoxDriver(SetFirefox());
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
             {
