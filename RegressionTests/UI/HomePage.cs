@@ -9,21 +9,23 @@ namespace UI
     public class HomePage : UITestsSuitFixture
     {
         [Test]
-        public void GamesCanBiFilteredByPlatform_TES_T4()
+        public void TheUser_CanSelect_Game_Genre_T4()
         {
             //Arrange
-            var platform = "PlayStation";
+            var genreName = "Card";
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
-            var platform_API = Controllers.Platforms.Get_ParentPlatform(platform).Result;
-            var platform_Games = Controllers.Games.Get_Games(platform_API).Result;
-            //todo: add Get details of the platform. - https://api.rawg.io/docs/#operation/platforms_lists_parents_list
+            var genreUnderTest = Controllers.Genres.Get_Genre(genreName).Result;
 
             //Act
-            HomePage.GamesGrid.Platforms
-                .Click_Platform_DropDown()
-                .Click_Platform_Option(platform);
+            HomePage.Genres.Click_Genre_Link(genreName);
             HomePage.GamesGrid.IsLoaded();
             var card_Titles_UI = HomePage.GamesGrid.Get_Cards_Titles();
+
+            //Assert
+            Parallel.ForEach(card_Titles_UI, gameTitle =>
+            {
+                Assert.IsNotNull(genreUnderTest.games.Where(g => g.name.ToLower().Equals(gameTitle.ToLower())), "Expected game is found on UI after filtering by genre");
+            });
 
             //Assert
 

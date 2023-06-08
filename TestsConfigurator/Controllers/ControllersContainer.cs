@@ -13,5 +13,6 @@ namespace TestsConfigurator.Controllers
 
         public PlatformsController Platforms => new PlatformsController(_apiManager);
         public GamesController Games => new GamesController(_apiManager);
+        public GenresController Genres => new GenresController(_apiManager);
     }
 }
