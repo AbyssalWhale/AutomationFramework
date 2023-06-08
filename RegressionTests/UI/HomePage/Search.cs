@@ -2,11 +2,11 @@
 using NUnit.Framework;
 using TestsConfigurator;
 
-namespace UI
+namespace RegressionTests.UI.HomePage
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
-    public class ProfessionalsPage : UITestsSuitFixture
+    public class Search : UITestsSuitFixture
     {
         [SetUp]
         public new void SetUp()
@@ -15,7 +15,7 @@ namespace UI
         }
 
         [Test]
-        public void TheUserCanNavigateToProfessionalsPage_TES_T1()
+        public void TheUser_CanSearch_Game_TES_T1()
         {
 
         }

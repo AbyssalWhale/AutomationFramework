@@ -317,38 +317,8 @@ namespace AutomationCore.Managers
         {
             _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
             IWebElement element = FindElement(elementLocator, mSecondsToWait);
-            var message = string.Empty;
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            while (true)
-            {
-                if (stopwatch.ElapsedMilliseconds > mSecondsToWait)
-                {
-                    var msg = $"It is impossible to click element by locator [{elementLocator}]. Message: {message}";
-                    _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
-                    throw UIAMessages.GetException(msg);
-                }
-
-                try
-                {
-                    element.Click();
-                    break;
-                }
-                catch (ElementClickInterceptedException e)
-                {
-                    message = e.GetType().FullName + " - " + e.Message;
-                }
-                catch (ElementNotInteractableException e)
-                {
-                    message = e.GetType().FullName + " - " + e.Message;
-                }
-                catch (StaleElementReferenceException)
-                {
-                    element = FindElement(elementLocator, mSecondsToWait);
-                }
-            }
+            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Element found"), element: element);
+            element.Click();
         }
 
         ///<summary>
