@@ -5,7 +5,7 @@ using TestsConfigurator;
 namespace RegressionTests.UI.HomePage
 {
     [TestFixture]
-    //[Parallelizable(ParallelScope.All)]
+    [Parallelizable(ParallelScope.All)]
     public class Genre : UITestsSuitFixture
     {
         [Test]
