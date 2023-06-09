@@ -31,6 +31,7 @@ namespace AutomationCore.Managers
             _logger = logger;
             _runSettings = RunSettings.Instance;
             _seleniumDriver = InitNewCopyOfWebDriver();
+            _seleniumDriver.Manage().Window.Maximize();
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
             _seleniumDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
         }
@@ -41,12 +42,13 @@ namespace AutomationCore.Managers
 
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                ChromeDriverService service_Local = ChromeDriverService.CreateDefaultService();
-                service_Local.WhitelistedIPAddresses = " ";
-                service_Local.Port = 9515;
+                //ChromeDriverService service_Local = ChromeDriverService.CreateDefaultService();
+                //service_Local.WhitelistedIPAddresses = " ";
+                //service_Local.Port = 9515;
                 var uri = new Uri("http://localhost:4444");
                 //var result = new RemoteWebDriver(remoteAddress: uri, options: SetChrome());
                 var result = new RemoteWebDriver(remoteAddress: uri, options: SetChrome());
+                result.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
                 return result;
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
@@ -64,11 +66,12 @@ namespace AutomationCore.Managers
         private ChromeOptions SetChrome()
         {
             ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--start-maximized");
+            //options.AddArgument("--start-maximized");
+            options.AddArgument("--window-size=1920,1080");
 
             if (_runSettings.Headless)
             {
-                options.AddArgument("--headless=new");
+                //options.AddArgument("--headless=new");
             };
 
             return options;
