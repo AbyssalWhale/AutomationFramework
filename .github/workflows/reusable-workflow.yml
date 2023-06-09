@@ -49,10 +49,17 @@ jobs:
         with:
           repository: AbyssalWhale/AutomationFramework
           path: ${{ inputs.check-out-path }}
+      - name: 🔧 "Print out Workspace"
+        run: |
+          echo "Check out path: ${{ toJSON(inputs.check-out-path) }}"
+          echo "-Check out content-"
+          ls ${{ inputs.check-out-path }}
       - name: Start Selenium Hub with Docker
-        run: docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml up
+        run: | 
+          docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml up
       - name: Stop Selenium Hub with Docker
-        run: docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml down
+        run: | 
+          docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml down
     # - name: 🔧 Print out Workspace
     #   run: |
     #     dir ${{ inputs.check-out-path }}
