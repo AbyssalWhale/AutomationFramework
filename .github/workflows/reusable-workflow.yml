@@ -37,7 +37,7 @@ jobs:
     env:
       tests_result_dir: ${{ inputs.check-out-path }}/testResults
       runsettings_config_path: ${{ inputs.check-out-path }}/TestsConfigurator/RunSettings/InstanceSettings.runsettings
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
         contents: read
         issues: read
