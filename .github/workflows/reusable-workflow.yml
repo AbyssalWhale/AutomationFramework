@@ -38,21 +38,23 @@ jobs:
       tests_result_dir: ${{ inputs.check-out-path }}/testResults
       runsettings_config_path: ${{ inputs.check-out-path }}/TestsConfigurator/RunSettings/InstanceSettings.runsettings
     runs-on: ubuntu-latest
+    container:
+      image: selenium/standalone-chrome:latest
     permissions:
         contents: read
         issues: read
         checks: write
         pull-requests: write
     steps:
-      - name: Run Selenium Hub with Docker
-        uses: addnab/docker-run-action@v3
-        with:
-            image: selenium/standalone-chrome:latest
-            options: --rm -p 4444:4444 -p 7900:7900 --shm-size 2g
-            run: |
-                    composer install
-                    npm install
-                    npm run production
+      #- name: Run Selenium Hub with Docker
+      #  uses: addnab/docker-run-action@v3
+      #  with:
+      #      image: selenium/standalone-chrome:latest
+      #      options: --rm -p 4444:4444 -p 7900:7900 --shm-size 2g
+      #      run: |
+      #        composer install
+      #        npm install
+      #        npm run production
       #- name: Start Selenium 
       #  run: |
       #    docker run --rm -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
