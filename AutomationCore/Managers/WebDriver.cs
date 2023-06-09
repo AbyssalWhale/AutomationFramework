@@ -10,7 +10,6 @@ using System.Collections.ObjectModel;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
-using OpenQA.Selenium.Remote;
 
 namespace AutomationCore.Managers
 {
@@ -44,7 +43,7 @@ namespace AutomationCore.Managers
                 ChromeDriverService service_Local = ChromeDriverService.CreateDefaultService();
                 service_Local.WhitelistedIPAddresses = " ";
                 service_Local.Port = 9515;
-                var result = new RemoteWebDriver(options: SetChrome());
+                var result = new ChromeDriver(options: SetChrome(), service: service_Local);
                 return result;
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
