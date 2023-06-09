@@ -44,9 +44,14 @@ jobs:
         checks: write
         pull-requests: write
     steps:
-      - name: Start Selenium 
-        run: |
-          docker run --rm -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
+      - name: Run Selenium Hub with Docker
+        uses: addnab/docker-run-action@v3
+        with:
+            image: selenium/standalone-chrome:latest
+            options: --rm -p 4444:4444 -p 7900:7900 --shm-size 2g
+      #- name: Start Selenium 
+      #  run: |
+      #    docker run --rm -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
       - name: 🔻Checkout
         uses: actions/checkout@v2
         with:
