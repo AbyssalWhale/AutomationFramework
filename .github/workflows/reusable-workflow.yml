@@ -38,32 +38,53 @@ jobs:
       tests_result_dir: ${{ inputs.check-out-path }}/testResults
       runsettings_config_path: ${{ inputs.check-out-path }}/TestsConfigurator/RunSettings/InstanceSettings.runsettings
     runs-on: ubuntu-latest
-    container:
-      image: selenium/standalone-chrome:latest
-      options: --rm --shm-size 2g
     permissions:
         contents: read
         issues: read
         checks: write
         pull-requests: write
     steps:
-      #- name: Run Selenium Hub with Docker
-      #  uses: addnab/docker-run-action@v3
-      #  with:
-      #      image: selenium/standalone-chrome:latest
-      #      options: --rm -p 4444:4444 -p 7900:7900 --shm-size 2g
-      #      run: |
-      #        composer install
-      #        npm install
-      #        npm run production
-      #- name: Start Selenium 
-      #  run: |
-      #    docker run --rm -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
       - name: 🔻Checkout
         uses: actions/checkout@v2
         with:
           repository: AbyssalWhale/AutomationFramework
           path: ${{ inputs.check-out-path }}
+      - name: 🔧 "Print out Workspace"
+        run: |
+          echo "Check out path: ${{ toJSON(inputs.check-out-path) }}"
+          echo "-Check out content-"
+          ls ${{ inputs.check-out-path }}
+      - name: 🫙 Start Selenium Hub with Docker
+        shell: pwsh
+        run: | 
+          docker-compose -f ${{ inputs.check-out-path }}/.github/docker-compose-latest.yml up -d --build
+      - name: 🔧 Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3.1.0
+      - name: 🔧 Setup NuGet.exe for use with actions
+        uses: NuGet/setup-nuget@v1.2.0
+      - name: 🏗️ Build
+        uses: EasyDesk/action-dotnet-build@v1.0.0
+        with:
+          path: ${{ inputs.check-out-path }}/
+      - name: 🔧 Update .runsettings
+        shell: pwsh
+        run: |
+          ${{inputs.check-out-path}}\.pshell\updateRSettings.ps1 ${{env.runsettings_config_path}} ${{inputs.branch}} ${{secrets.instance-ui-url}} ${{secrets.instance-backend-url}} ${{secrets.instance-backend-api-key}} ${{secrets.instance-backend-api-key}} ${{inputs.zephyr-is-publishresults}} ${{secrets.zephyr-projectKey}} ${{inputs.zephyr-cycle-name}} ${{inputs.zephyr-CycleComment}} ${{inputs.zephyr-token}} ${{ env.tests_result_dir }}
+      - name: 🕵️‍♀️ Run Tests
+        shell: pwsh
+        run: |
+          dotnet test ${{ inputs.check-out-path }}/RegressionTests/bin/Release/net7.0/RegressionTests.dll --results-directory ${{ env.tests_result_dir }}/ --logger "trx;logfilename=testResults.trx" --settings "${{ env.runsettings_config_path }}" -- whitelisted-ips
+      - name: 🧪 Publish Tests Results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        with:
+          check_name: 🧪 .Net Selenium Tests Results 
+          files: |
+           ${{ env.tests_result_dir }}/testResults.trx
+      - name: 🫙 Stop Selenium Hub with Docker
+        shell: pwsh
+        run: | 
+          docker-compose -f ${{ inputs.check-out-path }}/.github/docker-compose-latest.yml down
     # - name: 🔧 Print out Workspace
     #   run: |
     #     dir ${{ inputs.check-out-path }}
