@@ -47,23 +47,15 @@ jobs:
         checks: write
         pull-requests: write
     steps:
-      #- name: Run Selenium Hub with Docker
-      #  uses: addnab/docker-run-action@v3
-      #  with:
-      #      image: selenium/standalone-chrome:latest
-      #      options: --rm -p 4444:4444 -p 7900:7900 --shm-size 2g
-      #      run: |
-      #        composer install
-      #        npm install
-      #        npm run production
-      #- name: Start Selenium 
-      #  run: |
-      #    docker run --rm -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
+      - name: Start Selenium Hub with Docker
+        run: docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml up
       - name: 🔻Checkout
         uses: actions/checkout@v2
         with:
           repository: AbyssalWhale/AutomationFramework
           path: ${{ inputs.check-out-path }}
+      - name: Stop Selenium Hub with Docker
+        run: docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml down
     # - name: 🔧 Print out Workspace
     #   run: |
     #     dir ${{ inputs.check-out-path }}
