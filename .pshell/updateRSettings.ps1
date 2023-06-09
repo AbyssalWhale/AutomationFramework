@@ -1,5 +1,6 @@
 param(
 [Parameter(Mandatory=$true, ValueFromPipeline=$true)][string] $path_ToRunSettings,
+[Parameter(Mandatory=$true, ValueFromPipeline=$true)][string] $is_RemoteWebDriver,
 [Parameter(Mandatory=$true, ValueFromPipeline=$true)][string] $instance_Branch,
 [Parameter(Mandatory=$true, ValueFromPipeline=$true)][string] $ui_instance_Url,
 [Parameter(Mandatory=$true, ValueFromPipeline=$true)][string] $api_instance_Url,
@@ -14,7 +15,8 @@ param(
 )
 
 $xml = [xml](Get-Content -Path $path_ToRunSettings)
-
+$node = $xml.RunSettings.TestRunParameters.Parameter | where {$_.name -eq 'IsRemoteWebDriver'}
+$node.Value = $is_RemoteWebDriver
 $node = $xml.RunSettings.TestRunParameters.Parameter | where {$_.name -eq 'Branch'}
 $node.Value = $instance_Branch
 $node = $xml.RunSettings.TestRunParameters.Parameter | where {$_.name -eq 'InstanceUrl'}
