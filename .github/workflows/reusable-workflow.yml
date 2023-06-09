@@ -40,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: selenium/standalone-chrome:latest
+      options: --rm --shm-size 2g
     permissions:
         contents: read
         issues: read
