@@ -46,7 +46,7 @@ jobs:
     steps:
       - name: Start Selenium 
         run: |
-          $ docker run --rm -it -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
+          docker run --rm -it -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
     # - name: 🔻Checkout
     #   uses: actions/checkout@v2
     #   with:
