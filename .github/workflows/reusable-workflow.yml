@@ -47,11 +47,11 @@ jobs:
       - name: Start Selenium 
         run: |
           docker run --rm -p 4444:4444 -p 7900:7900 --shm-size 2g selenium/standalone-chrome:beta
-    # - name: 🔻Checkout
-    #   uses: actions/checkout@v2
-    #   with:
-    #     repository: AbyssalWhale/AutomationFramework
-    #     path: ${{ inputs.check-out-path }}
+      - name: 🔻Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: AbyssalWhale/AutomationFramework
+          path: ${{ inputs.check-out-path }}
     # - name: 🔧 Print out Workspace
     #   run: |
     #     dir ${{ inputs.check-out-path }}
