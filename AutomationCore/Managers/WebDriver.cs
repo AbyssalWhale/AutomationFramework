@@ -41,8 +41,8 @@ namespace AutomationCore.Managers
             if (browser.Equals(Browsers.chrome.ToString()))
             {
                 ChromeDriverService service_Local = ChromeDriverService.CreateDefaultService();
-                service_Local.WhitelistedIPAddresses = "*";
-                service_Local.Port = 61285;
+                service_Local.WhitelistedIPAddresses = " ";
+                service_Local.Port = 9515;
                 var result = new ChromeDriver(options: SetChrome(), service: service_Local);
                 return result;
             }
