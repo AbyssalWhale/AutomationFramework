@@ -6,6 +6,7 @@
     <Parameter name="ApiInstanceUrl" value="default" />
     <!--Browser should be: chrome, firefox-->
     <Parameter name="Browser" value="chrome" />
+    <Parameter name="IsRemoteWebDriver" value="false" />
     <Parameter name="Headless" value="true" />
     <Parameter name="ImplicitWait" value="2" />
     <!--API-->

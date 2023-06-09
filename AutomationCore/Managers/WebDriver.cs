@@ -8,8 +8,6 @@ using AutomationCore.Utils;
 using AutomationCore.AssertAndErrorMsgs.UI;
 using System.Collections.ObjectModel;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
-using System;
 using OpenQA.Selenium.Remote;
 
 namespace AutomationCore.Managers
@@ -42,14 +40,12 @@ namespace AutomationCore.Managers
 
             if (browser.Equals(Browsers.chrome.ToString()))
             {
-                //ChromeDriverService service_Local = ChromeDriverService.CreateDefaultService();
-                //service_Local.WhitelistedIPAddresses = " ";
-                //service_Local.Port = 9515;
-                var uri = new Uri("http://localhost:4444");
-                //var result = new RemoteWebDriver(remoteAddress: uri, options: SetChrome());
-                var result = new RemoteWebDriver(remoteAddress: uri, options: SetChrome());
-                result.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
-                return result;
+                if (_runSettings.IsRemoteWebDriver)
+                {
+                    return new RemoteWebDriver(new Uri("http://localhost:4444"), options: SetChrome());
+                }
+
+                return new ChromeDriver(SetChrome());
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
             {
@@ -63,15 +59,29 @@ namespace AutomationCore.Managers
             }
         }
 
+        /// <summary>
+        /// Allow all connections not only private.
+        /// </summary>
+        /// <returns></returns>
+        private ChromeDriverService Get_ChromeServices()
+        {
+            ChromeDriverService service_Local = ChromeDriverService.CreateDefaultService();
+            service_Local.WhitelistedIPAddresses = " ";
+            service_Local.Port = 9515;
+
+            return service_Local;
+        }
+
         private ChromeOptions SetChrome()
         {
             ChromeOptions options = new ChromeOptions();
-            //options.AddArgument("--start-maximized");
             options.AddArgument("--window-size=1920,1080");
+            
 
             if (_runSettings.Headless)
             {
-                //options.AddArgument("--headless=new");
+                var headless = _runSettings.IsRemoteWebDriver ? "--headless" : "--headless=new";
+                options.AddArgument(headless);
             };
 
             return options;
