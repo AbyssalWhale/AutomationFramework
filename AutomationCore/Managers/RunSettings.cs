@@ -1,5 +1,6 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using NUnit.Framework;
+using OpenQA.Selenium.Remote;
 using System.Configuration;
 
 namespace AutomationCore.Managers
@@ -16,6 +17,7 @@ namespace AutomationCore.Managers
         public static string? InstanceUrl => TryToParseTestContext(nameof(InstanceUrl));
         public string ApiInstanceUrl { get; set; }
         public string Browser { get; set; }
+        public bool IsRemoteWebDriver { get; }
         public bool Headless { get; set; }
         public int ImplicitWait { get; set; }
         public string RunId { get; set; }
@@ -50,6 +52,8 @@ namespace AutomationCore.Managers
             Branch = TryToParseTestContext(nameof(Branch));
             ApiInstanceUrl = TryToParseTestContext(nameof(ApiInstanceUrl));
             Browser = TryToParseTestContext(nameof(Browser));
+            bool.TryParse(TryToParseTestContext(nameof(IsRemoteWebDriver)), out bool isRemoteWebDriver);
+            IsRemoteWebDriver = isRemoteWebDriver;
             bool.TryParse(TryToParseTestContext(nameof(Headless)), out bool headless);
             Headless = headless;
             int.TryParse(TryToParseTestContext(nameof(ImplicitWait)), out int implicitWait);

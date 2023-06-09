@@ -8,8 +8,7 @@ using AutomationCore.Utils;
 using AutomationCore.AssertAndErrorMsgs.UI;
 using System.Collections.ObjectModel;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
-using System;
+using OpenQA.Selenium.Remote;
 
 namespace AutomationCore.Managers
 {
@@ -30,6 +29,7 @@ namespace AutomationCore.Managers
             _logger = logger;
             _runSettings = RunSettings.Instance;
             _seleniumDriver = InitNewCopyOfWebDriver();
+            _seleniumDriver.Manage().Window.Maximize();
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
             _seleniumDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
         }
@@ -40,6 +40,11 @@ namespace AutomationCore.Managers
 
             if (browser.Equals(Browsers.chrome.ToString()))
             {
+                if (_runSettings.IsRemoteWebDriver)
+                {
+                    return new RemoteWebDriver(new Uri("http://localhost:4444"), options: SetChrome());
+                }
+
                 return new ChromeDriver(SetChrome());
             }
             else if (browser.Equals(Browsers.firefox.ToString()))
@@ -54,11 +59,30 @@ namespace AutomationCore.Managers
             }
         }
 
+        /// <summary>
+        /// Allow all connections not only private.
+        /// </summary>
+        /// <returns></returns>
+        private ChromeDriverService Get_ChromeServices()
+        {
+            ChromeDriverService service_Local = ChromeDriverService.CreateDefaultService();
+            service_Local.WhitelistedIPAddresses = " ";
+            service_Local.Port = 9515;
+
+            return service_Local;
+        }
+
         private ChromeOptions SetChrome()
         {
             ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--start-maximized");
-            if (_runSettings.Headless) options.AddArguments("--headless=new");
+            options.AddArgument("--window-size=1920,1080");
+            
+
+            if (_runSettings.Headless)
+            {
+                var headless = _runSettings.IsRemoteWebDriver ? "--headless" : "--headless=new";
+                options.AddArgument(headless);
+            };
 
             return options;
         }
