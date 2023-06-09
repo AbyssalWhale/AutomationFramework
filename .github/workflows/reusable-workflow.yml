@@ -55,11 +55,13 @@ jobs:
           echo "-Check out content-"
           ls ${{ inputs.check-out-path }}
       - name: Start Selenium Hub with Docker
+        shell: pwsh
         run: | 
-          docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml up
+          docker-compose -f ${{ inputs.check-out-path }}/.github/docker-compose-latest.yml up
       - name: Stop Selenium Hub with Docker
+        shell: pwsh
         run: | 
-          docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml down
+          docker-compose -f ${{ inputs.check-out-path }}/.github/docker-compose-latest.yml down
     # - name: 🔧 Print out Workspace
     #   run: |
     #     dir ${{ inputs.check-out-path }}
