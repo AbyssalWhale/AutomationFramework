@@ -44,13 +44,13 @@ jobs:
         checks: write
         pull-requests: write
     steps:
-      - name: Start Selenium Hub with Docker
-        run: docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml up
       - name: 🔻Checkout
         uses: actions/checkout@v2
         with:
           repository: AbyssalWhale/AutomationFramework
           path: ${{ inputs.check-out-path }}
+      - name: Start Selenium Hub with Docker
+        run: docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml up
       - name: Stop Selenium Hub with Docker
         run: docker-compose -f ${{inputs.check-out-path}}\.github\docker-compose-latest.yml down
     # - name: 🔧 Print out Workspace
