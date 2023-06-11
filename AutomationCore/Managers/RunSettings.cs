@@ -77,5 +77,15 @@ namespace AutomationCore.Managers
 
             return value;
         }
+
+        /// <summary>
+        /// Use it to get the path to directory with test content. 
+        /// </summary>
+        /// <returns></returns>
+        public string Get_TestContent_Name()
+        {
+            var testDir = $"{TestsReportDirectory}{TestContext.CurrentContext.Test.Name}";
+            return testDir.Replace(@"""", "_");
+        }
     }
 }

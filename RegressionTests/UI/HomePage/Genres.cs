@@ -9,10 +9,9 @@ namespace RegressionTests.UI.HomePage
     public class Genre : UITestsSuitFixture
     {
         [Test]
-        public void TheUser_CanSelect_Game_Genre_T4()
+        public void TheUser_CanSelect_Game_Genre_T4([Values("Card")] string genreName)
         {
             //Arrange
-            var genreName = "Card";
             Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
             var genreUnderTest = Controllers.Genres.Get_Genre(genreName).Result;
 

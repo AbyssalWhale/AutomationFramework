@@ -9,7 +9,7 @@ namespace AutomationCore.Managers
 {
     public class TestsLoggerManager
     {
-        private const string TestLogFileSuffixAndExtension = "_Log.json";
+        private const string TestExecutionLogName = "TestExecutionLog.json";
         private const string TestScreenshootFormat = ".png";
         public readonly string LoggerFullPath;
 
@@ -21,8 +21,9 @@ namespace AutomationCore.Managers
         public TestsLoggerManager(string? managerName = null)
         {
             _settingsManager = RunSettings.Instance;
+            ;
             _screenshootsPath = managerName is null ?
-                $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}" :
+                $"{_settingsManager.Get_TestContent_Name()}" :
                 $"{_settingsManager.TestsReportDirectory}/{managerName}";
             _testsCountersForScreshoots = 0;
             _logger = CreateTestFolderAndLog(out LoggerFullPath, managerName);
@@ -31,11 +32,11 @@ namespace AutomationCore.Managers
         private Logger CreateTestFolderAndLog(out string loggerFullPath, string? managerName = null)
         {
             string directory = managerName is null ?
-                $"{_settingsManager.TestsReportDirectory}/{TestContext.CurrentContext.Test.Name}" :
+                $"{_settingsManager.Get_TestContent_Name()}" :
                 _settingsManager.TestsReportDirectory;
             loggerFullPath = managerName is null ? 
-                $"{directory}/{TestContext.CurrentContext.Test.Name}{TestLogFileSuffixAndExtension}" :
-                $"{directory}/{managerName}{TestLogFileSuffixAndExtension}";
+                $"{directory}/{TestExecutionLogName}" :
+                $"{directory}/{managerName}{TestExecutionLogName}";
 
             Directory.CreateDirectory(directory);
             var result = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{loggerFullPath}").CreateLogger();
@@ -89,7 +90,6 @@ namespace AutomationCore.Managers
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");
             MakeLogScreenshoot(driver);
-            //js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
         }
     
         private void LogScreenShoot(WebDriver? driver = null, IWebElement? element = null)
