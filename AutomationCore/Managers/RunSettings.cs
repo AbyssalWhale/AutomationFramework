@@ -77,5 +77,15 @@ namespace AutomationCore.Managers
 
             return value;
         }
+
+        /// <summary>
+        /// Usage of NUnit.Framework.ValuesAttribute can cause issues with creating a folder where a name is test case name. This method provides work around. 
+        /// </summary>
+        /// <returns>the path to directory with test content for current execution</returns>
+        public string Get_TestContent_Name()
+        {
+            var testDir = $"{TestsReportDirectory}{TestContext.CurrentContext.Test.Name}";
+            return testDir.Replace(@"""", "_");
+        }
     }
 }

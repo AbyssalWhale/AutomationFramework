@@ -15,9 +15,15 @@ namespace RegressionTests.UI.HomePage
         }
 
         [Test]
-        public void TheUser_CanSearch_Game_TES_T1()
+        public void TheUser_CanSearch_Game_TES_T1([Values("Grand Theft Auto")] string gameName)
         {
+            //Act
+            HomePage.Search.Input_Search_Game(gameName);
 
+            //Assert
+            Assert.IsTrue(HomePage.GamesGrid.IsLoaded(), "Expected game grid is succefully loaded after entering game for search");
+            var card_Titles_UI = HomePage.GamesGrid.Get_Cards_Titles();
+            Assert.Contains(gameName, card_Titles_UI, $"Expected that all test titles contains game {gameName}");
         }
     }
 }
