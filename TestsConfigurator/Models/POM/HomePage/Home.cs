@@ -11,6 +11,7 @@ namespace TestsConfigurator.Models.POM.HomePage
 
         public GenresListComponent Genres => new GenresListComponent(WebDriver);
         public GamesGridComponent GamesGrid => new GamesGridComponent(WebDriver);
+        public SearchComponent Search => new SearchComponent(WebDriver);
 
         public Home(ManagersContainer managersContainer) : base(managersContainer)
         {
@@ -30,7 +31,7 @@ namespace TestsConfigurator.Models.POM.HomePage
 
         public override bool IsLoaded()
         {
-            return WebDriver.FindElement(Icon_Logo).Displayed & GamesGrid.IsLoaded();
+            return WebDriver.FindElement(Icon_Logo).Displayed & GamesGrid.IsLoaded() & Search.IsLoaded();
         }
     }
 }

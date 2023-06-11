@@ -8,11 +8,16 @@ namespace RegressionTests.UI.HomePage
     [Parallelizable(ParallelScope.All)]
     public class Genre : UITestsSuitFixture
     {
+        [SetUp]
+        public new void SetUp()
+        {
+            Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
+        }
+
         [Test]
         public void TheUser_CanSelect_Game_Genre_T4([Values("Card")] string genreName)
         {
             //Arrange
-            Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
             var genreUnderTest = Controllers.Genres.Get_Genre(genreName).Result;
 
             //Act
