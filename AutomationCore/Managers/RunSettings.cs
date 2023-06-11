@@ -79,9 +79,9 @@ namespace AutomationCore.Managers
         }
 
         /// <summary>
-        /// Use it to get the path to directory with test content. 
+        /// Usage of NUnit.Framework.ValuesAttribute can cause issues with creating a folder where a name is test case name. This method provides work around. 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>the path to directory with test content for current execution</returns>
         public string Get_TestContent_Name()
         {
             var testDir = $"{TestsReportDirectory}{TestContext.CurrentContext.Test.Name}";
