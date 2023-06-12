@@ -1,33 +1,35 @@
-# Solution overview:
-Solution consists of 3 projects. All of them use .NET 6.0 framework.    
-- AutomationCore - main project with managers, utils etc that are required by objects from the 'TestsConfigurator' project;
-- TestsConfigurator - project with models (POMs, APIs etc), fixtures, and reusettings. It has reference to the 'AutomationCore' project only;
-- RegressionTests - project with UI and API regression tests. It has reference to the 'TestsConfigurator' project only;
+# .Net Selenium Tests
+This repository only serves as a demonstration software for demostration of following skills:
+- automation testing with using .Net with Selenium;
+- DevOps with using AWS, GitHub Action, Microsoft Azure DevOps.
+- test are written against solution: https://github.com/AbyssalWhale/game-store
 
-Tools under the hood:
-- .net;
-- NUnit;
-- Selenium;
-- Dapper;
+# Technologies Used
+
+The following technologies and tools are used in this repository:
+- C# + .Net;
+- Coverlet Collector;
 - Bogus;
-- Serilog;
-- RestSharp;
-- JUnitTestLogger;
+- Dapper; 
+- DotNetSeleniumExtras PageObjects;
+- JunitXml;
+- Newtonsoft Json;
+- NUnit;
+- Docker.
 
-# Solution' projects overview:
-- AutomationCore:
-  - AssertAndErrorMsgs - assert and exception messages that should be used by exceptions and asserts;
-  - Enums - data that can be reused by tests, POMs, and APIs during test execution. For example: drop downs options, menu option etc;
-  - Managers - tool's wrappers that are used by POMs and APIs during test execution. If tool does not need a wrapper - it's initialised directly in test fixture/POM/API. 
-  - Utils - additional tools that can be used at any level (POMs, API routes, tests etc);
-- TestsConfigurator:
-  - Fixtures - has all fixtures for all tests. Notice that any fixture should be inherited from the 'TestsSuitsFixture' class;
-  - Models - contains all POMs and API models including API routes; 
-  - RunSettings - run settings for specific branch/instance;
-  - Projects - has reference to the 'AutomationCore' project;
-- RegressionTests: 
-  - API - all API regression tests. Tests sorting: Endpoint name -> request type;
-  - UI -  all UI regression tests. Tests sorting: Page name.
-  - TestsResults - contains tests attachment for each run. Notice: folder is added to .gitignore. 
-  - Projects - has reference to the 'TestsConfigurator' project;
+# DevOps
+There are two pipelines configured in the repository, which are automatically triggered whenever a new pull request (PR) is opened. These pipelines serve as 'Checks' to ensure the quality and functionality of the code. The pipelines are configured in two different places:
+- GitHub Actions: This pipeline runs all stages automatically, as they are public and can be reviewed by anyone;
+- Microsoft Azure DevOps: This pipeline also runs automatically, but only for the build and publish artifact stages. The remaining stages require some manual activity to be completed. This configuration is done to optimize cost savings.
 
+The main jobs performed by the pipelines are as follows:
+- Check out and run tests;
+- publish the test results to the corresponding pull request;
+- publishing test results to Jira ZephyrScale is applicable for Microsoft Azure DevOps. GitHub Actions is coming;
+
+#Conclusion
+I would like to emphasize the following points:
+- Ongoing Development: Everything in this repository, including the Game Store, are currently in development. I actively switch between projects to continuously enhance my skills in different technologies. It's important to note that this is not the final or most refined version of the software and tests;
+- Skill Demonstration: The main objective of this repository is to showcase my skills and capabilities. While the software and tests may not be the absolute best or most comprehensive versions, they serve as tangible examples of my proficiency in the respective technologies. They demonstrate my ability to work on real-world projects and provide insight into my development approach.
+
+By highlighting these points, it is clear that the repository serves as a demonstration of skills rather than representing finalized or production-ready software.
