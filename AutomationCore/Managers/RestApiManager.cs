@@ -1,4 +1,5 @@
 ﻿using AutomationCore.Managers.Models;
+using AutomationCore.Managers.Models.Jira.ZephyrScale.Cycles;
 using AutomationCore.Utils;
 using RestSharp;
 using System.Collections.Concurrent;
@@ -49,12 +50,18 @@ namespace AutomationCore.Managers
 
             if (headers != null)
             {
-                Parallel.ForEach(headers, header => { request.AddParameter(header.Key, header.Value, ParameterType.UrlSegment); });
+                foreach (var header in headers)
+                {
+                    request.AddHeader(header.Key, header.Value);
+                }
             }
 
             if (parameters != null)
             {
-                Parallel.ForEach(parameters, parameter => { request.AddParameter(parameter.Key, parameter.Value); });
+                foreach (var parameter in parameters)
+                {
+                    request.AddParameter(parameter.Key, parameter.Value, ParameterType.UrlSegment);
+                }
             }
 
             if (restObject != null)
@@ -65,7 +72,7 @@ namespace AutomationCore.Managers
             return request;
         }
 
-        public T GetZephyrFolders<T>()
+        public TestCyclesResponse GetZephyrFolders()
         {
             var zephyrUrl = "https://api.zephyrscale.smartbear.com";
             var requestUrl = "/v2/folders";
@@ -75,12 +82,12 @@ namespace AutomationCore.Managers
             var newRequest = new RestRequest(requestUrl, Method.Get);
             newRequest.AddHeader("Authorization", $"{_runSettings.ZephyrToken}");
 
-            var response = localCliend.Execute<T>(newRequest);
+            var response = localCliend.Execute<TestCyclesResponse>(newRequest);
             if (!response.StatusCode.Equals(HttpStatusCode.OK))
             {
                 var msg = $"Unable to get zephyr test cycle folders. https://api.zephyrscale.smartbear.com/v2/folders returns {response.StatusCode} for GET request";
                 _logger.LogError(LogMessages.MethodExecution($"Method throws exception: {msg}"));
-                throw new Exception(msg);
+                throw new HttpRequestException(msg);
             }
 
             _logger.LogTestAction(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {zephyrUrl}{requestUrl} Method: {Method.Get} Response Code: {response.StatusCode}"));
