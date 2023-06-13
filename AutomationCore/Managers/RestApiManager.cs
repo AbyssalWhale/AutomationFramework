@@ -49,12 +49,18 @@ namespace AutomationCore.Managers
 
             if (headers != null)
             {
-                Parallel.ForEach(headers, header => { request.AddParameter(header.Key, header.Value, ParameterType.UrlSegment); });
+                foreach (var header in headers)
+                {
+                    request.AddHeader(header.Key, header.Value);
+                }
             }
 
             if (parameters != null)
             {
-                Parallel.ForEach(parameters, parameter => { request.AddParameter(parameter.Key, parameter.Value); });
+                foreach (var parameter in parameters)
+                {
+                    request.AddParameter(parameter.Key, parameter.Value, ParameterType.UrlSegment);
+                }
             }
 
             if (restObject != null)
