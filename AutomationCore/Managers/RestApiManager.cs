@@ -11,12 +11,12 @@ namespace AutomationCore.Managers
     {
         private RestClient _client;
         private TestsLoggerManager _logger;
-        private RunSettings _runSettings;
+        private RunSettingsManager _runSettings;
 
         public RestApiManager(TestsLoggerManager logger)
         {
             _logger = logger;
-            _runSettings = RunSettings.Instance;
+            _runSettings = RunSettingsManager.Instance;
             _client = new RestClient(_runSettings.ApiInstanceUrl);
             _client.AddDefaultParameter("key", _runSettings.ApiKey);
         }

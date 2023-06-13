@@ -15,12 +15,12 @@ namespace AutomationCore.Managers
 
         private string _screenshootsPath;
         private int _testsCountersForScreshoots;
-        private RunSettings _settingsManager;
+        private RunSettingsManager _settingsManager;
         private Logger _logger;
 
         public TestsLoggerManager(string? managerName = null)
         {
-            _settingsManager = RunSettings.Instance;
+            _settingsManager = RunSettingsManager.Instance;
             ;
             _screenshootsPath = managerName is null ?
                 $"{_settingsManager.Get_TestContent_Name()}" :

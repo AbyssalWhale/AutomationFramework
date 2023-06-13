@@ -18,7 +18,7 @@ namespace TestsConfigurator
 
         public RestApiManager API => TestsManagers[TestContext.CurrentContext.Test.Name].API;
 
-        public RunSettings RunSettings => RunSettings.Instance;
+        public RunSettingsManager RunSettings => RunSettingsManager.Instance;
 
         public TestsLoggerManager Logger => TestsManagers[TestContext.CurrentContext.Test.Name].LogManager;
 
@@ -33,7 +33,7 @@ namespace TestsConfigurator
             HomePages = new ConcurrentDictionary<string, Home>();
             TestsControllers = new ConcurrentDictionary<string, ControllersContainer>();
 
-            if (RunSettings.Instance.PublishToZephyr) ZephyrScale.CreateTestCycleConfigFile();
+            if (RunSettingsManager.Instance.PublishToZephyr) ZephyrScale.CreateTestCycleConfigFile();
         }
 
         [SetUp]

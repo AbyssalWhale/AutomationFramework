@@ -15,7 +15,7 @@ namespace AutomationCore.Managers
     public class WebDriver
     {
         private TestsLoggerManager _logger;
-        private RunSettings _runSettings;
+        private RunSettingsManager _runSettings;
         internal IWebDriver _seleniumDriver;
 
         private static Dictionary<Browsers, List<string>> BrowsersProcessesNames = new Dictionary<Browsers, List<string>>
@@ -27,7 +27,7 @@ namespace AutomationCore.Managers
         public WebDriver(TestsLoggerManager logger)
         {
             _logger = logger;
-            _runSettings = RunSettings.Instance;
+            _runSettings = RunSettingsManager.Instance;
             _seleniumDriver = InitNewCopyOfWebDriver();
             _seleniumDriver.Manage().Window.Maximize();
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);

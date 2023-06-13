@@ -4,7 +4,7 @@ namespace AutomationCore.Managers
 {
     public class ManagersContainer
     {
-        public RunSettings RunSettings { get; }
+        public RunSettingsManager RunSettings { get; }
 
         public TestsLoggerManager LogManager { get; }
 
@@ -16,7 +16,7 @@ namespace AutomationCore.Managers
 
         public ManagersContainer(bool initWebDriver = true)
         {
-            RunSettings = RunSettings.Instance;
+            RunSettings = RunSettingsManager.Instance;
             LogManager = new TestsLoggerManager();
             if (initWebDriver) WebDriver = new WebDriver(LogManager);
             API = new RestApiManager(LogManager);
