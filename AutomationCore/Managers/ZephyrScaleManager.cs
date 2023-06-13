@@ -27,7 +27,7 @@ namespace AutomationCore.Managers
             {
                 if (!File.Exists(agentConfigPath))
                 {
-                    var zephyrTestCycles = _restApiManager.GetZephyrFolders<TestCyclesResponse>();
+                    var zephyrTestCycles = _restApiManager.GetZephyrFolders();
                     var runTestCycle = zephyrTestCycles.Values is null ?
                         null :
                         zephyrTestCycles.Values.FirstOrDefault(c => c.Name.ToLower().Equals(RunSettings.Instance.Branch));
