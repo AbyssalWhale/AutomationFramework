@@ -3,20 +3,18 @@ using OpenQA.Selenium;
 
 namespace AutomationCore.Managers.LogManagers
 {
-    public class ScreenShootManager
+    public class ScreenshotManager
     {
         private const string TestScreenshootFormat = ".png";
 
         private IWebDriver _driver;
         private string _screenshootsPath;
-        private RunSettingsManager _settingsManager;
         private int _testsCountersForScreshoots;
 
-        public ScreenShootManager(string loggerFileFullPath, IWebDriver driver)
+        public ScreenshotManager(string loggerFileFullPath, IWebDriver driver)
         {
             _testsCountersForScreshoots = 0;
             _driver = driver;
-            _settingsManager = RunSettingsManager.Instance;
             _screenshootsPath = loggerFileFullPath;
         }
 
@@ -27,8 +25,7 @@ namespace AutomationCore.Managers.LogManagers
                 return MakeAndSaveScreenshoot();
             }
 
-            IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
-            js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");
+            HighlightElement(element);
             return MakeAndSaveScreenshoot();
         }
 
@@ -41,6 +38,12 @@ namespace AutomationCore.Managers.LogManagers
             _testsCountersForScreshoots++;
 
             return screenShoot;
+        }
+
+        private object HighlightElement(IWebElement element)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+            return js.ExecuteScript("arguments[0].setAttribute('style', arguments[1]);", element, " border: 3px solid red;");
         }
     }
 }

@@ -15,7 +15,7 @@ namespace AutomationCore.Managers.LogManagers
         private RunSettingsManager _settingsManager;
         private Logger _logger;
         private WebDriver? _driver;
-        private ScreenShootManager? _screenShootManager;
+        private ScreenshotManager? _screenShootManager;
 
         public JsonLogManager(string? managerName = null, WebDriver? driver = null)
         {
@@ -25,7 +25,7 @@ namespace AutomationCore.Managers.LogManagers
             if (driver is not null)
             {
                 _driver = driver;
-                _screenShootManager = new ScreenShootManager(LoggerDirPath, _driver._seleniumDriver);
+                _screenShootManager = new ScreenshotManager(LoggerDirPath, _driver._seleniumDriver);
             }
         }
 
@@ -37,7 +37,7 @@ namespace AutomationCore.Managers.LogManagers
             }
 
             _driver = driver;
-            _screenShootManager = new ScreenShootManager(LoggerDirPath, _driver._seleniumDriver);
+            _screenShootManager = new ScreenshotManager(LoggerDirPath, _driver._seleniumDriver);
         }
 
         public void LogInfo(string message, bool makeScreenshoot = false, IWebElement? element = null)
