@@ -1,4 +1,5 @@
-﻿using AutomationCore.Managers.Models;
+﻿using AutomationCore.Managers.LogManagers;
+using AutomationCore.Managers.Models;
 using AutomationCore.Managers.Models.Jira.ZephyrScale.Cycles;
 using AutomationCore.Utils;
 using RestSharp;
@@ -10,10 +11,10 @@ namespace AutomationCore.Managers
     public class RestApiManager
     {
         private RestClient _client;
-        private TestsLoggerManager _logger;
+        private JsonLogManager _logger;
         private RunSettingsManager _runSettings;
 
-        public RestApiManager(TestsLoggerManager logger)
+        public RestApiManager(JsonLogManager logger)
         {
             _logger = logger;
             _runSettings = RunSettingsManager.Instance;
@@ -27,12 +28,12 @@ namespace AutomationCore.Managers
             ConcurrentDictionary<string, string>? parameters = null,
             IRestObject? restObject = null) where T : new()
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {endPoint} Method: {method}"));
+            _logger.LogInfo(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {endPoint} Method: {method}"));
             var request = CreateRequest(endPoint, method, headers, parameters, restObject);
 
             var result = await _client.ExecuteAsync<T>(request);
 
-            _logger.LogTestAction(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {endPoint} Method: {method} Response code: {result.StatusCode}"));
+            _logger.LogInfo(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {endPoint} Method: {method} Response code: {result.StatusCode}"));
 
             return result;
         }
@@ -77,7 +78,7 @@ namespace AutomationCore.Managers
             var zephyrUrl = "https://api.zephyrscale.smartbear.com";
             var requestUrl = "/v2/folders";
 
-            _logger.LogTestAction(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {zephyrUrl}{requestUrl} Method: {Method.Get}"));
+            _logger.LogInfo(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {zephyrUrl}{requestUrl} Method: {Method.Get}"));
             var localCliend = new RestClient(zephyrUrl);
             var newRequest = new RestRequest(requestUrl, Method.Get);
             newRequest.AddHeader("Authorization", $"{_runSettings.ZephyrToken}");
@@ -90,7 +91,7 @@ namespace AutomationCore.Managers
                 throw new HttpRequestException(msg);
             }
 
-            _logger.LogTestAction(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {zephyrUrl}{requestUrl} Method: {Method.Get} Response Code: {response.StatusCode}"));
+            _logger.LogInfo(LogMessages.MethodExecution(methodName: nameof(ExecuteAsync), $"End point: {zephyrUrl}{requestUrl} Method: {Method.Get} Response Code: {response.StatusCode}"));
 
 
             return response.Data;

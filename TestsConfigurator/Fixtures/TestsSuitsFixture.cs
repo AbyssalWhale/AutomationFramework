@@ -1,4 +1,5 @@
 ﻿using AutomationCore.Managers;
+using AutomationCore.Managers.LogManagers;
 using Bogus;
 using NUnit.Framework;
 using System.Collections.Concurrent;
@@ -20,7 +21,7 @@ namespace TestsConfigurator
 
         public RunSettingsManager RunSettings => RunSettingsManager.Instance;
 
-        public TestsLoggerManager Logger => TestsManagers[TestContext.CurrentContext.Test.Name].LogManager;
+        public JsonLogManager Logger => TestsManagers[TestContext.CurrentContext.Test.Name].LogManager;
 
         public ControllersContainer Controllers => TestsControllers[TestContext.CurrentContext.Test.Name];
 

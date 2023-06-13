@@ -1,11 +1,12 @@
-﻿using AutomationCore.Managers.Models.Jira.ZephyrScale.Cycles;
+﻿using AutomationCore.Managers.LogManagers;
+using AutomationCore.Managers.Models.Jira.ZephyrScale.Cycles;
 using Newtonsoft.Json;
 
 namespace AutomationCore.Managers
 {
     public class ZephyrScaleManager
     {
-        public readonly TestsLoggerManager TestsLoggerManager;
+        public readonly JsonLogManager TestsLoggerManager;
         private readonly RestApiManager _restApiManager;
         private RunSettingsManager RunSettings => RunSettingsManager.Instance;
 
@@ -15,7 +16,7 @@ namespace AutomationCore.Managers
 
         private ZephyrScaleManager()
         {
-            TestsLoggerManager = new TestsLoggerManager(nameof(ZephyrScaleManager));
+            TestsLoggerManager = new JsonLogManager(nameof(ZephyrScaleManager));
             _restApiManager = new RestApiManager(TestsLoggerManager);
         }
 

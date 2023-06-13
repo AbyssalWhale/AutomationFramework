@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using AutomationCore.Managers.LogManagers;
+using Bogus;
 
 namespace AutomationCore.Managers
 {
@@ -6,7 +7,7 @@ namespace AutomationCore.Managers
     {
         public RunSettingsManager RunSettings { get; }
 
-        public TestsLoggerManager LogManager { get; }
+        public JsonLogManager LogManager { get; }
 
         public WebDriver? WebDriver { get; }
 
@@ -17,8 +18,12 @@ namespace AutomationCore.Managers
         public ManagersContainer(bool initWebDriver = true)
         {
             RunSettings = RunSettingsManager.Instance;
-            LogManager = new TestsLoggerManager();
-            if (initWebDriver) WebDriver = new WebDriver(LogManager);
+            LogManager = new JsonLogManager();
+            if (initWebDriver)
+            {
+                WebDriver = new WebDriver(LogManager);
+                LogManager.SetWebDriver(WebDriver);
+            } 
             API = new RestApiManager(LogManager);
             FakeDataGenerator = new Faker();
         }
