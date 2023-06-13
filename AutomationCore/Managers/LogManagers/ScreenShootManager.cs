@@ -12,14 +12,12 @@ namespace AutomationCore.Managers.LogManagers
         private RunSettingsManager _settingsManager;
         private int _testsCountersForScreshoots;
 
-        public ScreenShootManager(IWebDriver driver, string? managerName = null)
+        public ScreenShootManager(string loggerFileFullPath, IWebDriver driver)
         {
             _testsCountersForScreshoots = 0;
             _driver = driver;
             _settingsManager = RunSettingsManager.Instance;
-            _screenshootsPath = string.IsNullOrEmpty(managerName) ?
-                $"{_settingsManager.Get_TestContent_Name()}" :
-                $"{_settingsManager.TestsReportDirectory}/{managerName}";
+            _screenshootsPath = loggerFileFullPath;
         }
 
         public Screenshot MakeScreenshoot(IWebElement? element = null)

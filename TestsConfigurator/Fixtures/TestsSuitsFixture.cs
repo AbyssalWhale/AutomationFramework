@@ -40,7 +40,7 @@ namespace TestsConfigurator
         [SetUp]
         public void GlobalSetUp()
         {
-            TestContext.AddTestAttachment(ZephyrScale.TestsLoggerManager.LoggerFullPath);
+            TestContext.AddTestAttachment(ZephyrScale.TestsLoggerManager.LoggerFilePath);
         }
     }
 }

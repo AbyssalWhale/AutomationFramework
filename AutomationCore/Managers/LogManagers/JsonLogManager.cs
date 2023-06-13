@@ -9,9 +9,9 @@ namespace AutomationCore.Managers.LogManagers
     public class JsonLogManager
     {
         private const string TestExecutionLogName = "TestExecutionLog.json";
-        public readonly string LoggerFullPath;
+        public readonly string LoggerDirPath;
+        public readonly string LoggerFilePath;
 
-        private string _managerName;
         private RunSettingsManager _settingsManager;
         private Logger _logger;
         private WebDriver? _driver;
@@ -20,13 +20,12 @@ namespace AutomationCore.Managers.LogManagers
         public JsonLogManager(string? managerName = null, WebDriver? driver = null)
         {
             _settingsManager = RunSettingsManager.Instance;
-            _managerName = managerName ?? string.Empty;
-            _logger = CreateTestFolderAndLog(out LoggerFullPath, _managerName);
+            _logger = CreateTestFolderAndLog(out LoggerDirPath, out LoggerFilePath, managerName);
 
             if (driver is not null)
             {
                 _driver = driver;
-                _screenShootManager = new ScreenShootManager(_driver._seleniumDriver, _managerName);
+                _screenShootManager = new ScreenShootManager(LoggerDirPath, _driver._seleniumDriver);
             }
         }
 
@@ -38,7 +37,7 @@ namespace AutomationCore.Managers.LogManagers
             }
 
             _driver = driver;
-            _screenShootManager = new ScreenShootManager(_driver._seleniumDriver, _managerName);
+            _screenShootManager = new ScreenShootManager(LoggerDirPath, _driver._seleniumDriver);
         }
 
         public void LogInfo(string message, bool makeScreenshoot = false, IWebElement? element = null)
@@ -64,16 +63,16 @@ namespace AutomationCore.Managers.LogManagers
             return _screenShootManager.MakeScreenshoot(element);
         }
 
-        private Logger CreateTestFolderAndLog(out string loggerFullPath, string? managerName = null)
+        private Logger CreateTestFolderAndLog(out string loggerFolderPath, out string loggerFullPath, string? managerName = null)
         {
-            string directory = string.IsNullOrEmpty(managerName) ?
+            loggerFolderPath = string.IsNullOrEmpty(managerName) ?
                 $"{_settingsManager.Get_TestContent_Name()}" :
                 _settingsManager.TestsReportDirectory;
             loggerFullPath = string.IsNullOrEmpty(managerName) ?
-                $"{directory}/{TestExecutionLogName}" :
-                $"{directory}/{managerName}{TestExecutionLogName}";
+                $"{loggerFolderPath}/{TestExecutionLogName}" :
+                $"{loggerFolderPath}/{managerName}{TestExecutionLogName}";
 
-            Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(loggerFolderPath);
             var result = new LoggerConfiguration().WriteTo.File(new JsonFormatter(), $"{loggerFullPath}").CreateLogger();
             result.Information($"Logger for '{managerName ?? TestContext.CurrentContext.Test.Name}' has been created. Path: {loggerFullPath}");
             TestContext.AddTestAttachment(loggerFullPath);
