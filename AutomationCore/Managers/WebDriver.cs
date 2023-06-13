@@ -9,13 +9,14 @@ using AutomationCore.AssertAndErrorMsgs.UI;
 using System.Collections.ObjectModel;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Remote;
+using AutomationCore.Managers.LogManagers;
 
 namespace AutomationCore.Managers
 {
     public class WebDriver
     {
-        private TestsLoggerManager _logger;
-        private RunSettings _runSettings;
+        private JsonLogManager _logger;
+        private RunSettingsManager _runSettings;
         internal IWebDriver _seleniumDriver;
 
         private static Dictionary<Browsers, List<string>> BrowsersProcessesNames = new Dictionary<Browsers, List<string>>
@@ -24,10 +25,10 @@ namespace AutomationCore.Managers
             { Browsers.firefox, new List<string>() { "Firefox", "geckodriver" } }
         };
 
-        public WebDriver(TestsLoggerManager logger)
+        public WebDriver(JsonLogManager logger)
         {
             _logger = logger;
-            _runSettings = RunSettings.Instance;
+            _runSettings = RunSettingsManager.Instance;
             _seleniumDriver = InitNewCopyOfWebDriver();
             _seleniumDriver.Manage().Window.Maximize();
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
@@ -137,7 +138,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public bool GoToUrl(string url)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"URL: {url}"));
+            _logger.LogInfo(LogMessages.MethodExecution($"URL: {url}"));
             _seleniumDriver.Navigate().GoToUrl(url);
             return IsPageLoaded();
         }
@@ -147,7 +148,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void NavigateBack()
         {
-            _logger.LogTestAction(LogMessages.MethodExecution());
+            _logger.LogInfo(LogMessages.MethodExecution());
             _seleniumDriver.Navigate().Back();
             IsPageLoaded();
         }
@@ -159,7 +160,7 @@ namespace AutomationCore.Managers
         {
             var millisecondsToWait = 10000;
             var stopwatch = new Stopwatch();
-            _logger.LogTestAction(LogMessages.MethodExecution($"MSeconds to wait: {millisecondsToWait}"));
+            _logger.LogInfo(LogMessages.MethodExecution($"MSeconds to wait: {millisecondsToWait}"));
 
             stopwatch.Start();
 
@@ -186,7 +187,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public object ExecuteJSScript(string script)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"Script: {script}"));
+            _logger.LogInfo(LogMessages.MethodExecution($"Script: {script}"));
             return ((IJavaScriptExecutor)_seleniumDriver).ExecuteScript(script);
         }
 
@@ -195,7 +196,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public object ExecuteJSScript(string script, List<IWebElement> elements)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution($"for element script: {script}"));
+            _logger.LogInfo(LogMessages.MethodExecution($"for element script: {script}"));
             return ((IJavaScriptExecutor)_seleniumDriver).ExecuteScript(script, elements);
         }
 
@@ -204,7 +205,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void Quit()
         {
-            _logger.LogTestAction(LogMessages.MethodExecution());
+            _logger.LogInfo(LogMessages.MethodExecution());
             _seleniumDriver.Quit();
         }
 
@@ -214,7 +215,7 @@ namespace AutomationCore.Managers
         ///</summary>
         internal void CloseWebDriverProcesses(string browser)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution());
+            _logger.LogInfo(LogMessages.MethodExecution());
             foreach (var BrowserProcessNames in BrowsersProcessesNames)
             {
                 if (BrowserProcessNames.Key.ToString().Equals(browser.ToLower()))
@@ -238,7 +239,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public bool GoToUrlInNewTab(string url)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution());
+            _logger.LogInfo(LogMessages.MethodExecution());
             ExecuteJSScript(JSCommands.OpenNewTab);
             _seleniumDriver.SwitchTo().Window(_seleniumDriver.WindowHandles[_seleniumDriver.WindowHandles.Count - 1]);
             return GoToUrl(url);
@@ -249,7 +250,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public string GetPageTitle()
         {
-            _logger.LogTestAction(LogMessages.MethodExecution());
+            _logger.LogInfo(LogMessages.MethodExecution());
             return _seleniumDriver.Title;
         }
 
@@ -259,7 +260,7 @@ namespace AutomationCore.Managers
         public IWebElement FindElement(By elementLocator, int mSecondsToWait = 5000, int newImplicitWait = 2)
         {
             var message = string.Empty;
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
 
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(newImplicitWait);
             Stopwatch stopwatch = new Stopwatch();
@@ -277,7 +278,7 @@ namespace AutomationCore.Managers
                 try
                 {
                     var element = _seleniumDriver.FindElement(elementLocator);
-                    _logger.MakeLogScreenshoot(_seleniumDriver, element);
+                    _logger.MakeScreenShoot(element);
                     _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
                     return element;
                 }
@@ -294,7 +295,7 @@ namespace AutomationCore.Managers
         public ReadOnlyCollection<IWebElement> FindElements(By elementLocator, int mSecondsToWait = 5000, int newImplicitWait = 2)
         {
             var message = string.Empty;
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
 
             _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(newImplicitWait);
             Stopwatch stopwatch = new Stopwatch();
@@ -312,7 +313,7 @@ namespace AutomationCore.Managers
                 try
                 {
                     var element = _seleniumDriver.FindElements(elementLocator);
-                    _logger.MakeLogScreenshoot(_seleniumDriver);
+                    _logger.MakeScreenShoot();
                     _seleniumDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_runSettings.ImplicitWait);
                     return element;
                 }
@@ -328,7 +329,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void SendKeys(By elementLocator, string textToSend, int mSecondsToWait = 5000)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
             var element = FindElement(elementLocator, mSecondsToWait);
             element.Clear();
             element.SendKeys(textToSend);
@@ -339,9 +340,9 @@ namespace AutomationCore.Managers
         ///</summary>
         public void ClickOnElement(By elementLocator, int mSecondsToWait = 5000)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria} MSeconds to wait: {mSecondsToWait}"));
             IWebElement element = FindElement(elementLocator, mSecondsToWait);
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Element found"), element: element);
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Element found"), element: element);
             element.Click();
         }
 
@@ -350,7 +351,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public bool IsElementExistInDOM(By elementLocator, int mSecondsToWait = 5000)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {elementLocator.Criteria}"));
             var result = false;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -381,7 +382,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public IWebElement ScrollToElement(By locator)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {locator.Criteria}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {locator.Criteria}"));
             if (IsElementExistInDOM(locator))
             {
                 IJavaScriptExecutor js = (IJavaScriptExecutor)_seleniumDriver;
@@ -403,7 +404,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public IWebElement ScrollToElement(IWebElement element)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"IWebElement"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"IWebElement"));
             IJavaScriptExecutor js = (IJavaScriptExecutor)_seleniumDriver;
             js.ExecuteScript(JSCommands.MoveToElement, element);
 
@@ -415,7 +416,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void HoverElement(By locator)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {locator.Criteria}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {locator.Criteria}"));
             if (IsElementExistInDOM(locator))
             {
                 var actions = new Actions(_seleniumDriver);
@@ -435,7 +436,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public bool SwitchToIFrame(By frameLocator)
         {
-            _logger.LogTestAction(LogMessages.MethodExecution(additionalData: $"Locator: {frameLocator.Criteria}"));
+            _logger.LogInfo(LogMessages.MethodExecution(additionalData: $"Locator: {frameLocator.Criteria}"));
             var result = false;
 
             if (IsElementExistInDOM(frameLocator))
@@ -452,7 +453,7 @@ namespace AutomationCore.Managers
         ///</summary>
         public void SwitchToDefaultContent()
         {
-            _logger.LogTestAction(LogMessages.MethodExecution());
+            _logger.LogInfo(LogMessages.MethodExecution());
             _seleniumDriver.SwitchTo().DefaultContent();
             _seleniumDriver.SwitchTo().ActiveElement();
         }

@@ -1,13 +1,14 @@
-﻿using AutomationCore.Managers.Models.Jira.ZephyrScale.Cycles;
+﻿using AutomationCore.Managers.LogManagers;
+using AutomationCore.Managers.Models.Jira.ZephyrScale.Cycles;
 using Newtonsoft.Json;
 
 namespace AutomationCore.Managers
 {
     public class ZephyrScaleManager
     {
-        public readonly TestsLoggerManager TestsLoggerManager;
+        public readonly JsonLogManager TestsLoggerManager;
         private readonly RestApiManager _restApiManager;
-        private RunSettings RunSettings => RunSettings.Instance;
+        private RunSettingsManager RunSettings => RunSettingsManager.Instance;
 
         private static readonly Lazy<ZephyrScaleManager> lazy = new Lazy<ZephyrScaleManager>(() => new ZephyrScaleManager());
 
@@ -15,7 +16,7 @@ namespace AutomationCore.Managers
 
         private ZephyrScaleManager()
         {
-            TestsLoggerManager = new TestsLoggerManager(nameof(ZephyrScaleManager));
+            TestsLoggerManager = new JsonLogManager(nameof(ZephyrScaleManager));
             _restApiManager = new RestApiManager(TestsLoggerManager);
         }
 
@@ -30,7 +31,7 @@ namespace AutomationCore.Managers
                     var zephyrTestCycles = _restApiManager.GetZephyrFolders();
                     var runTestCycle = zephyrTestCycles.Values is null ?
                         null :
-                        zephyrTestCycles.Values.FirstOrDefault(c => c.Name.ToLower().Equals(RunSettings.Instance.Branch));
+                        zephyrTestCycles.Values.FirstOrDefault(c => c.Name.ToLower().Equals(RunSettingsManager.Instance.Branch));
 
                     var configToWrite = GetConfigurationObject(runTestCycle);
 
@@ -53,7 +54,7 @@ namespace AutomationCore.Managers
         {
            return new
             {
-                name = $"{DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")} Build ID: {RunSettings.Instance.BuildId}",
+                name = $"{DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")} Build ID: {RunSettingsManager.Instance.BuildId}",
                 description = "Desc",
                 jiraProjectVersion = 0,
                 folderId = runTestCycle is null ? "null" : runTestCycle.Id.ToString()

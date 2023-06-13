@@ -20,7 +20,7 @@ namespace TestsConfigurator.Models.POM.HomePage
 
         public void Open()
         {
-            var url = RunSettings.InstanceUrl;
+            var url = RunSettingsManager.InstanceUrl;
             if (url is null)
             {
                 throw AEMessagesBase.GetException("Settings url is empty. Can not procceed.");
