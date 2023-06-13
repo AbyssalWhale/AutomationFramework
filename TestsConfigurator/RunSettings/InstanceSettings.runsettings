@@ -7,7 +7,7 @@
     <!--Browser should be: chrome, firefox-->
     <Parameter name="Browser" value="chrome" />
     <Parameter name="IsRemoteWebDriver" value="false" />
-    <Parameter name="Headless" value="false" />
+    <Parameter name="Headless" value="true" />
     <Parameter name="ImplicitWait" value="2" />
     <!--API-->
     <Parameter name="ApiKey" value="default" />
@@ -18,7 +18,7 @@
     <Parameter name="DBUserId" value="default" />
     <Parameter name="DBUserPass" value="default" />
     <!--Zephyr-->
-    <Parameter name="PublishToZephyr" value="false" />
+    <Parameter name="PublishToZephyr" value="true" />
     <Parameter name="ZephyrProjectKey" value="default" />
     <Parameter name="ZephyrCycleName" value="default" />
     <Parameter name="ZephyrCycleComment" value="default" />
