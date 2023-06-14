@@ -12,6 +12,7 @@ namespace AutomationCore.Managers
         public bool PublishToZephyr { get; set; }
         public string ZephyrToken { get; set; }
         public string AgentTestsResultsFolder { get; set; }
+        public string ReleaseUrl { get; set; }
         public string BuildId { get; set; }
         public string Branch { get; set; }
         public static string InstanceUrl => GetRunSetting(nameof(InstanceUrl));
@@ -34,6 +35,7 @@ namespace AutomationCore.Managers
             PublishToZephyr = TryParse_Bool_RunSetting(nameof(PublishToZephyr));
             ZephyrToken = GetRunSetting(nameof(ZephyrToken));
             AgentTestsResultsFolder = GetRunSetting(nameof(AgentTestsResultsFolder));
+            ReleaseUrl = GetRunSetting(nameof(ReleaseUrl));
             BuildId = GetRunSetting(nameof(BuildId));
             Branch = GetRunSetting(nameof(Branch));
             ApiInstanceUrl = GetRunSetting(nameof(ApiInstanceUrl));
