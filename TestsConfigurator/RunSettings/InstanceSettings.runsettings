@@ -25,6 +25,7 @@
     <Parameter name="ZephyrToken" value="token" />
     <!--Agent-->
     <Parameter name="BuildId" value="0" />
+    <Parameter name="ReleaseUrl" value="0" />
     <Parameter name="AgentTestsResultsFolder" value="default" />
   </TestRunParameters>
 </RunSettings>
