@@ -54,8 +54,8 @@ namespace AutomationCore.Managers
         {
            return new
             {
-                name = $"📅{DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")} 🏗️ Release: {RunSettingsManager.Instance.BuildId}",
-                description = $"Branch: {RunSettingsManager.Instance.Branch} Release URL: <a href='{RunSettingsManager.Instance.ReleaseUrl}'> </a>",
+                name = $"🧪 .Net Selenium 📅{DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")} 🏗️ Release: {RunSettingsManager.Instance.BuildId}",
+                description = $"Branch: {RunSettingsManager.Instance.Branch} Release URL: {RunSettingsManager.Instance.ReleaseUrl}",
                 jiraProjectVersion = 0,
                 folderId = runTestCycle is null ? "null" : runTestCycle.Id.ToString()
             };
