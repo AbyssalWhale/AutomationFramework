@@ -1,5 +1,6 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestsConfigurator;
 
 namespace RegressionTests.UI.HomePage
@@ -11,7 +12,7 @@ namespace RegressionTests.UI.HomePage
         [SetUp]
         public new void SetUp()
         {
-            Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
+            ClassicAssert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
         }
 
         [Test]
@@ -28,7 +29,7 @@ namespace RegressionTests.UI.HomePage
             //Assert
             Parallel.ForEach(card_Titles_UI, gameTitle =>
             {
-                Assert.IsNotNull(genreUnderTest.games.Where(g => g.name.ToLower().Equals(gameTitle.ToLower())), "Expected game is found on UI after filtering by genre");
+                ClassicAssert.IsNotNull(genreUnderTest.games.Where(g => g.name.ToLower().Equals(gameTitle.ToLower())), "Expected game is found on UI after filtering by genre");
             });
         }
     }
