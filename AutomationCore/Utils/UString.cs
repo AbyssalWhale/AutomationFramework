@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 
@@ -18,7 +19,7 @@ namespace AutomationCore.Utils
 
         public static ConcurrentDictionary<string, string> GetAllClassPropertiesWithValuesAsStrings(object objectForApiCall, bool returnProperties = false)
         {
-            Assert.IsNotNull(objectForApiCall, $"Object for api can't not be null. Type: {objectForApiCall.GetType()}");
+            ClassicAssert.IsNotNull(objectForApiCall, $"Object for api can't not be null. Type: {objectForApiCall.GetType()}");
 
             ConcurrentDictionary<string, string> result = new ConcurrentDictionary<string, string>();
             var allProperties = objectForApiCall.GetType().GetProperties();

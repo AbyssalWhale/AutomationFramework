@@ -1,5 +1,6 @@
 ﻿using AutomationCore.AssertAndErrorMsgs.UI;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestsConfigurator;
 
 namespace RegressionTests.UI.HomePage
@@ -11,7 +12,7 @@ namespace RegressionTests.UI.HomePage
         [SetUp]
         public new void SetUp()
         {
-            Assert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
+            ClassicAssert.IsTrue(HomePage.IsLoaded(), UIAMessages.PageNotLoaded(HomePage.Title));
         }
 
         [Test]
@@ -21,9 +22,9 @@ namespace RegressionTests.UI.HomePage
             HomePage.Search.Input_Search_Game(gameName);
 
             //Assert
-            Assert.IsTrue(HomePage.GamesGrid.IsLoaded(), "Expected game grid is succefully loaded after entering game for search");
+            ClassicAssert.IsTrue(HomePage.GamesGrid.IsLoaded(), "Expected game grid is succefully loaded after entering game for search");
             var card_Titles_UI = HomePage.GamesGrid.Get_Cards_Titles();
-            Assert.Contains(gameName, card_Titles_UI, $"Expected that all test titles contains game {gameName}");
+            ClassicAssert.Contains(gameName, card_Titles_UI, $"Expected that all test titles contains game {gameName}");
         }
     }
 }
