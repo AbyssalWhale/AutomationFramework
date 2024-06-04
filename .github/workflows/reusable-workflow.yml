@@ -73,7 +73,7 @@ jobs:
       - name: 🕵️‍♀️ Run Tests
         shell: pwsh
         run: |
-          dotnet test ${{ inputs.check-out-path }}/RegressionTests/bin/Release/net7.0/RegressionTests.dll --results-directory ${{ env.tests_result_dir }}/ --logger "trx;logfilename=testResults.trx" --settings "${{ env.runsettings_config_path }}" -- whitelisted-ips
+          dotnet test ${{ inputs.check-out-path }}/RegressionTests/bin/Release/net8.0/RegressionTests.dll --results-directory ${{ env.tests_result_dir }}/ --logger "trx;logfilename=testResults.trx" --settings "${{ env.runsettings_config_path }}" -- whitelisted-ips
       - name: 🧪 Publish Tests Results
         if: always()
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
